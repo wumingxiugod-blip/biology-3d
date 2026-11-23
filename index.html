@@ -13,6 +13,7 @@
   --mut: #9fb6c8;
   --gold: #ffd479;
   --cyan: #38bdf8;
+  --accent: #2dd4bf;
 }
 * { box-sizing: border-box; }
 html, body {
@@ -23,7 +24,7 @@ html, body {
   min-height: 100vh;
 }
 main {
-  max-width: 1000px;
+  max-width: 1040px;
   margin: 0 auto;
   padding: 40px 20px 60px;
 }
@@ -45,7 +46,7 @@ header p {
 }
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
   gap: 20px;
 }
 .card {
@@ -63,7 +64,7 @@ header p {
 .card:hover {
   transform: translateY(-4px);
   border-color: var(--cyan);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--cyan) inset;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45), 0 0 0 1px var(--cyan) inset;
 }
 .card-tag {
   display: inline-block;
@@ -76,6 +77,8 @@ header p {
   width: fit-content;
   margin-bottom: 12px;
 }
+.card-tag.cyan { background: var(--cyan); }
+.card-tag.accent { background: var(--accent); }
 .card h2 {
   font-size: 20px;
   margin: 0 0 8px;
@@ -95,13 +98,24 @@ header p {
   color: var(--cyan);
   margin-top: auto;
 }
+.card .extra-links {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--line);
+  font-size: 12.5px;
+  color: var(--mut);
+}
+.card .extra-links a {
+  color: var(--gold);
+  text-decoration: underline;
+}
 footer {
   text-align: center;
   color: var(--mut);
   font-size: 13px;
   margin-top: 50px;
   border-top: 1px solid var(--line);
-  padding-top: 20px;
+  padding-top: 24px;
 }
 </style>
 </head>
@@ -109,7 +123,7 @@ footer {
 <main>
   <header>
     <h1>雷弟生物學 <span>3D</span> 互動模型門戶</h1>
-    <p>各章節生動 3D 互動模型、生理機制與器官解剖可視化展示</p>
+    <p>整合最新升級版 3D 結構、生物生理機制與立體器官解剖模型</p>
   </header>
 
   <div class="grid">
@@ -117,64 +131,69 @@ footer {
       <div>
         <span class="card-tag">分子結構</span>
         <h2>蛋白質 3D 結構</h2>
-        <p>胜肽鍵、二級結構（α-螺旋、β-摺板）、三級折疊與晶體結構交互演示。</p>
+        <p>胜肽鍵構型、二級結構（α-螺旋、β-摺板）、三級折疊與晶體結構交互演示。</p>
       </div>
       <span class="enter-btn">進入 3D 場景 &rarr;</span>
     </a>
 
     <a class="card" href="./male-repro-3d/">
       <div>
-        <span class="card-tag">解剖生理</span>
+        <span class="card-tag cyan">解剖生理</span>
         <h2>雄性生殖系統 3D</h2>
         <p>雄性生殖器官立體構造、解剖層次與相關生殖道生理路徑。</p>
       </div>
       <span class="enter-btn">進入 3D 場景 &rarr;</span>
     </a>
 
-    <a class="card" href="./musle-membrane-bone-female_upgrade/female-repro-3d/">
+    <a class="card" href="./female-repro-3d/">
       <div>
-        <span class="card-tag">解剖生理</span>
+        <span class="card-tag cyan">升級版</span>
         <h2>雌性生殖系統 3D</h2>
-        <p>雌性生殖道空間結構、卵巢、輸卵管與子宮 3D 解剖視角。</p>
+        <p>雌性生殖道空間結構、卵巢、輸卵管與子宮 3D 解剖視角（升級版著色與材質）。</p>
       </div>
       <span class="enter-btn">進入 3D 場景 &rarr;</span>
     </a>
 
-    <a class="card" href="./musle-membrane-bone-female_upgrade/bone-3d/">
+    <a class="card" href="./bone-3d/">
       <div>
-        <span class="card-tag">骨骼運動</span>
+        <span class="card-tag accent">升級版</span>
         <h2>骨骼系統 3D</h2>
-        <p>人體骨骼架構、關節連接形式與三維空間骨骼分佈。</p>
+        <p>骨單位 (Osteon)、長骨構造、關節形態與高真實感骨骼模型。</p>
       </div>
       <span class="enter-btn">進入 3D 場景 &rarr;</span>
     </a>
 
-    <a class="card" href="./musle-membrane-bone-female_upgrade/muscle-3d/">
+    <a class="card" href="./muscle-3d/">
       <div>
-        <span class="card-tag">肌肉生理</span>
+        <span class="card-tag accent">升級版</span>
         <h2>肌纖維與肌肉收縮 3D</h2>
-        <p>肌小節、粗細肌絲滑動學說與神經肌肉接頭 (NMJ) 3D 視覺化。</p>
+        <p>肌小節、粗細肌絲滑動學說、肌梭與神經肌肉接頭 (NMJ) 動態生理視覺化。</p>
       </div>
       <span class="enter-btn">進入 3D 場景 &rarr;</span>
     </a>
 
-    <a class="card" href="./musle-membrane-bone-female_upgrade/membrane-3d/">
+    <a class="card" href="./membrane-3d/">
       <div>
-        <span class="card-tag">細胞生物</span>
+        <span class="card-tag">升級版</span>
         <h2>細胞膜與跨膜運輸 3D</h2>
-        <p>磷脂雙分子層流體鑲嵌模型、離子通道與跨膜運輸動力學。</p>
+        <p>磷脂雙分子層流體鑲嵌模型、離子通道、主動被動運輸與上皮細胞極性。</p>
       </div>
       <span class="enter-btn">進入 3D 場景 &rarr;</span>
     </a>
 
-    <a class="card" href="./解剖生理_馬骨_豬狗器官/">
+    <div class="card" style="cursor: default;">
       <div>
-        <span class="card-tag">動物解剖</span>
+        <span class="card-tag" style="background:#e0aaff;">大體解剖</span>
         <h2>馬骨與犬豬器官解剖 3D</h2>
-        <p>大型動物骨骼模型與實體內臟器官空間解剖比對展示。</p>
+        <p>大型動物骨骼模型與實體內臟器官空間解剖比對展示，內含自適應防遮擋標籤與抽考題庫。</p>
       </div>
-      <span class="enter-btn">進入 3D 場景 &rarr;</span>
-    </a>
+      <div>
+        <a class="enter-btn" href="./解剖生理_馬骨_豬狗器官/">進入 3D 解剖導覽 &rarr;</a>
+        <div class="extra-links">
+          測驗模式：<a href="./解剖生理_馬骨_豬狗器官/index_quiz.html">開啟完整中文抽考系統</a>
+        </div>
+      </div>
+    </div>
   </div>
 
   <footer>

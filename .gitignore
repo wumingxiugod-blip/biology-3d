@@ -7,7 +7,15 @@ $RECYCLE.BIN/
 # macOS
 .DS_Store
 
-# IDE
+# Python
+__pycache__/
+*.pyc
+*.pkl
+
+# Editor / AI
 .idea/
+.vscode/
+.claude/
 *.swp
 *.bak
+*.bak_*
