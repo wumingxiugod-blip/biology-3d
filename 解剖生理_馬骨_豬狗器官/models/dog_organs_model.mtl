@@ -1,0 +1,81 @@
+# Material library for Dog Visceral Organs
+newmtl dog_brain
+Kd 0.93 0.78 0.76
+Ks 0.25 0.25 0.25
+Ns 25
+
+newmtl dog_trachea
+Kd 0.70 0.86 0.95
+Ks 0.25 0.25 0.25
+Ns 25
+
+newmtl dog_heart
+Kd 0.72 0.12 0.16
+Ks 0.25 0.25 0.25
+Ns 25
+
+newmtl dog_lung_left
+Kd 0.93 0.62 0.64
+Ks 0.25 0.25 0.25
+Ns 25
+
+newmtl dog_lung_right
+Kd 0.93 0.62 0.64
+Ks 0.25 0.25 0.25
+Ns 25
+
+newmtl dog_liver
+Kd 0.45 0.13 0.11
+Ks 0.25 0.25 0.25
+Ns 25
+
+newmtl dog_gallbladder
+Kd 0.20 0.50 0.25
+Ks 0.25 0.25 0.25
+Ns 25
+
+newmtl dog_stomach
+Kd 0.90 0.68 0.62
+Ks 0.25 0.25 0.25
+Ns 25
+
+newmtl dog_spleen
+Kd 0.42 0.10 0.18
+Ks 0.25 0.25 0.25
+Ns 25
+
+newmtl dog_pancreas
+Kd 0.96 0.84 0.55
+Ks 0.25 0.25 0.25
+Ns 25
+
+newmtl dog_small_intestine
+Kd 0.94 0.66 0.62
+Ks 0.25 0.25 0.25
+Ns 25
+
+newmtl dog_cecum
+Kd 0.85 0.35 0.40
+Ks 0.25 0.25 0.25
+Ns 25
+
+newmtl dog_colon
+Kd 0.82 0.58 0.40
+Ks 0.25 0.25 0.25
+Ns 25
+
+newmtl dog_kidney_left
+Kd 0.55 0.16 0.16
+Ks 0.25 0.25 0.25
+Ns 25
+
+newmtl dog_kidney_right
+Kd 0.55 0.16 0.16
+Ks 0.25 0.25 0.25
+Ns 25
+
+newmtl dog_urinary_bladder
+Kd 0.95 0.80 0.45
+Ks 0.25 0.25 0.25
+Ns 25
+

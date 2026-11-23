@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>蛋白質 3D 結構｜生物化學 Ch3–4</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:#0d1b2a;color:#e8eef5;font-family:"Microsoft JhengHei","PingFang TC","Noto Sans TC",sans-serif;font-size:14px}
+#top{position:absolute;left:0;right:0;top:0;height:46px;background:#14263a;border-bottom:1px solid #2c4560;display:flex;align-items:center;padding:0 10px;gap:6px;z-index:20}
+#top h1{font-size:15px;margin:0 12px 0 0;white-space:nowrap;color:#9fd3ff}
+#tabs{display:flex;gap:4px;flex-wrap:nowrap;overflow-x:auto}
+.tab{background:#1f3a55;border:1px solid #2f5577;color:#cfe3f5;padding:6px 10px;border-radius:6px;cursor:pointer;white-space:nowrap;font-size:13px}
+.tab.on{background:#2f7fd0;color:#fff;border-color:#6bb2ff}
+#left{position:absolute;left:0;top:46px;bottom:0;width:290px;background:rgba(16,32,48,.94);border-right:1px solid #2c4560;overflow-y:auto;z-index:10;padding:10px}
+#left h2{font-size:14px;margin:6px 0;color:#ffd479}
+#desc{font-size:12.5px;line-height:1.6;color:#c4d4e2}
+#desc table{border-collapse:collapse;margin:6px 0;font-size:12px}
+#desc td,#desc th{border:1px solid #35516d;padding:2px 5px;vertical-align:top}
+#desc details{margin:4px 0}
+#desc summary{cursor:pointer;color:#8fd0ff}
+.grp{margin-top:8px;font-weight:bold;color:#8fd0ff;font-size:13px;border-bottom:1px solid #2c4560;padding-bottom:2px}
+.row{display:flex;align-items:center;gap:6px;padding:2px 2px;cursor:pointer;border-radius:4px}
+.row:hover{background:#21415f}
+.row.sel{background:#7a5a10}
+.sw{width:12px;height:12px;border-radius:3px;flex:none;border:1px solid #fff4}
+.row span.n{flex:1;font-size:12.5px}
+#right{position:absolute;right:0;top:46px;bottom:0;width:320px;background:rgba(16,32,48,.94);border-left:1px solid #2c4560;z-index:10;display:flex;flex-direction:column;padding:10px;gap:10px;overflow:hidden}
+#ctrl{border:1px solid #2c4560;border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:6px;font-size:12.5px;flex:none}
+#extra{display:flex;flex-direction:column;gap:6px}
+#ctrl button,#ctrl select{background:#1f3a55;color:#e8eef5;border:1px solid #3a6590;border-radius:5px;padding:4px 8px;cursor:pointer;font-family:inherit}
+#ctrl button:hover{background:#2b5a88}
+#ctrl label,#extra button{display:flex;align-items:center;gap:5px}
+#info{flex:1;overflow-y:auto;background:rgba(10,20,32,.7);border:1px solid #d9a628;border-radius:10px;padding:12px 14px;line-height:1.65}
+#info h3{margin:0;font-size:17px;color:#ffd479}
+#info .en{color:#8fd0ff;font-size:12.5px;margin-bottom:4px;font-style:italic}
+#info .g{display:inline-block;background:#2b4d6e;border-radius:10px;padding:0 8px;font-size:11.5px;margin-bottom:6px}
+#info .t{font-size:13px;color:#e0e9f2}
+#info .hint{color:#8aa;font-size:12.5px}
+#labels{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:5;overflow:hidden}
+#leaders{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:4}
+.lab{position:absolute;white-space:nowrap;pointer-events:auto;cursor:pointer;background:rgba(10,20,32,.82);border:1px solid #5b86ad;color:#fff;border-radius:4px;padding:1px 5px;font-size:12px;line-height:1.35}
+.lab small{display:block;color:#8fd0ff;font-size:9.5px;line-height:1.1}
+.lab.sel{border-color:#ffd479;background:rgba(90,60,5,.92)}
+#tip{position:absolute;pointer-events:none;background:#000c;color:#fff;border-radius:4px;padding:2px 7px;font-size:12px;z-index:30;display:none}
+#cv{position:absolute;left:290px;right:320px;top:46px;bottom:0}
+#cv canvas{display:block}
+body.wide #left,body.wide #right{display:none}body.wide #cv{left:0;right:0}
+#wbtn{margin-left:auto;background:#1f3a55;border:1px solid #2f5577;color:#cfe3f5;padding:6px 10px;border-radius:6px;cursor:pointer;white-space:nowrap;font-size:13px}
+#extra input[type=range]{width:100%}
+#extra .sl{display:block}
+#extra .sl b{color:#ffd479}
+#extra canvas{background:#0a1420;border:1px solid #2c4560;border-radius:6px;width:100%}
+#extra .note{font-size:11.5px;color:#9fb6c8;line-height:1.45}
+#extra .warn{color:#ff8080;font-weight:bold}
+#err{position:absolute;left:300px;top:60px;color:#f88;z-index:50}
+</style>
+</head>
+<body>
+<div id="top"><h1>🧬 胺基酸與蛋白質 3D</h1><div id="tabs"></div><div id="wbtn" title="隱藏／顯示左右面板">⛶ 面板</div></div>
+<div id="left"><div id="desc"></div><h2>結構清單（勾選＝顯示，點名稱＝選取）</h2><div id="plist"></div></div>
+<div id="cv"><div id="leaders"><svg width="100%" height="100%" id="svg"></svg></div><div id="labels"></div></div>
+<div id="right"><div id="ctrl">
+  <label>標籤：<select id="lm"><option value="all">全部顯示</option><option value="sel">僅選取項目</option><option value="none">隱藏</option></select></label>
+  <label><input type="checkbox" id="iso"> 孤立選取（其餘淡化）</label>
+  <label><input type="checkbox" id="rot"> 自動旋轉</label>
+  <div id="extra"></div>
+  <button id="reset">重設視角</button>
+  <button id="showall">全部顯示</button>
+</div>
+<div id="info"><div class="hint">👆 點擊 3D 模型或標籤／清單，即可查看結構名稱與說明。<br>左鍵拖曳旋轉、滾輪縮放、右鍵平移。</div></div></div>
+<div id="tip"></div>
+<div id="err"></div>
+<script src="three.min.js"></script>
+<script src="OrbitControls.js"></script>
+<script src="core.js"></script>
+<script src="mol.js"></script>
+<script src="scene_chiral.js"></script>
+<script src="scene_peptide.js"></script>
+<script src="scene_helix.js"></script>
+<script src="scene_sheet.js"></script>
+<script src="scene_super.js"></script>
+<script src="scene_fiber.js"></script>
+<script src="scene_mb.js"></script>
+<script src="scene_hb.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

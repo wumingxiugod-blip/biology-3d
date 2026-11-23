@@ -1,0 +1,1637 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>獸醫解剖 3D｜馬骨骼・狗器官・豬特徵器官</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!-- Three.js & Controls (本機純離線版，保證無網路亦可秒速啟動) -->
+<script src="three.min.js"></script>
+<script src="OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/OBJLoader.js"></script>
+<!-- 本機真實 3D 骨骼與器官數據 (100% 離線可用、零 CORS 限制) -->
+<script src="models/horse_model_data.js"></script>
+<script src="models/dog_model_data.js"></script>
+<script src="models/pig_model_data.js"></script>
+
+<style>
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: #0d1b2a;
+  color: #e8eef5;
+  font-family: "Microsoft JhengHei", "PingFang TC", "Noto Sans TC", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+}
+
+/* Top Bar */
+#top {
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 46px;
+  background: #14263a;
+  border-bottom: 1px solid #2c4560;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  gap: 6px;
+  z-index: 20;
+}
+#top h1 {
+  font-size: 15px;
+  margin: 0 12px 0 0;
+  white-space: nowrap;
+  color: #9fd3ff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+#tabs {
+  display: flex;
+  gap: 4px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+.tab {
+  background: #1f3a55;
+  border: 1px solid #2f5577;
+  color: #cfe3f5;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+.tab:hover {
+  background: #274768;
+}
+.tab.on {
+  background: #2f7fd0;
+  color: #fff;
+  border-color: #6bb2ff;
+}
+#wbtn {
+  margin-left: auto;
+  background: #1f3a55;
+  border: 1px solid #2f5577;
+  color: #cfe3f5;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: 13px;
+  flex: none;
+}
+
+/* Left Panel */
+#left {
+  position: absolute;
+  left: 0; top: 46px; bottom: 0;
+  width: 290px;
+  background: rgba(16, 32, 48, 0.94);
+  border-right: 1px solid #2c4560;
+  overflow-y: auto;
+  z-index: 10;
+  padding: 10px;
+}
+#left h2 {
+  font-size: 14px;
+  margin: 6px 0;
+  color: #ffd479;
+}
+#desc {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: #c4d4e2;
+  margin-bottom: 10px;
+}
+#desc table {
+  border-collapse: collapse;
+  margin: 6px 0;
+  font-size: 11.5px;
+  width: 100%;
+}
+#desc td, #desc th {
+  border: 1px solid #35516d;
+  padding: 3px 5px;
+  vertical-align: top;
+}
+#desc th {
+  background: rgba(43, 77, 110, 0.4);
+  color: #8fd0ff;
+  font-weight: 600;
+}
+.grp {
+  margin-top: 8px;
+  font-weight: bold;
+  color: #8fd0ff;
+  font-size: 13px;
+  border-bottom: 1px solid #2c4560;
+  padding-bottom: 2px;
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 4px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-bottom: 2px;
+  transition: background 0.15s;
+}
+.row:hover {
+  background: #21415f;
+}
+.row.sel {
+  background: #1a4b7a;
+  border-left: 3px solid #6bb2ff;
+}
+.sw {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  flex: none;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+.row span.n {
+  flex: 1;
+  font-size: 12.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Center 3D Viewport */
+#cv {
+  position: absolute;
+  left: 290px; right: 320px; top: 46px; bottom: 0;
+  background: radial-gradient(ellipse at 50% 38%, #3a4656 0%, #222c39 45%, #0e151e 100%);
+}
+#cv canvas {
+  display: block;
+  outline: none;
+}
+#leaders {
+  position: absolute;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 4;
+}
+#labels {
+  position: absolute;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 5;
+  overflow: hidden;
+}
+.lab {
+  position: absolute;
+  white-space: nowrap;
+  pointer-events: auto;
+  cursor: pointer;
+  background: rgba(10, 20, 32, 0.82);
+  border: 1px solid #5b86ad;
+  color: #fff;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 12px;
+  line-height: 1.35;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  transition: border-color 0.2s, background 0.2s;
+}
+.lab small {
+  display: block;
+  color: #8fd0ff;
+  font-size: 9.5px;
+  line-height: 1.1;
+}
+.lab.sel {
+  border-color: #ffd479;
+  background: rgba(90, 60, 5, 0.92);
+  box-shadow: 0 0 10px rgba(255, 212, 121, 0.6);
+}
+#tip {
+  position: absolute;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid #38bdf8;
+  color: #fff;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  z-index: 30;
+  display: none;
+}
+
+/* Right Panel */
+#right {
+  position: absolute;
+  right: 0; top: 46px; bottom: 0;
+  width: 320px;
+  background: rgba(16, 32, 48, 0.94);
+  border-left: 1px solid #2c4560;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  gap: 10px;
+  overflow: hidden;
+}
+#ctrl {
+  border: 1px solid #2c4560;
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12.5px;
+  flex: none;
+}
+#extra {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+#ctrl button, #ctrl select {
+  background: #1f3a55;
+  color: #e8eef5;
+  border: 1px solid #3a6590;
+  border-radius: 5px;
+  padding: 5px 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12.5px;
+  transition: all 0.2s;
+}
+#ctrl button:hover, #ctrl select:hover {
+  background: #2b5a88;
+}
+#ctrl label, #extra button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+#extra button {
+  justify-content: center;
+  font-weight: 500;
+}
+#info {
+  flex: 1;
+  overflow-y: auto;
+  background: rgba(10, 20, 32, 0.7);
+  border: 1px solid #d9a628;
+  border-radius: 10px;
+  padding: 12px 14px;
+  line-height: 1.65;
+}
+#info h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #ffd479;
+}
+#info .en {
+  color: #8fd0ff;
+  font-size: 12px;
+  margin-bottom: 4px;
+  font-style: italic;
+}
+#info .g {
+  display: inline-block;
+  background: #2b4d6e;
+  border-radius: 10px;
+  padding: 1px 8px;
+  font-size: 11px;
+  margin-bottom: 6px;
+}
+#info .t {
+  font-size: 12.5px;
+  color: #e0e9f2;
+  margin-bottom: 8px;
+}
+#info .clinical {
+  font-size: 12px;
+  color: #fde047;
+  background: rgba(234, 179, 8, 0.12);
+  border-left: 3px solid #eab308;
+  padding: 5px 8px;
+  border-radius: 4px;
+  margin-top: 6px;
+}
+#info .hint {
+  color: #8aa;
+  font-size: 12.5px;
+}
+
+/* Quiz Box in Info */
+.quiz-widget {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.quiz-badge {
+  background: #b45309;
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11.5px;
+  font-weight: 700;
+  display: inline-block;
+}
+.quiz-prompt {
+  font-size: 13.5px;
+  color: #fef08a;
+  line-height: 1.5;
+}
+.quiz-row {
+  display: flex;
+  gap: 6px;
+}
+.quiz-input {
+  flex: 1;
+  background: #111e2e;
+  border: 1px solid #3a6590;
+  border-radius: 4px;
+  color: #fff;
+  padding: 6px 8px;
+  font-size: 13px;
+  outline: none;
+}
+.quiz-input:focus {
+  border-color: #38bdf8;
+}
+.quiz-res {
+  font-size: 12.5px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  line-height: 1.5;
+}
+.quiz-res.ok {
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid #10b981;
+  color: #6ee7b7;
+}
+.quiz-res.err {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid #ef4444;
+  color: #fca5a5;
+}
+
+/* Wide Mode */
+body.wide #left, body.wide #right { display: none; }
+body.wide #cv { left: 0; right: 0; }
+
+#err {
+  position: absolute;
+  left: 300px;
+  top: 60px;
+  color: #f88;
+  z-index: 50;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: none;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.15); }
+::-webkit-scrollbar-thumb { background: #2f5577; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #457ca8; }
+</style>
+</head>
+<body>
+
+<div id="top">
+  <h1>🐾 獸醫解剖生理 3D</h1>
+  <div id="tabs"></div>
+  <div id="wbtn" title="隱藏／顯示左右面板">⛶ 面板</div>
+</div>
+
+<div id="left">
+  <div id="desc"></div>
+  <h2>構造清單（勾選＝顯示，點名稱＝選取）</h2>
+  <div id="plist"></div>
+</div>
+
+<div id="cv">
+  <div id="leaders"><svg width="100%" height="100%" id="svg"></svg></div>
+  <div id="labels"></div>
+</div>
+
+<div id="right">
+  <div id="ctrl">
+    <label>標籤：<select id="lm">
+      <option value="all">全部顯示</option>
+      <option value="sel">僅選取項目</option>
+      <option value="none">隱藏</option>
+    </select></label>
+    <label title="勾選＝器官壁半透明，可看見內部深層構造；不勾＝寫實外觀">
+      <input type="checkbox" id="xray"> 透視模式（看內部構造）
+    </label>
+    <label>
+      <input type="checkbox" id="iso"> 孤立選取（其餘淡化）
+    </label>
+    <label>
+      <input type="checkbox" id="rot"> 自動旋轉
+    </label>
+    <div id="extra"></div>
+    <button id="reset">重設視角</button>
+    <button id="showall">全部顯示</button>
+  </div>
+  <div id="info">
+    <div class="hint">👆 點擊 3D 模型機構／標籤，即可查看解剖名稱與功能。<br>左鍵拖曳旋轉、滾輪縮放、右鍵平移。</div>
+  </div>
+</div>
+
+<div id="tip"></div>
+<div id="err"></div>
+
+<script>
+/**
+ * 獸醫解剖 3D 核心應用程式
+ * 整合：馬骨骼系統、狗主要內臟器官、豬特徵消化與實質器官
+ */
+
+const $ = id => document.getElementById(id);
+const cvBox = $('cv');
+const SCENES = [];
+const CUR = { parts: [], root: null, tick: null };
+let renderer, scene3, camera, controls, curIdx = -1, selected = null, labelEls = [], keyLight, XRAY = false, fly = null;
+
+// 音效引擎
+class SoundEngine {
+  constructor() { this.ctx = null; }
+  init() {
+    if (!this.ctx) {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (AC) this.ctx = new AC();
+    }
+    if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+  }
+  playClick() {
+    this.init(); if (!this.ctx) return;
+    const osc = this.ctx.createOscillator(), g = this.ctx.createGain();
+    osc.type = 'sine'; osc.frequency.setValueAtTime(800, this.ctx.currentTime);
+    g.gain.setValueAtTime(0.08, this.ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.06);
+    osc.connect(g); g.connect(this.ctx.destination);
+    osc.start(); osc.stop(this.ctx.currentTime + 0.07);
+  }
+  playRight() {
+    this.init(); if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+    [523.25, 659.25, 783.99].forEach((f, idx) => {
+      const o = this.ctx.createOscillator(), g = this.ctx.createGain();
+      o.type = 'triangle'; o.frequency.setValueAtTime(f, now + idx * 0.08);
+      g.gain.setValueAtTime(0.12, now + idx * 0.08);
+      g.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.25);
+      o.connect(g); g.connect(this.ctx.destination);
+      o.start(now + idx * 0.08); o.stop(now + idx * 0.08 + 0.26);
+    });
+  }
+  playWrong() {
+    this.init(); if (!this.ctx) return;
+    const o = this.ctx.createOscillator(), g = this.ctx.createGain();
+    o.type = 'sawtooth';
+    o.frequency.setValueAtTime(220, this.ctx.currentTime);
+    o.frequency.linearRampToValueAtTime(146.8, this.ctx.currentTime + 0.25);
+    g.gain.setValueAtTime(0.15, this.ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.28);
+    o.connect(g); g.connect(this.ctx.destination);
+    o.start(); o.stop(this.ctx.currentTime + 0.29);
+  }
+}
+const SOUND = new SoundEngine();
+
+// 向量與輔助
+const V = (x, y, z) => new THREE.Vector3(x, y, z);
+
+// 簡單 OBJ パーサー (OBJLoader CDN がオフラインの場合のフォールバック)
+function parseOBJFallback(text) {
+  const lines = text.split('\n');
+  const group = new THREE.Group();
+  const positions = [];
+  let curMeshName = 'default';
+  let curIndices = [];
+  let curVertices = [];
+
+  function commitMesh() {
+    if (curVertices.length === 0) return;
+    const geom = new THREE.BufferGeometry();
+    geom.setAttribute('position', new THREE.Float32BufferAttribute(curVertices, 3));
+    geom.computeVertexNormals();
+    const mesh = new THREE.Mesh(geom, new THREE.MeshLambertMaterial({ color: 0xddccbb }));
+    mesh.name = curMeshName;
+    group.add(mesh);
+    curVertices = [];
+  }
+
+  for (let i = 0; i < lines.length; i++) {
+    const l = lines[i].trim();
+    if (!l || l.startsWith('#')) continue;
+    const parts = l.split(/\s+/);
+    if (parts[0] === 'v') {
+      positions.push([parseFloat(parts[1]), parseFloat(parts[2]), parseFloat(parts[3])]);
+    } else if (parts[0] === 'o' || parts[0] === 'g') {
+      commitMesh();
+      curMeshName = parts[1] || 'obj_' + group.children.length;
+    } else if (parts[0] === 'f') {
+      const vIndices = [];
+      for (let j = 1; j < parts.length; j++) {
+        const seg = parts[j].split('/')[0];
+        vIndices.push(parseInt(seg, 10) - 1);
+      }
+      for (let j = 1; j < vIndices.length - 1; j++) {
+        const i0 = vIndices[0], i1 = vIndices[j], i2 = vIndices[j + 1];
+        if (positions[i0] && positions[i1] && positions[i2]) {
+          curVertices.push(...positions[i0], ...positions[i1], ...positions[i2]);
+        }
+      }
+    }
+  }
+  commitMesh();
+  return group;
+}
+
+function loadOBJString(text) {
+  if (typeof THREE.OBJLoader !== 'undefined') {
+    try {
+      const loader = new THREE.OBJLoader();
+      return loader.parse(text);
+    } catch(e) {
+      console.warn("OBJLoader parse error, using fallback parser:", e);
+    }
+  }
+  return parseOBJFallback(text);
+}
+
+// 註冊構造物件到 CUR.parts
+function regPart(data) {
+  // data: { id, zh, en, latin, grp, desc, clinical, meshes, anchor, anchorMeshes, anchorAt, visible, wall, wallO }
+  const p = {
+    id: data.id || ('part_' + CUR.parts.length),
+    zh: data.zh,
+    en: data.en || '',
+    latin: data.latin || '',
+    grp: data.grp || '一般構造',
+    desc: data.desc || '',
+    clinical: data.clinical || '',
+    meshes: data.meshes || [],
+    anchor: data.anchor || new THREE.Vector3(),
+    anchorMeshes: data.anchorMeshes || null,
+    anchorAt: data.anchorAt || null,
+    visible: data.visible !== undefined ? data.visible : true,
+    wall: !!data.wall,
+    wallO: data.wallO || 0.95
+  };
+  p.meshes.forEach(m => {
+    m.userData.part = p;
+    if (m.material) {
+      m.material.userData.baseO = m.material.opacity;
+      m.material.userData.baseC = m.material.emissive ? m.material.emissive.getHex() : 0;
+      m.material.userData.hex = m.material.color ? m.material.color.getHex() : 0xffffff;
+    }
+  });
+  CUR.parts.push(p);
+  return p;
+}
+
+/* =========================================================
+   SCENE 定義
+   ========================================================= */
+
+// SCENE 1: 馬全身骨骼
+SCENES.push({
+  name: "(1) 馬全身骨骼",
+  title: "馬全身骨骼系統 (Equine Skeleton)",
+  desc: `
+    馬（<em>Equus caballus</em>）專為長距離高速奔馳特化，體重由單趾（第三指/趾骨）承受。<br>
+    <table>
+      <tr><th>骨骼分區</th><th>主要骨骼組成</th><th>解剖與臨床特徵</th></tr>
+      <tr><td>頭頸部</td><td>頭顱骨、下頜骨、寰椎(C1)、樞椎(C2)、頸椎(C3-C7)</td><td>面脊發達、額上頜竇相通、門齒磨損辨年齡</td></tr>
+      <tr><td>軀幹胸廓</td><td>胸椎(T18)、腰椎(L6)、薦骨(S5癒合)、尾椎(Co15-21)、肋骨(18對)</td><td>背腰段剛性高；第1-8為真肋，9-18為假肋</td></tr>
+      <tr><td>前肢系統</td><td>肩胛骨、肱骨、橈尺骨、腕骨群、前砲骨(MC3)、副夾骨、指骨(繫/冠/蹄)</td><td>承擔60%體重；懸韌帶與種子骨吸收衝擊；蹄葉炎易致蹄骨旋轉</td></tr>
+      <tr><td>後肢系統</td><td>骨盆(髂/坐/恥)、股骨、髕骨、脛腓骨、跟骨(飛節)、後砲骨(MT3)、趾骨</td><td><strong>第三轉子</strong>為馬特徵；膝蓋與飛節形成<strong>站立靜止裝置</strong></td></tr>
+    </table>
+  `,
+  camera: { pos: [0, 0, 70], target: [0, 0, 0] },
+  build: function() {
+    let root = null;
+    if (window.HORSE_OBJ_DATA) {
+      root = loadOBJString(window.HORSE_OBJ_DATA);
+    }
+    if (!root || root.children.length === 0) {
+      root = buildFallbackHorse();
+    }
+
+    // 原始 OBJ 座標：+Z 朝頭、-Z 朝尾、X 為左右（負值＝左側）
+    // 轉 90° 讓馬頭朝 +X，左側面朝向鏡頭（解剖學慣用左側觀）
+    if (window.HORSE_OBJ_DATA) root.rotation.y = Math.PI / 2;
+
+    // 正規化尺寸
+    const box = new THREE.Box3().setFromObject(root);
+    const center = new THREE.Vector3();
+    box.getCenter(center);
+    const size = new THREE.Vector3();
+    box.getSize(size);
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const scale = 32 / (maxDim || 1);
+    root.scale.set(scale, scale, scale);
+    root.position.sub(center.clone().multiplyScalar(scale));
+    root.position.y += 1.0;
+    CUR.root.add(root);
+
+    const boneMat = new THREE.MeshLambertMaterial({ color: 0xe2d9cc });
+
+    // OBJ 內的物件名稱是早期自動分割依座標門檻猜的，許多名稱與實際骨骼不符
+    // （例如 pelvis_* 其實是股骨、sacrum_95 是整個骨盆、humerus_130~137 是肋軟骨），
+    // 因此這裡逐一依實際位置與形狀指定歸屬；左側（_l / x<0）面向鏡頭，作為標籤錨點
+    const R = (pre, a, b) => Array.from({ length: b - a + 1 }, (_, i) => pre + (a + i));
+    const groupDef = [
+      { id: "cranium", names: ["cranium_200"], match: /cranium/i, zh: "頭骨 (腦顱與面骨)", en: "Skull (Cranium & Facial Bones)", latin: "Ossa cranii et faciei", grp: "頭頸部骨骼", desc: "腦顱與面部骨骼總成，含額骨、頂骨、顳骨、上頜骨、鼻骨與切齒骨；具發達的額竇、上頜竇與完整骨性眼眶。", clinical: "面脊（Facial crest）是馬頭部最重要的體表標記；上頜竇蓄膿常需經面脊上方環鑽引流。" },
+      { id: "mandible", names: ["mandible_82"], zh: "下頜骨", en: "Mandible", latin: "Mandibula", grp: "頭頸部骨骼", desc: "左右下頜骨於前端癒合，下頜體承載下頰齒與下切齒，後方寬大的下頜支供咬肌附著。", clinical: "下頜血管切跡為臨床觸摸面動脈脈搏的常用部位。" },
+      { id: "incisors", names: [...R("mandible_", 76, 81), ...R("mandible_", 194, 199)], zh: "切齒 (上下各 6 枚)", en: "Incisor Teeth", latin: "Dentes incisivi", grp: "頭頸部骨骼", desc: "上、下切齒各 6 枚（中央齒、中間齒、隅齒），用於切斷草料。", clinical: "依切齒的萌發、齒坎（杯）消失與咬合面形狀可推估馬的年齡。" },
+      { id: "cheek_teeth", names: [...R("mandible_", 83, 94), ...R("mandible_", 182, 193)], zh: "頰齒 (前臼齒與臼齒 24 枚)", en: "Cheek Teeth (Premolars & Molars)", latin: "Dentes praemolares et molares", grp: "頭頸部骨骼", desc: "上下左右各 6 枚，共 24 枚高冠齒，持續萌出以抵銷研磨磨耗。", clinical: "上頰齒頰側與下頰齒舌側易磨出銳利齒尖，需定期銼牙（Floating）。" },
+      { id: "atlas_axis", names: ["facial_bones_101", "cervical_vert_102"], match: /atlas|axis/i, zh: "寰椎 (C1) 與樞椎 (C2)", en: "Atlas (C1) & Axis (C2)", latin: "Atlas et axis", grp: "頭頸部骨骼", desc: "寰椎呈環狀、無椎體，具寬大寰椎翼；樞椎具齒突，構成頭部旋轉的寰樞關節。", clinical: "寰椎翼在頸部前端皮下可觸摸，是頸部重要的體表標記。" },
+      { id: "cervical", names: R("cervical_vert_", 96, 100), match: /cervical/i, zh: "頸椎 (C3–C7)", en: "Cervical Vertebrae C3–C7", latin: "Vertebrae cervicales", grp: "頭頸部骨骼", desc: "椎體長而粗大，關節突發達；C6 具板狀腹側結節，C7 無橫突孔。", clinical: "項韌帶（Nuchal ligament）極發達，協助支撐沉重的頭頸；頸椎狹窄可致搖擺症（Wobbler syndrome）。" },
+      { id: "thoracic", names: [...R("thoracic_vert_", 109, 115), ...R("lumbar_vert_", 116, 122), ...R("thoracic_vert_", 123, 126)], anchor: R("lumbar_vert_", 116, 118), anchorAt: "top", match: /thoracic|withers/i, zh: "胸椎 (T1–T18，含鬐甲)", en: "Thoracic Vertebrae T1–T18", latin: "Vertebrae thoracicae", grp: "軀幹脊柱與胸廓", desc: "共 18 枚。前段胸椎棘突極高，形成馬體表最高點「鬐甲（Withers）」。", clinical: "鬐甲部易因鞍具摩擦導致鬐甲瘻管（Fistulous withers）。" },
+      { id: "lumbar", names: R("lumbar_vert_", 103, 108), match: /lumbar/i, zh: "腰椎 (L1–L6)", en: "Lumbar Vertebrae L1–L6", latin: "Vertebrae lumbales", grp: "軀幹脊柱與胸廓", desc: "通常 6 枚（部分阿拉伯馬 5 枚），橫突寬扁水平伸展，後段橫突之間具關節面。", clinical: "腰椎橫突間關節提供強大剛性，使後肢推力有效傳至軀幹。" },
+      { id: "sacrum", names: ["sacrum_181"], zh: "薦骨 (S1–S5 癒合)", en: "Sacrum", latin: "Os sacrum", grp: "軀幹脊柱與胸廓", desc: "5 枚薦椎癒合成三角形骨板，兩側翼與髂骨形成薦髂關節。", clinical: "薦髂關節扭傷是賽馬與障礙馬後軀運動障礙的常見來源。" },
+      { id: "caudal", names: [...R("caudal_vert_", 56, 57), ...R("caudal_vert_", 69, 73), ...R("vertebra_", 64, 68), ...R("limb_bone_mid_", 58, 63)], anchor: ["caudal_vert_56", "caudal_vert_57"], zh: "尾椎 (Co1–Co18)", en: "Caudal Vertebrae", latin: "Vertebrae caudales", grp: "軀幹脊柱與胸廓", desc: "馬尾椎約 15–21 枚（本模型 18 枚），向後逐漸變小，末端僅剩椎體。", clinical: "尾根腹側的尾中動脈可用於採血或觸摸脈搏。" },
+      { id: "ribs", names: [...R("scapula_l_", 145, 150), ...R("ribs_l_", 151, 158), "coffin_hind_l_159", "ribs_l_160", "ribs_l_161", "coffin_hind_l_162", ...R("scapula_r_", 163, 168), ...R("ribs_r_", 169, 178), "coffin_hind_r_179", "coffin_hind_r_180"], anchor: [...R("scapula_l_", 145, 150), ...R("ribs_l_", 151, 158)], match: /ribs/i, zh: "肋骨 (18 對)", en: "Ribs (18 pairs)", latin: "Costae", grp: "軀幹脊柱與胸廓", desc: "18 對肋骨：第 1–8 對為真肋（直接接胸骨），第 9–18 對為假肋（經肋軟骨形成肋弓）。", clinical: "第 6–7 肋間為胸腔聽診與胸腔穿刺（Thoracocentesis）的重要位置。" },
+      { id: "costal_cartilage", names: ["limb_bone_r_128", "limb_bone_l_129", "humerus_l_130", "humerus_r_131", "humerus_l_132", "humerus_r_133", "humerus_l_134", "humerus_r_135", "humerus_l_136", "humerus_r_137", "sternum_138", "ribs_r_139", "ribs_l_140", "ribs_r_141", "ribs_l_142", "ribs_r_143", "ribs_l_144"], anchor: ["ribs_l_144"], anchorAt: "bottom", zh: "肋軟骨與肋弓", en: "Costal Cartilages & Costal Arch", latin: "Cartilagines costales et arcus costalis", grp: "軀幹脊柱與胸廓", desc: "真肋的肋軟骨直接連接胸骨；假肋的肋軟骨依序相連，形成胸廓後緣的肋弓。", clinical: "肋弓是腹部觸診與超音波定位（如肝、脾）的體表界線。" },
+      { id: "sternum", names: ["limb_bone_mid_127"], anchorAt: "bottom", match: /sternum/i, zh: "胸骨", en: "Sternum", latin: "Sternum", grp: "軀幹脊柱與胸廓", desc: "由胸骨柄、胸骨體（6–7 節）與劍突軟骨構成，呈船形，腹側具胸骨嵴。", clinical: "胸骨嵴是胸肌附著點；必要時可於胸骨採集骨髓。" },
+      { id: "scapula", names: ["scapula_l_74", "scapula_r_75"], anchor: ["scapula_l_74"], match: /scapula/i, zh: "肩胛骨 (含肩胛軟骨)", en: "Scapula", latin: "Scapula", grp: "前肢承重系統", desc: "三角形扁平骨，肩胛岡無肩峰，背側緣接寬大肩胛軟骨，不與鎖骨相連。", clinical: "前肢以肌肉懸吊於胸壁（Synsarcosis），能吸收奔跑著地時的衝擊。" },
+      { id: "humerus", names: ["humerus_l_0", "humerus_r_1"], anchor: ["humerus_l_0"], match: /humerus/i, zh: "肱骨", en: "Humerus", latin: "Humerus", grp: "前肢承重系統", desc: "粗短扭轉的長骨，近端外側大結節發達，結節間溝分為兩溝，容納二頭肌腱。", clinical: "二頭肌腱與結節間溝摩擦易引發結節間囊炎（Bicipital bursitis）。" },
+      { id: "radius_ulna", names: ["radius_ulna_l_54", "radius_ulna_r_55"], anchor: ["radius_ulna_l_54"], match: /radius_ulna/i, zh: "橈骨與尺骨", en: "Radius & Ulna", latin: "Radius et ulna", grp: "前肢承重系統", desc: "橈骨粗大承重；尺骨近端形成鷹嘴（肘頭），骨幹遠端退化並與橈骨癒合，不能旋轉。", clinical: "鷹嘴為肱三頭肌附著點，鷹嘴骨折會使馬無法伸肘承重（肘部下垂）。" },
+      { id: "carpus", names: [...R("radius_ulna_l_", 36, 37), "carpal_l_38", "carpal_l_39", ...R("radius_ulna_l_", 40, 41), "carpal_l_42", ...R("radius_ulna_l_", 43, 44), "radius_ulna_r_45", "radius_ulna_r_46", "carpal_r_47", "carpal_r_48", ...R("radius_ulna_r_", 49, 53)], anchor: [...R("radius_ulna_l_", 36, 37), "carpal_l_38", "carpal_l_39", ...R("radius_ulna_l_", 40, 41), "carpal_l_42", ...R("radius_ulna_l_", 43, 44)], match: /carpal/i, zh: "腕骨群 (前膝 Knee)", en: "Carpal Bones", latin: "Ossa carpi", grp: "前肢承重系統", desc: "近列（橈腕骨、中間腕骨、尺腕骨、副腕骨）與遠列（第 2–4 腕骨）小骨，馬俗稱「膝」。", clinical: "賽馬常見腕骨碎片骨折（Chip fracture），尤其是橈腕骨與第三腕骨。" },
+      { id: "cannon_fore", names: ["cannon_fore_l_16", "cannon_fore_r_17"], anchor: ["cannon_fore_l_16"], match: /cannon_fore|splint_fore/i, zh: "前大砲骨 (第三掌骨) 與夾骨", en: "Fore Cannon (MC III) & Splint Bones", latin: "Os metacarpale III et II/IV", grp: "前肢承重系統", desc: "第三掌骨為前肢主要承重骨；第二、第四掌骨退化為附於後側兩旁的「夾骨」。", clinical: "夾骨與砲骨間骨間韌帶發炎骨化稱為「夾骨瘤（Splints）」。" },
+      { id: "digit_fore", names: ["pastern_fore_l_23", "pastern_fore_r_25", "coronet_fore_l_22", "coronet_fore_r_24", "coffin_fore_l_26", "coronet_fore_r_27"], anchor: ["pastern_fore_l_23", "coronet_fore_l_22", "coffin_fore_l_26"], match: /pastern_fore|coronet_fore|coffin_fore|sesamoid/i, zh: "前肢指骨 (繫骨・冠骨・蹄骨)", en: "Fore Digit: Pastern, Coronet & Coffin", latin: "Phalanx proximalis, media et distalis", grp: "前肢承重系統", desc: "第一指骨（繫骨）、第二指骨（冠骨）、第三指骨（蹄骨）；蹄骨後方有遠端種子骨（舟骨）。", clinical: "舟骨症（Navicular disease）與蹄葉炎（Laminitis）是前肢跛行的兩大病因。" },
+      { id: "pelvis", names: ["sacrum_95"], match: /pelvis/i, zh: "骨盆 (髂骨・坐骨・恥骨)", en: "Pelvis (Os coxae)", latin: "Os coxae", grp: "後肢推進系統", desc: "髂骨翼寬大，外側角為髖結節（腰角），內側角為薦結節；坐骨結節形成臀角；髖臼容納股骨頭。", clinical: "撞擊門柱易造成髖結節骨折，外觀單側塌陷，俗稱「掉胯（Knocked-down hip）」。" },
+      { id: "femur", names: ["pelvis_l_2", "pelvis_r_3"], anchor: ["pelvis_l_2"], match: /femur/i, zh: "股骨 (具第三轉子)", en: "Femur (with 3rd Trochanter)", latin: "Os femoris", grp: "後肢推進系統", desc: "全身最粗大的長骨，骨幹外側具「第三轉子（Third trochanter）」；遠端內側滑車嵴特別粗大。", clinical: "內側滑車嵴是髕骨鎖定（站立裝置 Stay apparatus）的核心構造。" },
+      { id: "patella", names: ["femur_l_4", "femur_r_5"], anchor: ["femur_l_4"], match: /patella/i, zh: "髕骨 (膝蓋骨)", en: "Patella", latin: "Patella", grp: "後肢推進系統", desc: "大型種子骨，內側附有髕骨纖維軟骨，並有內、中、外三條髕直韌帶。", clinical: "髕骨可勾住股骨內側滑車嵴而鎖定膝關節，使馬站著睡覺；鎖定無法解除稱「髕骨上方固定」。" },
+      { id: "tibia_fibula", names: ["tibia_fibula_l_8", "tibia_fibula_r_9", "tibia_fibula_l_12", "tibia_fibula_r_13"], anchor: ["tibia_fibula_l_8"], match: /tibia_fibula/i, zh: "脛骨與腓骨", en: "Tibia & Fibula", latin: "Tibia et fibula", grp: "後肢推進系統", desc: "脛骨粗壯，近端前方有脛骨粗隆；腓骨退化為外側細長骨片，遠端與脛骨癒合為外踝。", clinical: "脛骨內側面皮下無肌肉覆蓋，外傷易造成骨膜炎或開放性骨折。" },
+      { id: "tarsus", names: ["tibia_fibula_l_6", "tibia_fibula_r_7", "tibia_fibula_l_10", "tibia_fibula_r_11", ...R("tarsus_calcaneus_l_", 30, 32), ...R("tarsus_calcaneus_r_", 33, 35)], anchor: ["tibia_fibula_l_6", "tibia_fibula_l_10", ...R("tarsus_calcaneus_l_", 30, 32)], match: /calcaneus|talus|tarsal/i, zh: "跗骨群 (飛節 Hock，含跟骨)", en: "Tarsal Bones & Calcaneus (Hock)", latin: "Ossa tarsi", grp: "後肢推進系統", desc: "包含跟骨、距骨、中央跗骨及第 1–4 跗骨；跟骨結節向後上突出成飛節尖，為跟腱附著點。", clinical: "遠端跗間關節與跗蹠關節的退化性關節炎稱「飛節內腫（Bone spavin）」。" },
+      { id: "cannon_hind", names: ["cannon_hind_l_14", "cannon_hind_r_15"], anchor: ["cannon_hind_l_14"], match: /cannon_hind|splint_hind/i, zh: "後大砲骨 (第三蹠骨)", en: "Hind Cannon (MT III)", latin: "Os metatarsale III", grp: "後肢推進系統", desc: "比前砲骨長約 1/6，橫斷面較圓；兩側同樣附有退化的第二、第四蹠骨。", clinical: "球節後方有懸韌帶與屈肌腱通過，承受極大張力。" },
+      { id: "digit_hind", names: ["pastern_hind_l_18", "pastern_hind_r_19", "coronet_hind_l_20", "coronet_hind_r_21", "coronet_hind_l_28", "coronet_hind_r_29"], anchor: ["pastern_hind_l_18", "coronet_hind_l_20", "coronet_hind_l_28"], match: /pastern_hind|coronet_hind|coffin_hind/i, zh: "後肢趾骨 (繫骨・冠骨・蹄骨)", en: "Hind Digit: Pastern, Coronet & Coffin", latin: "Phalanges digiti pedis", grp: "後肢推進系統", desc: "結構同前肢，但後蹄骨較窄、蹄底較凹，有利於抓地推進。", clinical: "後蹄發生蹄葉炎的頻率遠低於前蹄。" }
+    ];
+
+    // 將 3D 骨骼 mesh 分派至各 group：先依名稱清單，找不到再用 regex（供備用模型）
+    const byName = {};
+    groupDef.forEach(g => (g.names || []).forEach(n => byName[n] = g.id));
+    const buckets = {};
+    groupDef.forEach(g => buckets[g.id] = []);
+
+    root.traverse(child => {
+      if (!child.isMesh) return;
+      child.material = boneMat.clone();
+      let id = byName[child.name];
+      if (!id) {
+        const g = groupDef.find(g => g.match && g.match.test(child.name));
+        id = g ? g.id : null;
+      }
+      if (id) buckets[id].push(child);
+      else console.warn('未分類的馬骨骼 mesh:', child.name);
+    });
+
+    groupDef.forEach(g => {
+      const meshes = buckets[g.id];
+      if (meshes.length === 0) return;
+      const anchorMeshes = g.anchor ? meshes.filter(m => g.anchor.includes(m.name)) : [];
+      regPart({
+        id: g.id,
+        zh: g.zh,
+        en: g.en,
+        latin: g.latin,
+        grp: g.grp,
+        desc: g.desc,
+        clinical: g.clinical,
+        meshes: meshes,
+        anchorMeshes: anchorMeshes.length ? anchorMeshes : null,
+        anchorAt: g.anchorAt,
+        visible: true
+      });
+    });
+  },
+  controls: [
+    { label: "🐾 聚焦頭頸部", fn: () => flyTo([12, 8, 26], [12, 8, 0]) },
+    { label: "🦵 聚焦前肢與單蹄", fn: () => flyTo([4, -6, 32], [4, -6, 0]) },
+    { label: "🐎 聚焦後肢與骨盆", fn: () => flyTo([-12, -3, 34], [-12, -3, 0]) },
+    { label: "💥 爆炸分解 / 復原", fn: toggleExplode }
+  ]
+});
+
+// SCENE 2: 馬頭頸與前肢
+SCENES.push({
+  name: "(2) 馬頭頸與前肢",
+  title: "馬頭部・頸椎與前肢單蹄機構",
+  desc: `
+    馬前肢承擔全身 60-65% 體重，主要功能為吸收高速著地之強大垂直震盪。<br>
+    <table>
+      <tr><th>構造</th><th>解剖結構</th><th>臨床重要性</th></tr>
+      <tr><td>頭顱副鼻竇</td><td>額竇與上頜竇直接相通</td><td>竇蓄膿穿孔引流術（Sinus Trephination）重要位置</td></tr>
+      <tr><td>球節懸吊系統</td><td>第三掌骨遠端、近端種子骨、懸韌帶</td><td>球節下沉過度引發種子骨炎（Sesamoiditis）</td></tr>
+      <tr><td>單蹄懸吊</td><td>蹄匣（Hoof capsule）內之角質與真皮葉層</td><td>蹄葉炎（Laminitis）時葉層缺血壞死，蹄骨旋轉穿底</td></tr>
+    </table>
+  `,
+  camera: { pos: [9, 0, 46], target: [9, 0, 0] },
+  build: function() {
+    SCENES[0].build(); // 復用骨骼模型
+  },
+  controls: [
+    { label: "🐴 側觀視角", fn: () => flyTo([9, 0, 46], [9, 0, 0]) },
+    { label: "🔍 正面檢視", fn: () => flyTo([48, 2, 0], [0, 0, 0]) },
+    { label: "💥 爆炸分解 / 復原", fn: toggleExplode }
+  ]
+});
+
+// SCENE 3: 馬脊椎與後肢
+SCENES.push({
+  name: "(3) 馬後肢與骨盆",
+  title: "馬骨盆・後肢與站立靜止裝置 (Stay Apparatus)",
+  desc: `
+    後肢為馬奔馳前進之動力引擎，並具特化之關節聯鎖靜止裝置。<br>
+    <table>
+      <tr><th>構造</th><th>解剖特徵</th><th>獸醫臨床重點</th></tr>
+      <tr><td>第三轉子</td><td>股骨外側之粗大骨突</td><td>臀淺肌附著處，馬特徵解剖標記</td></tr>
+      <tr><td>膝蓋鎖定機制</td><td>髕骨軟骨勾鎖於股骨內側滑車脊</td><td>鎖定時後肢不需肌肉出力即可支撐體重；偶發髕骨上方固定（習慣性鎖死）</td></tr>
+      <tr><td>相互聯動裝置</td><td>腓骨第三肌與趾淺屈肌肌腱索</td><td>膝關節屈曲時強制飛節同步屈曲，兩關節角度永保聯鎖</td></tr>
+    </table>
+  `,
+  camera: { pos: [-11, -2, 42], target: [-11, -2, 0] },
+  build: function() {
+    SCENES[0].build();
+  },
+  controls: [
+    { label: "🐎 骨盆與第三轉子特寫", fn: () => flyTo([-10, 4, 22], [-10, 4, 0]) },
+    { label: "🦵 膝關節與髕骨特寫", fn: () => flyTo([-10, -1, 16], [-10, -1, 0]) },
+    { label: "💥 爆炸分解 / 復原", fn: toggleExplode }
+  ]
+});
+
+// SCENE 4: 狗內臟器官
+SCENES.push({
+  name: "(4) 狗內臟器官",
+  title: "狗胸腹腔內臟器官 (Canine Visceral Organs)",
+  desc: `
+    食肉目犬（<em>Canis lupus familiaris</em>）內臟器官解剖拓撲：<br>
+    <table>
+      <tr><th>器官</th><th>解剖特徵形態</th><th>臨床與生理特點</th></tr>
+      <tr><td>氣管與肺</td><td>C形軟骨環；左肺2葉(前葉分前後部)，右肺4葉(含副葉)</td><td>右肺副葉包繞後腔靜脈；心切跡位於第4-5肋間</td></tr>
+      <tr><td>心臟</td><td>斜置於第3-6肋間，心尖偏左朝尾腹側</td><td>犬心絲蟲寄生於右心室與肺動脈</td></tr>
+      <tr><td>單胃</td><td>C形彎曲單室胃，左側胃底膨大，接幽門竇</td><td>大型犬易發「胃扭轉膨脹綜合症（GDV）」危急重症</td></tr>
+      <tr><td>多葉肝臟</td><td>深裂為6葉（左外、左內、方葉、右內、右外、尾狀葉）</td><td>膽囊位於方葉與右內葉間；尾狀突具右腎窩</td></tr>
+      <tr><td>舌狀脾臟</td><td>扁平舌狀，經胃脾韌帶掛於胃大彎</td><td>脾臟富含平滑肌，為體內重要血液儲存庫，易發脾血腫</td></tr>
+      <tr><td>左右腎臟</td><td>單乳頭平滑腎；左腎游離位置靠後，右腎位置靠前</td><td>左腎腹壁易於直接觸診；右腎嵌於肝尾狀突</td></tr>
+    </table>
+  `,
+  camera: { pos: [0, 0, 26], target: [-1, 0, 0] },
+  build: function() {
+    let root = null;
+    if (window.DOG_OBJ_DATA) {
+      root = loadOBJString(window.DOG_OBJ_DATA);
+    }
+    if (!root || root.children.length === 0) {
+      root = buildFallbackDog();
+    }
+
+    const box = new THREE.Box3().setFromObject(root);
+    const center = new THREE.Vector3();
+    box.getCenter(center);
+    const size = new THREE.Vector3();
+    box.getSize(size);
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const scale = 24 / (maxDim || 1);
+    root.scale.set(scale, scale, scale);
+    root.position.sub(center.clone().multiplyScalar(scale));
+    CUR.root.add(root);
+
+    // 器官配色與資料表
+    const dogOrgans = [
+      { id: "dog_brain", match: /brain/i, zh: "大腦與小腦 (腦部總成)", en: "Canine Brain (Cerebrum & Cerebellum)", latin: "Encephalon", grp: "神經與感知", col: 0xfbcfe8, desc: "大腦雙半球具腦回與縱裂分隔，前端具巨大嗅球；後方為具葉片之小腦，腹側接腦橋與延腦。", clinical: "犬嗅覺受體細胞數量高達人類數十倍，嗅球極發達。" },
+      { id: "dog_trachea", match: /trachea/i, zh: "氣管與主支氣管樹", en: "Trachea & Bronchi", latin: "Trachea", grp: "呼吸系統", col: 0x7dd3fc, desc: "由約35枚C形透明軟骨環構成，背側由氣管肌封閉；心底分左右主支氣管。", clinical: "小型玩賞犬（如博美、貴賓）常見氣管塌陷（Tracheal collapse）。" },
+      { id: "dog_heart", match: /heart/i, zh: "心臟與大血管幹", en: "Heart & Great Vessels", latin: "Cor", grp: "循環系統", col: 0xbe123c, desc: "斜置於第3–6肋間，含左右心房、心室、冠狀溝，接主動脈弓與腔靜脈。", clinical: "老年小型犬常發二尖瓣黏液瘤樣退化（MMVD）。" },
+      { id: "dog_lung_left", match: /lung_left/i, zh: "左肺 (前葉前後部與後葉)", en: "Left Lung (2 Lobes)", latin: "Pulmo sinister", grp: "呼吸系統", col: 0xfb7185, wall: true, wallO: 0.85, desc: "左肺分為前葉（再細分為頭段與尾段）及後葉，腹側形成心切跡。", clinical: "心切跡提供超音波心臟掃描之聲窗（Acoustic window）。" },
+      { id: "dog_lung_right", match: /lung_right/i, zh: "右肺 (4葉：前中後副葉)", en: "Right Lung (4 Lobes)", latin: "Pulmo dexter", grp: "呼吸系統", col: 0xf43f5e, wall: true, wallO: 0.85, desc: "右肺大於左肺，包含前葉、中葉、後葉，以及包繞後腔靜脈之副葉。", clinical: "右肺副葉藏於心臟與橫膈間，異物吸入時常進入右肺葉。" },
+      { id: "dog_liver", match: /liver/i, zh: "肝臟 (6葉深裂)", en: "Liver (6 Lobes)", latin: "Hepar", grp: "消化系統", col: 0x881337, desc: "緊貼橫膈，深裂為左外、左內、方葉、右內、右外與尾狀葉。", clinical: "門脈分流（PSS）為幼犬常見血管畸形，毒素未經肝臟解毒直達腦部。" },
+      { id: "dog_gallbladder", match: /gallbladder/i, zh: "膽囊與總膽管", en: "Gallbladder & Bile Duct", latin: "Vesica fellea", grp: "消化系統", col: 0x15803d, desc: "梨形囊袋，位於方葉與右內側葉之間的膽囊窩，經膽管通十二指腸。", clinical: "膽囊黏液囊腫（Gallbladder mucocele）好發於喜樂蒂與雪納瑞犬。" },
+      { id: "dog_stomach", match: /stomach/i, zh: "胃 (單室C形囊)", en: "Canine Stomach", latin: "Gaster", grp: "消化系統", col: 0xf472b6, desc: "位於左季肋部，賁門接食道，胃底向背左側膨大，胃體下行轉向幽門。", clinical: "胃擴張扭轉（GDV）會迅速壓迫後腔靜脈造成休克，須緊急去壓手術。" },
+      { id: "dog_spleen", match: /spleen/i, zh: "脾臟 (舌狀掛於胃大彎)", en: "Spleen (Tongue-shaped)", latin: "Lien", grp: "淋巴與免疫", col: 0x4c0519, desc: "扁平長舌狀，經胃脾韌帶掛於胃大彎左側腹壁，背端窄腹端寬。", clinical: "脾臟富含血液，鈍力挫傷易引發嚴重腹腔內大出血（Hemoperitoneum）。" },
+      { id: "dog_pancreas", match: /pancreas/i, zh: "胰臟 (V形兩葉)", en: "Pancreas (V-shaped)", latin: "Pancreas", grp: "消化與內分泌", col: 0xfde047, desc: "呈V字形：右葉沿降十二指腸伸展，左葉沿胃大彎後方伸向脾臟。", clinical: "攝取高脂肪食物易誘發急性胰臟炎（Acute pancreatitis）。" },
+      { id: "dog_small_intestine", match: /small_intestine/i, zh: "小腸 (十二指腸・空腸・迴腸)", en: "Small Intestine", latin: "Intestinum tenue", grp: "消化系統", col: 0xfca5a5, desc: "十二指腸沿右側腹壁下行，空腸形成發達腸曲盤繞於腹底，迴腸短直。", clinical: "幼犬腸套疊（Intussusception）與線狀異物最常卡在空腸段。" },
+      { id: "dog_cecum", match: /cecum/i, zh: "盲腸 (S形螺旋短盲囊)", en: "Canine Cecum", latin: "Caecum", grp: "消化系統", col: 0xd97706, desc: "短小S形螺旋狀盲囊，位於右側迴結腸接合處，開口通結腸。", clinical: "犬無真正闌尾，盲腸炎較罕見但偶有盲腸內翻或寄生蟲（鞭蟲）寄生。" },
+      { id: "dog_colon", match: /colon/i, zh: "結腸與直腸 (問號形)", en: "Colon & Rectum", latin: "Colon et rectum", grp: "消化系統", col: 0xb45309, desc: "升結腸短、轉為橫結腸再延續為左側長降結腸，入骨盆腔為直腸。", clinical: "高齡公犬攝護腺肥大常壓迫直腸導致裏急後重與排便困難。" },
+      { id: "dog_kidney_left", match: /kidney_left/i, zh: "左腎 (長腹膜繫帶・游離易觸)", en: "Left Kidney", latin: "Ren sinister", grp: "泌尿系統", col: 0x9f1239, desc: "平滑單乳頭腎，具較長之腹膜繫帶，位置靠後（約L2-L4）。", clinical: "左腎位置浮動，臨床腹壁觸診極易以手指握持定位。" },
+      { id: "dog_kidney_right", match: /kidney_right/i, zh: "右腎 (嵌於肝尾狀突腎窩)", en: "Right Kidney", latin: "Ren dexter", grp: "泌尿系統", col: 0x881337, desc: "位置較左腎靠前（約T13-L2），頭端緊緊嵌入肝臟尾狀突之腎窩。", clinical: "母犬絕育時右側卵巢動靜脈離右腎極近，結紮需特別注意避開右腎。" },
+      { id: "dog_urinary_bladder", match: /bladder/i, zh: "膀胱與尿道", en: "Urinary Bladder & Urethra", latin: "Vesica urinaria", grp: "泌尿系統", col: 0xf59e0b, wall: true, wallO: 0.85, desc: "梨形平滑肌囊，位於骨盆入口前腹壁，膨脹時可達肚臍平面。", clinical: "公犬尿道曲與陰莖骨處狹窄，尿道結石最常嵌頓於此引起尿道阻塞。" }
+    ];
+
+    root.traverse(child => {
+      if (child.isMesh) {
+        let matched = false;
+        for (let o of dogOrgans) {
+          if (o.match.test(child.name)) {
+            child.material = new THREE.MeshLambertMaterial({
+              color: o.col,
+              transparent: !!o.wall,
+              opacity: o.wall ? o.wallO : 1.0
+            });
+            const bb = new THREE.Box3().setFromObject(child);
+            const anchor = new THREE.Vector3();
+            bb.getCenter(anchor);
+
+            regPart({
+              id: o.id,
+              zh: o.zh,
+              en: o.en,
+              latin: o.latin,
+              grp: o.grp,
+              desc: o.desc,
+              clinical: o.clinical,
+              meshes: [child],
+              anchor: anchor,
+              visible: true,
+              wall: o.wall,
+              wallO: o.wallO
+            });
+            matched = true;
+            break;
+          }
+        }
+        if (!matched) {
+          child.material = new THREE.MeshLambertMaterial({ color: 0xcccccc });
+        }
+      }
+    });
+  },
+  controls: [
+    { label: "🫀 聚焦心肺與胸腔", fn: () => flyTo([2, 1, 14], [2, 0, 0]) },
+    { label: "🥩 聚焦消化道 (胃肝腸)", fn: () => flyTo([-3, -1, 16], [-3, -1, 0]) },
+    { label: "💧 聚焦泌尿系統 (腎膀胱)", fn: () => flyTo([-6, 0, 16], [-6, 0, 0]) },
+    { label: "💥 爆炸分解 / 復原", fn: toggleExplode }
+  ]
+});
+
+// SCENE 5: 豬特徵器官
+SCENES.push({
+  name: "(5) 豬特徵器官",
+  title: "豬特徵解剖器官 (Porcine Characteristic Organs)",
+  desc: `
+    偶蹄目豬（<em>Sus scrofa domesticus</em>）特化雜食解剖奇觀：<br>
+    <table>
+      <tr><th>特徵構造</th><th>解剖學構造名稱</th><th>臨床與辨識重點</th></tr>
+      <tr><td>吻骨</td><td>吻骨 (Os rostri) 與吻軟骨</td><td>吻端特化異位骨，支撐強韌鼻鏡拱土</td></tr>
+      <tr><td>氣管支氣管</td><td>氣管支氣管 (Tracheal bronchus)</td><td>隆突前右壁單獨發出，直接供氣右肺前葉（插管需注意）</td></tr>
+      <tr><td>胃憩室</td><td>胃憩室 (Diverticulum ventriculi)</td><td>胃底背側之圓錐形盲囊；幽門處具<strong>幽門枕</strong></td></tr>
+      <tr><td>螺旋結腸盤</td><td>圓錐螺旋結腸 (Spiral colon)</td><td>升結腸盤成圓錐形：外層向心迴旋（有帶），內層離心迴旋（平滑）</td></tr>
+      <tr><td>小葉網紋肝</td><td>網紋分葉肝 (Interlobular texture)</td><td>小葉間結締組織極為發達，肉眼可見清晰多角形小葉紋路</td></tr>
+      <tr><td>帶狀脾臟</td><td>長條帶狀脾 (Strap-like spleen)</td><td>極為狹長扁平，完全不呈舌狀，沿胃大彎延伸</td></tr>
+    </table>
+  `,
+  camera: { pos: [0, 0, 26], target: [-2, 0, 0] },
+  build: function() {
+    let root = null;
+    if (window.PIG_OBJ_DATA) {
+      root = loadOBJString(window.PIG_OBJ_DATA);
+    }
+    if (!root || root.children.length === 0) {
+      root = buildFallbackPig();
+    }
+
+    const box = new THREE.Box3().setFromObject(root);
+    const center = new THREE.Vector3();
+    box.getCenter(center);
+    const size = new THREE.Vector3();
+    box.getSize(size);
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const scale = 24 / (maxDim || 1);
+    root.scale.set(scale, scale, scale);
+    root.position.sub(center.clone().multiplyScalar(scale));
+    CUR.root.add(root);
+
+    const pigOrgans = [
+      { id: "pig_rostral_bone", match: /rostral|os_rostri/i, zh: "吻骨與吻軟骨 (拱土特化)", en: "Rostral Bone & Cartilage", latin: "Os rostri", grp: "頭部特徵", col: 0x93c5fd, desc: "位於吻端鼻中膈前端的特殊骨性構造，牢固支撐平截多肉之鼻鏡，專供拱掘泥土與地底植物根莖。", clinical: "防拱鼻環（Pig nose ring）即穿刺於此骨與軟骨邊緣以抑制破壞性拱地行為。" },
+      { id: "pig_trachea_and_bronchus", match: /trachea/i, zh: "氣管與特徵「氣管支氣管」", en: "Trachea & Tracheal Bronchus", latin: "Bronchus trachealis", grp: "呼吸系統", col: 0x38bdf8, desc: "在氣管分叉隆突前方數公分處，右側管壁直接分出一條「氣管支氣管」，單獨進入並供應右肺前葉。", clinical: "豬插管麻醉時若氣管導管過深，容易阻塞氣管支氣管導致右肺前葉萎陷！" },
+      { id: "pig_heart", match: /heart/i, zh: "心臟與大血管", en: "Porcine Heart", latin: "Cor", grp: "循環系統", col: 0xbe123c, desc: "由心房、左右心室與心尖構成，體積相對豬龐大體重而言比例較小。", clinical: "豬心臟冠狀動脈解剖結構與人類極度相似，為心血管支架醫學研究之黃金模型。" },
+      { id: "pig_lungs", match: /lung/i, zh: "分葉肺臟 (右4葉・左2葉)", en: "Lobulated Lungs (Right 4 / Left 2)", latin: "Pulmones", grp: "呼吸系統", col: 0xfb7185, wall: true, wallO: 0.85, desc: "右肺包含前葉、中葉、後葉與副葉；左肺分前葉與後葉。右前葉由專屬之氣管支氣管供氣。", clinical: "豬黴漿菌肺炎（支原體肺炎）最典型病灶好發於雙側肺前葉與中葉之肉樣實變。" },
+      { id: "pig_stomach_diverticulum", match: /stomach|diverticulum/i, zh: "單室胃、胃憩室與幽門枕", en: "Stomach, Gastric Diverticulum & Torus Pyloricus", latin: "Diverticulum ventriculi et torus pyloricus", grp: "消化系統", col: 0xf472b6, desc: "單室胃背側具特徵錐形盲囊「胃憩室」；幽門括約肌處具凸入管腔之半球形「幽門枕（Torus pyloricus）」。", clinical: "密集飼養豬易在食道部黏膜發生劇烈胃潰瘍（Gastric ulcer），可引起致命出血。" },
+      { id: "pig_liver_lobules", match: /liver/i, zh: "分葉肝臟 (顯著小葉間網紋)", en: "Liver (Interlobular Fibrous Texture)", latin: "Hepar", grp: "消化系統", col: 0x881337, desc: "分葉深裂，其最顯著特點為**小葉間結締組織極厚**，肉眼可見清晰之多角形肝小葉網紋。", clinical: "發達的結締組織使豬肝質地堅韌切面分明，但豬蛔蟲幼蟲移行會造成「乳斑肝（Milk spots）」。" },
+      { id: "pig_gallbladder", match: /gallbladder/i, zh: "膽囊與膽囊管", en: "Gallbladder", latin: "Vesica biliaris", grp: "消化系統", col: 0x15803d, desc: "梨形囊袋位於方葉與右內葉間之膽囊窩，膽管斜穿十二指腸壁開口。", clinical: "膽汁分泌旺盛，富含豬去氧膽酸（Hyodeoxycholic acid）。" },
+      { id: "pig_spleen", match: /spleen/i, zh: "帶狀脾臟 (狹長帶狀)", en: "Strap-like Spleen", latin: "Lien", grp: "淋巴與免疫", col: 0x4c0519, desc: "極度狹長扁平呈帶狀（Strap-like），與犬之舌狀脾大不相同，長度可達 40-50 cm。", clinical: "非洲豬瘟（ASF）時脾臟極度腫大黑紫（充血性脾腫大），為重要剖檢標記。" },
+      { id: "pig_pancreas", match: /pancreas/i, zh: "三葉胰臟 (門靜脈環)", en: "Pancreas (Portal Ring)", latin: "Pancreas", grp: "消化與內分泌", col: 0xfde047, desc: "由體、十二指腸葉、脾葉組成，連接葉與體環繞門靜脈形成門靜脈環。", clinical: "豬胰臟為早期人體糖尿病胰島素萃取的主要天然來源。" },
+      { id: "pig_spiral_colon", match: /spiral_colon/i, zh: "圓錐螺旋結腸盤 (豬標誌性器官)", en: "Conical Spiral Colon (Centripetal & Centrifugal)", latin: "Colon spirale", grp: "消化系統", col: 0xb45309, desc: "升結腸盤旋成基底朝背、尖端朝腹的圓錐體。外層向心迴旋（具袋狀結腸帶），內層離心迴旋（管徑細平滑無帶）。", clinical: "豬赤痢（密螺旋體病）與傳染性胃腸炎（TGE）好發於螺旋結腸，可見黏液纖維素性壞死。" },
+      { id: "pig_cecum", match: /cecum/i, zh: "圓筒盲腸 (具縱行肌帶)", en: "Cylindrical Cecum (with Taeniae)", latin: "Caecum", grp: "消化系統", col: 0xd97706, desc: "粗大圓筒狀盲囊，位於右側，表面有2-3條縱行肌帶（Taeniae）及袋狀分節（Haustra）。", clinical: "盲腸內容物發酵粗纖維，寄生蟲鞭蟲（Trichuris suis）常寄生於此造成黏膜出血。" },
+      { id: "pig_kidneys", match: /kidney/i, zh: "雙側平滑多腎盞腎臟", en: "Paired Smooth Kidneys", latin: "Renes", grp: "泌尿系統", col: 0x9f1239, desc: "左右對稱位於腰下，表面平滑但內部有多個腎錐體與腎小盞、腎大盞結構。", clinical: "豬腎大小、解剖形態與生理代謝與人類腎臟極相近，為異種器官移植之主要研究對象。" },
+      { id: "pig_urinary_bladder", match: /bladder/i, zh: "膀胱與尿道", en: "Urinary Bladder", latin: "Vesica urinaria", grp: "泌尿系統", col: 0xf59e0b, wall: true, wallO: 0.85, desc: "容量龐大的梨形厚壁平滑肌囊袋，伸展於骨盆腔前腹壁。", clinical: "公豬尿道具有「乙狀彎曲（Sigmoid flexure）」，結石易阻滯於彎曲處引起膀胱破裂。" }
+    ];
+
+    root.traverse(child => {
+      if (child.isMesh) {
+        let matched = false;
+        for (let o of pigOrgans) {
+          if (o.match.test(child.name)) {
+            child.material = new THREE.MeshLambertMaterial({
+              color: o.col,
+              transparent: !!o.wall,
+              opacity: o.wall ? o.wallO : 1.0
+            });
+            const bb = new THREE.Box3().setFromObject(child);
+            const anchor = new THREE.Vector3();
+            bb.getCenter(anchor);
+
+            regPart({
+              id: o.id,
+              zh: o.zh,
+              en: o.en,
+              latin: o.latin,
+              grp: o.grp,
+              desc: o.desc,
+              clinical: o.clinical,
+              meshes: [child],
+              anchor: anchor,
+              visible: true,
+              wall: o.wall,
+              wallO: o.wallO
+            });
+            matched = true;
+            break;
+          }
+        }
+        if (!matched) {
+          child.material = new THREE.MeshLambertMaterial({ color: 0xcccccc });
+        }
+      }
+    });
+  },
+  controls: [
+    { label: "🐽 聚焦吻骨與呼吸道", fn: () => flyTo([4, 1, 14], [4, 0, 0]) },
+    { label: "🌀 聚焦圓錐螺旋結腸盤", fn: () => flyTo([-4, -2, 16], [-4, -2, 0]) },
+    { label: "🥩 聚焦胃憩室與分葉肝", fn: () => flyTo([-2, 1, 15], [-2, 0, 0]) },
+    { label: "💥 爆炸分解 / 復原", fn: toggleExplode }
+  ]
+});
+
+// SCENE 6: 狗與豬消化道形態對比
+SCENES.push({
+  name: "(6) 豬狗消化器官對比",
+  title: "犬（食肉類）與豬（雜食類）消化道解剖對比",
+  desc: `
+    食肉目與偶蹄雜食類演化適應之巨觀解剖特徵對照表：<br>
+    <table>
+      <tr><th>比較器官</th><th>犬 (Canine, 食肉類)</th><th>豬 (Porcine, 雜食類)</th></tr>
+      <tr><td>吻部骨骼</td><td>吻端由鼻骨與切齒骨構成，無額外骨</td><td>具獨立<strong>吻骨 (Os rostri)</strong> 支撐拱土</td></tr>
+      <tr><td>氣管構造</td><td>正常氣管分叉成左右主支氣管</td><td>隆突前右壁具<strong>氣管支氣管 (Tracheal bronchus)</strong></td></tr>
+      <tr><td>胃部形態</td><td>單室C形囊，胃底平滑</td><td>具<strong>胃憩室 (Diverticulum)</strong> 與<strong>幽門枕</strong></td></tr>
+      <tr><td>結腸形態</td><td>呈簡單<strong>問號形</strong>（升/橫/降結腸）</td><td>特化為巨大<strong>圓錐螺旋結腸盤 (Spiral colon)</strong></td></tr>
+      <tr><td>肝臟質地</td><td>深裂柔軟，小葉間結締組織薄</td><td>小葉結締組織厚，肉眼可見<strong>清晰小葉網紋</strong></td></tr>
+      <tr><td>脾臟形態</td><td>扁平<strong>舌狀 (Tongue-shaped)</strong></td><td>狹長<strong>帶狀 (Strap-like)</strong>，長達40-50cm</td></tr>
+      <tr><td>盲腸構造</td><td><strong>S形短小螺旋狀</strong>盲囊</td><td>粗大<strong>圓筒狀</strong>，具縱行肌帶與袋狀分節</td></tr>
+    </table>
+  `,
+  camera: { pos: [0, 0, 28], target: [-1, 0, 0] },
+  build: function() {
+    SCENES[4].build(); // 同時展示特徵器官
+  },
+  controls: [
+    { label: "🐕 切換至狗內臟觀看", fn: () => loadScene(3) },
+    { label: "🐖 切換至豬特徵觀看", fn: () => loadScene(4) }
+  ]
+});
+
+// SCENE 7: 解剖隨機抽考
+let QUIZ_STATE = { active: false, curPart: null, score: 0, total: 0, streak: 0 };
+SCENES.push({
+  name: "(7) 隨機抽考測驗",
+  title: "獸醫解剖 3D 中文抽考測驗系統",
+  desc: `
+    互動式 3D 解剖部位隨機抽考：<br>
+    系統將在當前 3D 模型中<strong>聚光鎖定</strong>某個骨骼或內臟部位。<br>
+    請在右下側輸入該構造的<strong>中文名稱</strong>（或通用俗稱/別名），並點擊送出！<br>
+    測驗支援即時音效反饋、答題統計與即時詳解。
+  `,
+  camera: { pos: [0, 0, 26], target: [0, 0, 0] },
+  build: function() {
+    // 預設以馬全身骨骼為題庫
+    SCENES[0].build();
+    setTimeout(() => startQuizQuestion(), 200);
+  },
+  controls: [
+    { label: "🎯 換一題抽考", fn: () => startQuizQuestion() },
+    { label: "🐎 抽考馬骨骼", fn: () => { SCENES[0].build(); startQuizQuestion(); } },
+    { label: "🐕 抽考狗器官", fn: () => { SCENES[3].build(); startQuizQuestion(); } },
+    { label: "🐖 抽考豬器官", fn: () => { SCENES[4].build(); startQuizQuestion(); } }
+  ]
+});
+
+/* =========================================================
+   3D 備用模型產生器 (若未下載 OBJ 亦可 100% 正常運作)
+   ========================================================= */
+function buildFallbackHorse() {
+  const g = new THREE.Group();
+  const mat = new THREE.MeshLambertMaterial({ color: 0xe2d9cc });
+  // 頭顱
+  const head = new THREE.Mesh(new THREE.BoxGeometry(4.5, 3.0, 2.5), mat);
+  head.name = "cranium_fallback"; head.position.set(13, 7, 0); g.add(head);
+  // 脊椎
+  const vert = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 0.9, 22, 12), mat);
+  vert.name = "thoracic_fallback"; vert.rotation.z = Math.PI / 2; vert.position.set(0, 5, 0); g.add(vert);
+  // 骨盆
+  const pel = new THREE.Mesh(new THREE.BoxGeometry(5, 2.5, 3.5), mat);
+  pel.name = "pelvis_fallback"; pel.position.set(-11, 4, 0); g.add(pel);
+  // 前肢
+  const fL = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.4, 16, 10), mat);
+  fL.name = "cannon_fore_l"; fL.position.set(6, -4, 2.5); g.add(fL);
+  const fR = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.4, 16, 10), mat);
+  fR.name = "cannon_fore_r"; fR.position.set(6, -4, -2.5); g.add(fR);
+  // 後肢
+  const hL = new THREE.Mesh(new THREE.CylinderGeometry(0.7, 0.5, 17, 10), mat);
+  hL.name = "cannon_hind_l"; hL.position.set(-11, -4.5, 2.5); g.add(hL);
+  const hR = new THREE.Mesh(new THREE.CylinderGeometry(0.7, 0.5, 17, 10), mat);
+  hR.name = "cannon_hind_r"; hR.position.set(-11, -4.5, -2.5); g.add(hR);
+  return g;
+}
+
+function buildFallbackDog() {
+  const g = new THREE.Group();
+  const m = c => new THREE.MeshLambertMaterial({ color: c });
+  const heart = new THREE.Mesh(new THREE.SphereGeometry(2.0, 16, 14), m(0xbe123c));
+  heart.name = "dog_heart"; heart.position.set(1.5, -0.5, 0); g.add(heart);
+  const lungL = new THREE.Mesh(new THREE.ConeGeometry(2.4, 6, 12), m(0xfb7185));
+  lungL.name = "dog_lung_left"; lungL.rotation.z = -1.4; lungL.position.set(1.2, 0.6, 1.6); g.add(lungL);
+  const lungR = new THREE.Mesh(new THREE.ConeGeometry(2.5, 6, 12), m(0xf43f5e));
+  lungR.name = "dog_lung_right"; lungR.rotation.z = -1.4; lungR.position.set(1.2, 0.6, -1.6); g.add(lungR);
+  const stomach = new THREE.Mesh(new THREE.TorusGeometry(2.2, 1.2, 10, 16), m(0xf472b6));
+  stomach.name = "dog_stomach"; stomach.position.set(-3, -1, 0); g.add(stomach);
+  const liver = new THREE.Mesh(new THREE.SphereGeometry(3.2, 16, 14), m(0x881337));
+  liver.name = "dog_liver"; liver.position.set(-1, -0.2, 0); g.add(liver);
+  return g;
+}
+
+function buildFallbackPig() {
+  const g = new THREE.Group();
+  const m = c => new THREE.MeshLambertMaterial({ color: c });
+  const snout = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.2, 1.8, 12), m(0x93c5fd));
+  snout.name = "pig_rostral_bone"; snout.rotation.z = Math.PI / 2; snout.position.set(6, 1, 0); g.add(snout);
+  const spiral = new THREE.Mesh(new THREE.ConeGeometry(2.8, 5, 14), m(0xb45309));
+  spiral.name = "pig_spiral_colon"; spiral.position.set(-4, -1.5, 0); g.add(spiral);
+  const stomach = new THREE.Mesh(new THREE.SphereGeometry(2.5, 14, 12), m(0xf472b6));
+  stomach.name = "pig_stomach_diverticulum"; stomach.position.set(-2, 0, 0); g.add(stomach);
+  return g;
+}
+
+/* =========================================================
+   爆炸分解動畫 (Exploded View Animation)
+   ========================================================= */
+let isExploded = false;
+function toggleExplode() {
+  isExploded = !isExploded;
+  const factor = isExploded ? 1.7 : 1.0;
+  CUR.parts.forEach(p => {
+    p.meshes.forEach(m => {
+      if (!m.userData.origPos) m.userData.origPos = m.position.clone();
+      const targetPos = isExploded
+        ? m.userData.origPos.clone().multiplyScalar(factor).add(p.anchor.clone().multiplyScalar(0.45))
+        : m.userData.origPos.clone();
+      flyMesh(m, targetPos, 600);
+    });
+  });
+  SOUND.playClick();
+}
+
+function flyMesh(mesh, targetPos, ms = 600) {
+  const startPos = mesh.position.clone();
+  const startTime = performance.now();
+  function step() {
+    const elapsed = performance.now() - startTime;
+    const t = Math.min(1, elapsed / ms);
+    const ease = t * t * (3 - 2 * t);
+    mesh.position.lerpVectors(startPos, targetPos, ease);
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+/* =========================================================
+   隨機抽考測驗邏輯
+   ========================================================= */
+function startQuizQuestion() {
+  if (CUR.parts.length === 0) return;
+  QUIZ_STATE.active = true;
+  const validParts = CUR.parts.filter(p => p.visible && p.zh);
+  const picked = validParts[Math.floor(Math.random() * validParts.length)];
+  QUIZ_STATE.curPart = picked;
+
+  select(picked);
+  resolveAnchor(picked);
+  if (picked.anchor) {
+    flyTo(
+      [picked.anchor.x + 4, picked.anchor.y + 2, picked.anchor.z + 12],
+      [picked.anchor.x, picked.anchor.y, picked.anchor.z],
+      600
+    );
+  }
+
+  // 渲染右側測驗 Widget
+  $('info').innerHTML = `
+    <div class="quiz-widget">
+      <span class="quiz-badge">🎯 解剖隨機抽考</span>
+      <div style="font-size:12px; color:#93c5fd;">已聚焦鎖定 3D 模型中高亮閃爍之部位：</div>
+      <div class="quiz-prompt">請輸入此解剖構造的<strong>中文名稱</strong>：</div>
+      <div class="quiz-row">
+        <input type="text" class="quiz-input" id="quiz-ans" placeholder="輸入名稱 (如: 股骨、盲腸...)" autofocus />
+        <button id="quiz-sub" style="background:#2563eb; color:#fff; padding:6px 14px; border:none; border-radius:4px; cursor:pointer; font-weight:700;">提交</button>
+      </div>
+      <div id="quiz-feedback"></div>
+      <div style="margin-top:10px; font-size:12px; color:#9ca3af;">
+        統計：答對 <strong>${QUIZ_STATE.score}</strong> / <strong>${QUIZ_STATE.total}</strong> 題 ｜ 🔥 連續答對：<strong>${QUIZ_STATE.streak}</strong>
+      </div>
+    </div>
+  `;
+
+  const inputEl = $('quiz-ans');
+  const submitBtn = $('quiz-sub');
+
+  const checkAns = () => {
+    const val = inputEl.value.trim().toLowerCase();
+    if (!val) return;
+    QUIZ_STATE.total++;
+    const fb = $('quiz-feedback');
+    const targetName = picked.zh.toLowerCase();
+    const isCorrect = val === targetName || targetName.includes(val) || val.includes(targetName.split(' ')[0]);
+
+    if (isCorrect) {
+      QUIZ_STATE.score++;
+      QUIZ_STATE.streak++;
+      SOUND.playRight();
+      fb.className = "quiz-res ok";
+      fb.innerHTML = `🎉 <strong>答對了！</strong><br>此構造為：<strong>${picked.zh}</strong><br><small>${picked.en} (${picked.latin})</small><br>${picked.desc}`;
+    } else {
+      QUIZ_STATE.streak = 0;
+      SOUND.playWrong();
+      fb.className = "quiz-res err";
+      fb.innerHTML = `❌ <strong>再接再厲！</strong><br>正確答案為：<strong>${picked.zh}</strong><br><small>${picked.en} (${picked.latin})</small><br>${picked.desc}`;
+    }
+    inputEl.disabled = true;
+    submitBtn.textContent = "下一題 ▶";
+    submitBtn.style.background = "#059669";
+    submitBtn.onclick = () => startQuizQuestion();
+  };
+
+  submitBtn.onclick = checkAns;
+  inputEl.onkeydown = e => { if (e.key === 'Enter') checkAns(); };
+  inputEl.focus();
+}
+
+/* =========================================================
+   主系統初始化與事件管理
+   ========================================================= */
+function init() {
+  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.05;
+  cvBox.insertBefore(renderer.domElement, cvBox.firstChild);
+
+  scene3 = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(40, cvBox.clientWidth / cvBox.clientHeight, 0.1, 500);
+
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.08;
+  controls.autoRotateSpeed = 1.2;
+
+  // 柔和光照系統
+  scene3.add(new THREE.HemisphereLight(0xfff5ea, 0x1f2937, 0.65));
+  keyLight = new THREE.DirectionalLight(0xffffff, 1.2);
+  keyLight.position.set(15, 25, 20);
+  scene3.add(keyLight);
+  const fillLight = new THREE.DirectionalLight(0x7dd3fc, 0.55);
+  fillLight.position.set(-15, 10, -15);
+  scene3.add(fillLight);
+
+  window.addEventListener('resize', resize);
+  resize();
+
+  // 構建頂端頁籤
+  const tabs = $('tabs');
+  SCENES.forEach((s, i) => {
+    const b = document.createElement('div');
+    b.className = 'tab';
+    b.textContent = s.name;
+    b.onclick = () => loadScene(i);
+    tabs.appendChild(b);
+  });
+
+  // 控制項綁定
+  $('lm').onchange = refresh;
+  $('iso').onchange = refresh;
+  $('xray').onchange = () => { XRAY = $('xray').checked; refresh(); };
+  $('rot').onchange = () => controls.autoRotate = $('rot').checked;
+  $('reset').onclick = resetCam;
+  $('wbtn').onclick = () => { document.body.classList.toggle('wide'); resize(); };
+  $('showall').onclick = () => {
+    CUR.parts.forEach(p => p.visible = true);
+    rebuildList();
+    refresh();
+    SOUND.playClick();
+  };
+
+  // 3D 射線點選與懸停提示
+  const ray = new THREE.Raycaster();
+  const mouse = new THREE.Vector2();
+  let downPos = null;
+  const canvasEl = renderer.domElement;
+
+  function pick(ev) {
+    if (!CUR.root) return null;
+    const r = canvasEl.getBoundingClientRect();
+    mouse.set(((ev.clientX - r.left) / r.width) * 2 - 1, -((ev.clientY - r.top) / r.height) * 2 + 1);
+    ray.setFromCamera(mouse, camera);
+    const hits = ray.intersectObjects(CUR.root.children, true)
+      .filter(h => h.object.userData.part && h.object.userData.part.visible && h.object.visible);
+    if (!hits.length) return null;
+    // 孤立模式下其餘構造已淡化成半透明，點擊應穿透它們，優先選到目前高亮的構造
+    if ($('iso').checked && selected) {
+      const h = hits.find(h => h.object.userData.part === selected);
+      if (h) return selected;
+    }
+    return hits[0].object.userData.part;
+  }
+
+  canvasEl.addEventListener('pointerdown', e => downPos = [e.clientX, e.clientY]);
+  canvasEl.addEventListener('pointerup', e => {
+    if (downPos && Math.hypot(e.clientX - downPos[0], e.clientY - downPos[1]) < 6) {
+      const p = pick(e);
+      select(p);
+      SOUND.playClick();
+    }
+    downPos = null;
+  });
+
+  let lastMove = 0;
+  canvasEl.addEventListener('pointermove', e => {
+    if (e.buttons) { $('tip').style.display = 'none'; return; }
+    const now = performance.now();
+    if (now - lastMove < 50) return;
+    lastMove = now;
+    const p = pick(e), t = $('tip');
+    if (p) {
+      t.innerHTML = `<strong>${p.zh}</strong><br><small style="color:#93c5fd;">${p.latin || p.en}</small>`;
+      t.style.display = 'block';
+      t.style.left = (e.clientX + 14) + 'px';
+      t.style.top = (e.clientY + 14) + 'px';
+      canvasEl.style.cursor = 'pointer';
+    } else {
+      t.style.display = 'none';
+      canvasEl.style.cursor = 'default';
+    }
+  });
+
+  loadScene(0);
+
+  // 動畫主循環
+  (function loop() {
+    requestAnimationFrame(loop);
+    stepFly();
+    controls.update();
+    if (CUR.tick) CUR.tick();
+    renderer.render(scene3, camera);
+    updateLabels();
+  })();
+}
+
+function resize() {
+  const w = cvBox.clientWidth, h = cvBox.clientHeight;
+  renderer.setSize(w, h);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+
+function loadScene(idx) {
+  if (CUR.root) {
+    scene3.remove(CUR.root);
+    CUR.root.traverse(o => {
+      if (o.geometry && !o.geometry.userData.shared) o.geometry.dispose();
+    });
+  }
+  curIdx = idx;
+  selected = null;
+  CUR.parts = [];
+  CUR.tick = null;
+  fly = null;
+  isExploded = false;
+  QUIZ_STATE.active = false;
+
+  CUR.root = new THREE.Group();
+  scene3.add(CUR.root);
+
+  const sc = SCENES[idx];
+  $('extra').innerHTML = '';
+  sc.build();
+
+  // 記錄原始材質參數
+  CUR.parts.forEach(p => p.meshes.forEach(m => {
+    if (m.material) {
+      m.material.userData.baseO = m.material.opacity;
+      m.material.userData.baseC = m.material.emissive ? m.material.emissive.getHex() : 0;
+    }
+  }));
+
+  [...$('tabs').children].forEach((t, k) => t.classList.toggle('on', k === idx));
+  $('desc').innerHTML = '<h2>' + sc.title + '</h2>' + sc.desc;
+
+  if (sc.controls) {
+    sc.controls.forEach(c => {
+      const b = document.createElement('button');
+      b.textContent = c.label;
+      b.onclick = c.fn;
+      $('extra').appendChild(b);
+    });
+  }
+
+  $('info').innerHTML = '<div class="hint">👆 點擊 3D 模型機構／標籤，即可查看解剖名稱與功能。<br>左鍵拖曳旋轉、滾輪縮放、右鍵平移。</div>';
+
+  // 構建浮動標籤與引線
+  $('labels').innerHTML = '';
+  $('svg').innerHTML = '';
+  labelEls = [];
+
+  CUR.parts.forEach(p => {
+    const d = document.createElement('div');
+    d.className = 'lab';
+    d.innerHTML = p.zh + '<small>' + (p.latin || p.en) + '</small>';
+    d.onclick = () => { select(p); SOUND.playClick(); };
+    $('labels').appendChild(d);
+
+    const ln = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    ln.setAttribute('stroke', '#7fb6e8');
+    ln.setAttribute('stroke-width', '1');
+    ln.setAttribute('stroke-opacity', '0.75');
+    $('svg').appendChild(ln);
+
+    labelEls.push({ p, d, ln });
+  });
+
+  rebuildList();
+  resetCam();
+  refresh();
+}
+
+function resetCam() {
+  fly = null;
+  const c = SCENES[curIdx].camera;
+  camera.position.set(...c.pos);
+  controls.target.set(...c.target);
+  controls.update();
+}
+
+function flyTo(pos, target, ms = 700) {
+  fly = {
+    p0: camera.position.clone(),
+    t0: controls.target.clone(),
+    p1: V(...pos),
+    t1: V(...target),
+    s: performance.now(),
+    ms
+  };
+}
+
+function stepFly() {
+  if (!fly) return;
+  let k = Math.min(1, (performance.now() - fly.s) / fly.ms);
+  k = k * k * (3 - 2 * k); // Smooth ease
+  camera.position.lerpVectors(fly.p0, fly.p1, k);
+  controls.target.lerpVectors(fly.t0, fly.t1, k);
+  if (k >= 1) fly = null;
+}
+
+function rebuildList() {
+  const box = $('plist');
+  box.innerHTML = '';
+  let lastG = null;
+
+  CUR.parts.forEach(p => {
+    if (p.grp !== lastG) {
+      const g = document.createElement('div');
+      g.className = 'grp';
+      g.textContent = p.grp;
+      box.appendChild(g);
+      lastG = p.grp;
+    }
+
+    const r = document.createElement('div');
+    r.className = 'row';
+    p.row = r;
+
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.checked = p.visible;
+    cb.onclick = e => {
+      e.stopPropagation();
+      p.visible = cb.checked;
+      refresh();
+    };
+
+    const sw = document.createElement('div');
+    sw.className = 'sw';
+    const m = p.meshes[0];
+    const hex = (m && m.material && m.material.userData.hex !== undefined)
+      ? m.material.userData.hex
+      : (m && m.material && m.material.color ? m.material.color.getHex() : 0xe2d9cc);
+    sw.style.background = '#' + hex.toString(16).padStart(6, '0');
+
+    const n = document.createElement('span');
+    n.className = 'n';
+    n.textContent = p.zh;
+
+    r.append(cb, sw, n);
+    r.onclick = () => { select(p); SOUND.playClick(); };
+    box.appendChild(r);
+  });
+}
+
+function select(p) {
+  selected = p;
+  if (p) {
+    if (!QUIZ_STATE.active) {
+      $('info').innerHTML = `
+        <h3>${p.zh}</h3>
+        <div class="en">${p.en} ${p.latin ? '(' + p.latin + ')' : ''}</div>
+        <span class="g">${p.grp}</span>
+        <div class="t">${p.desc}</div>
+        ${p.clinical ? `<div class="clinical">💡 <strong>獸醫臨床重點：</strong>${p.clinical}</div>` : ''}
+      `;
+    }
+    if (!p.visible) {
+      p.visible = true;
+      rebuildList();
+    }
+    if (p.wall && !XRAY) {
+      XRAY = true;
+      $('xray').checked = true;
+    }
+  }
+  refresh();
+}
+
+function refresh() {
+  const iso = $('iso').checked;
+  CUR.parts.forEach(p => {
+    p.meshes.forEach(m => {
+      if (!m.material) return;
+      m.visible = p.visible;
+      const baseO = (!XRAY && p.wall) ? p.wallO : m.material.userData.baseO;
+      const isSel = (p === selected);
+
+      if (m.material.emissive) {
+        m.material.emissive.setHex(isSel ? 0x663300 : m.material.userData.baseC);
+      }
+
+      if (iso && selected && !isSel) {
+        m.material.transparent = true;
+        m.material.opacity = Math.min(baseO, 0.12);
+        m.material.depthWrite = false;
+      } else {
+        m.material.opacity = baseO;
+        m.material.transparent = baseO < 1;
+        m.material.depthWrite = baseO >= 0.9;
+      }
+    });
+
+    if (p.row) {
+      p.row.classList.toggle('sel', p === selected);
+      if (p.row.firstChild) p.row.firstChild.checked = p.visible;
+    }
+  });
+}
+
+const _v = new THREE.Vector3();
+
+// 錨點：取構造包圍盒（朝鏡頭面）中心後吸附到最近的表面三角形（避免 C 形胃、螺旋結腸等中心落在器官外），
+// 以 mesh 局部座標保存，每幀依 matrixWorld 換算，縮放／爆炸分解後仍能對準
+function resolveAnchor(p) {
+  if (!p.meshes.length) return;
+  if (!p._anc) {
+    CUR.root.updateMatrixWorld(true);
+    const bb = new THREE.Box3();
+    const src = p.anchorMeshes || p.meshes;
+    src.forEach(m => bb.expandByObject(m));
+    if (bb.isEmpty()) return;
+    // 目標點取包圍盒朝鏡頭（+Z）那一面的中心，讓錨點落在看得見的表面上
+    const c = bb.getCenter(new THREE.Vector3());
+    c.z = bb.max.z;
+    // anchorAt 可改取頂端／底端（如胸椎棘突頂、胸骨腹側），避開被其他骨骼遮住的位置
+    if (p.anchorAt === 'top') c.y = bb.max.y;
+    else if (p.anchorAt === 'bottom') c.y = bb.min.y;
+    const t = new THREE.Vector3();
+    let best = Infinity, bestMesh = null, bestLocal = null;
+    // 取最近的三角形中心（而非頂點），錨點才會落在面內、不會卡在輪廓邊緣點不到
+    const a = new THREE.Vector3(), b = new THREE.Vector3(), cc = new THREE.Vector3();
+    src.forEach(m => {
+      const geo = m.geometry, pos = geo && geo.attributes.position;
+      if (!pos) return;
+      const idx = geo.index, nTri = (idx ? idx.count : pos.count) / 3;
+      const step = Math.max(1, Math.floor(nTri / 20000));
+      const vi = k => idx ? idx.getX(k) : k;
+      for (let f = 0; f < nTri; f += step) {
+        a.fromBufferAttribute(pos, vi(f * 3));
+        b.fromBufferAttribute(pos, vi(f * 3 + 1));
+        cc.fromBufferAttribute(pos, vi(f * 3 + 2));
+        a.add(b).add(cc).multiplyScalar(1 / 3);
+        t.copy(a).applyMatrix4(m.matrixWorld);
+        const d = t.distanceToSquared(c);
+        if (d < best) { best = d; bestMesh = m; bestLocal = a.clone(); }
+      }
+    });
+    if (!bestMesh) return;
+    p._anc = { mesh: bestMesh, local: bestLocal };
+  }
+  p.anchor.copy(p._anc.local).applyMatrix4(p._anc.mesh.matrixWorld);
+}
+
+function updateLabels() {
+  const w = cvBox.clientWidth, h = cvBox.clientHeight;
+  const mode = $('lm').value;
+  const items = [];
+
+  labelEls.forEach(L => {
+    const p = L.p;
+    let show = p.visible && (mode === 'all' || (mode === 'sel' && p === selected));
+    if (show && p.anchor) {
+      resolveAnchor(p);
+      _v.copy(p.anchor).project(camera);
+      if (_v.z > 1) {
+        show = false;
+      } else {
+        L.s = { x: (_v.x * 0.5 + 0.5) * w, y: (-_v.y * 0.5 + 0.5) * h };
+      }
+    } else {
+      show = false;
+    }
+
+    L.show = show;
+    L.d.style.display = show ? 'block' : 'none';
+    L.ln.style.display = show ? 'block' : 'none';
+    L.d.classList.toggle('sel', p === selected);
+    if (show) items.push(L);
+  });
+
+  if (items.length === 0) return;
+
+  // 左右兩欄平衡排列 (防止文字標籤重疊)
+  const cols = {
+    L: items.filter(L => L.s.x < w / 2),
+    R: items.filter(L => L.s.x >= w / 2)
+  };
+  while (cols.L.length - cols.R.length > 2) {
+    cols.L.sort((a, b) => a.s.x - b.s.x);
+    cols.R.push(cols.L.pop());
+  }
+  while (cols.R.length - cols.L.length > 2) {
+    cols.R.sort((a, b) => a.s.x - b.s.x);
+    cols.L.push(cols.R.shift());
+  }
+
+  const GAP = Math.min(28, (h - 20) / Math.max(1, cols.L.length, cols.R.length));
+
+  ['L', 'R'].forEach(side => {
+    const col = cols[side].sort((a, b) => a.s.y - b.s.y);
+    let prev = -1e9;
+    col.forEach(L => {
+      L.y = Math.max(8, L.s.y - 14, prev + GAP);
+      prev = L.y;
+    });
+    let next = h - 8;
+    for (let i = col.length - 1; i >= 0; i--) {
+      col[i].y = Math.min(col[i].y, next - GAP);
+      next = col[i].y;
+    }
+    col.forEach(L => {
+      const lw = L.d.offsetWidth || 110;
+      const x = (side === 'L') ? 8 : (w - lw - 8);
+      L.d.style.left = x + 'px';
+      L.d.style.top = L.y + 'px';
+      L.ln.setAttribute('x1', L.s.x);
+      L.ln.setAttribute('y1', L.s.y);
+      L.ln.setAttribute('x2', (side === 'L') ? (x + lw) : x);
+      L.ln.setAttribute('y2', L.y + 12);
+    });
+  });
+}
+
+try {
+  init();
+} catch (e) {
+  $('err').textContent = '初始化失敗：' + e.message;
+  $('err').style.display = 'block';
+  console.error(e);
+}
+</script>
+
+</body>
+</html>
