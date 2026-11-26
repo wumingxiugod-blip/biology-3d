@@ -31,7 +31,7 @@
   <tr><td><b>第 IIX 型</b><br>fast glycolytic</td><td>白色：肝醣多、粒線體與肌紅素少，無氧代謝、易疲勞；運動單元大</td></tr>
   </table></details>`,
     build() {
-      S = { sm: 0, smT: 0, hw: -1 };
+      S = { sm: 0, smT: 0, smStep: -1, smStepTime: 0, smSequence: false, smReleaseTime: 0, hw: -1 };
       // ── 骨骼肌
       const kt = stripeTex(40, { I: '#d9a29b' }), kf = [], kn = [], rr = rnd(9);
       [[-1.2, -1.2], [-1.2, 1.2], [1.2, -1.2], [1.2, 1.2]].forEach(([y, z]) => {
@@ -42,33 +42,68 @@
       reg('骨骼肌', '多個周邊細胞核', 'Peripheral nuclei (multinucleate)', '由許多肌母細胞融合而成，所以<b>多核</b>，核位於肌膜下方周邊。', kn, { anchor: [XK - 3, -2.3, 1.2] });
       textSprite('骨骼肌', [XK, 4.2, 0], 1.3, '#ffd479', 'Skeletal muscle');
 
-      // ── 心肌：三列細胞，以分支相連，接合處為間盤
-      const ct = stripeTex(1, { I: '#d9a29b' }), cells = [], discs = [], cn = [];
-      const rows = [-3, 0, 3], seg = 4.4, R = 0.75;
-      const addCell = (a, b, idx) => {
-        const len = a.distanceTo(b), t = ct.clone(); t.needsUpdate = true; t.repeat.set(1, len / 1.4);
-        const m = cylM(a, b, R, tmat(t, 0.8), 20); m.userData.ord = idx; cells.push(m);
-        const mid = a.clone().lerp(b, 0.5); cn.push(ell([mid.x, mid.y, mid.z], [0.55, 0.3, 0.3], 0x5060c8));
-        cn[cn.length - 1].quaternion.setFromUnitVectors(V(1, 0, 0), b.clone().sub(a).normalize());
+      // ── 心肌：四列大致平行的心肌細胞首尾相接，列與列之間以斜向分支連成網；接點畫成階梯狀間盤
+      const ct = stripeTex(1, { I: '#e4b4aa', A: '#91464a', H: '#c67b73', Z: '#552c38' });
+      const cells = [], discs = [], cn = [], mito = [];
+      const R = 0.56, RB = 0.38;
+      const ROWS = [3, 1, -1, -3];
+      const CUTS = [[-2.6, 2.4], [-4.2, 0.6, 4.6], [-1.4, 3.4], [-4.6, -0.2, 4.0]]; // 各列間盤的 x 位置（相鄰列錯開）
+      const BRIDGES = [[0, 1, 0.2, 1.8], [0, 1, 4.8, 6.4], [1, 2, -3.6, -2.0], [2, 3, 1.0, 2.6], [2, 3, -6.6, -5.2]]; // [上列, 下列, 上列 x, 下列 x]
+      const addFiberSegment = (a, b, r) => {
+        const len = a.distanceTo(b), tex = ct.clone(); tex.needsUpdate = true; tex.repeat.set(1, len / 0.42);
+        const m = cylM(a, b, r, tmat(tex, 0.96), 24);
+        m.userData.waveFrom = Math.min(a.x, b.x) - (XC - 7);
+        m.userData.waveTo = Math.max(a.x, b.x) - (XC - 7);
+        cells.push(m);
       };
-      const disc = p => discs.push(cylM(p.clone().add(V(-0.09, 0, 0)), p.clone().add(V(0.09, 0, 0)), R + 0.06, mat(0x402060), 20));
-      rows.forEach((y, r) => {
-        const sh = r % 2 ? seg / 2 : 0;
-        for (let k = 0; k < 3; k++) {
-          const a = V(XC - 7 + sh + k * seg, y, 0), b = V(XC - 7 + sh + (k + 1) * seg - 0.2, y, 0);
-          if (b.x > XC + 7.4) b.x = XC + 7.4;
-          addCell(a, b, a.x); if (k) disc(a);
+      // 階梯狀間盤（局部座標沿 +x）：三段橫向薄片前後錯開，再以縱向薄片連接，在細胞表面露出一圈階梯狀暗線
+      const stepDisc = (Rr, offs) => {
+        const t = 0.1, b = [-Rr, -Rr / 3, Rr / 3, Rr], items = [];
+        for (let i = 0; i < 3; i++) {
+          const sh = new THREE.Shape(), n = 10, u = v => Math.sqrt(Math.max(0, Rr * Rr - v * v));
+          for (let k = 0; k <= n; k++) { const v = b[i] + (b[i + 1] - b[i]) * k / n; k ? sh.lineTo(u(v), v) : sh.moveTo(u(v), v); }
+          for (let k = n; k >= 0; k--) { const v = b[i] + (b[i + 1] - b[i]) * k / n; sh.lineTo(-u(v), v); }
+          const g = new THREE.ExtrudeGeometry(sh, { depth: t, bevelEnabled: false }); g.translate(0, 0, -t / 2);
+          items.push([g, M4().makeTranslation(offs[i], 0, 0).multiply(M4().makeRotationY(Math.PI / 2))]);
         }
+        [1, 2].forEach(i => {
+          const v = b[i], x0 = Math.min(offs[i - 1], offs[i]), x1 = Math.max(offs[i - 1], offs[i]);
+          items.push([new THREE.BoxGeometry(x1 - x0 + t, 0.08, 2 * Math.sqrt(Rr * Rr - v * v)), M4().makeTranslation((x0 + x1) / 2, v, 0)]);
+        });
+        return mergeGeo(items);
+      };
+      const addDisc = (p, dir, Rr, offs) => {
+        const m = new THREE.Mesh(stepDisc(Rr, offs), mat(0x1c0a14));
+        m.position.copy(p); m.quaternion.setFromUnitVectors(V(1, 0, 0), dir);
+        m.userData.wave = p.x - (XC - 7); discs.push(m);
+      };
+      const rr2 = rnd(21);
+      ROWS.forEach((y, r) => {
+        const xs = [XC - 7, ...CUTS[r].map(x => XC + x), XC + 7];
+        for (let i = 0; i < xs.length - 1; i++) {
+          const a = V(xs[i], y, 0), b = V(xs[i + 1], y, 0);
+          addFiberSegment(a, b, R);
+          const mid = a.clone().lerp(b, 0.42 + rr2() * 0.16);
+          cn.push(ell([mid.x, mid.y + 0.05, 0.12], [0.5, 0.27, 0.25], 0x5060c8));
+          [0.2, 0.38, 0.66, 0.84].forEach((t, k) => {
+            const p = a.clone().lerp(b, t);
+            mito.push(ell([p.x, y + (k % 2 ? 0.3 : -0.3), 0.3], [0.3, 0.11, 0.1], 0xe4a646));
+          });
+        }
+        CUTS[r].forEach((x, i) => addDisc(V(XC + x, y, 0), V(1, 0, 0), R + 0.05, i % 2 ? [0.16, -0.14, 0.06] : [-0.16, 0.12, -0.06]));
       });
-      // 分支
-      [[0, XC - 4.6], [0, XC + 3.4], [1, XC - 1.6], [1, XC + 5.2]].forEach(([r, x]) => {
-        const a = V(x, rows[r] + R * 0.6, 0), b = V(x + 1.6, rows[r + 1] - R * 0.6, 0);
-        addCell(a, b, x + 0.8); disc(b.clone().add(V(0, 0.15, 0)));
+      BRIDGES.forEach(([ra, rb, xa, xb]) => {
+        const A = V(XC + xa, ROWS[ra], 0), B = V(XC + xb, ROWS[rb], 0), M = A.clone().lerp(B, 0.5);
+        addFiberSegment(A, M, RB); addFiberSegment(M, B, RB);
+        addDisc(M, B.clone().sub(A).normalize(), RB + 0.04, [-0.1, 0.08, -0.04]);
       });
-      S.cells = cells.sort((p, q) => p.userData.ord - q.userData.ord);
-      reg('心肌', '心肌細胞', 'Myocardial cells', '短、<b>分支</b>、有橫紋，彼此相連成網；不隨意。能自發產生動作電位（起源於<b>節律點</b>），速率受自主神經調節。', cells, { anchor: [XC - 6, 3.6, 0.5] });
-      reg('心肌', '間盤', 'Intercalated discs', '相鄰心肌細胞的連接處（染色後為暗線）。含<b>隙型連結</b>（電性突觸，由 connexin 組成）與特殊的胞橋小體；隙型連結集中在細胞兩端，使衝動沿細胞長軸傳遞。', discs, { anchor: [discs[0].position.x, discs[0].position.y + 0.9, 0.3] });
-      reg('心肌', '細胞核（居中）', 'Central nuclei', '心肌細胞多為單核（偶有雙核），位於細胞中央。', cn, { anchor: [cn[1].position.x, cn[1].position.y - 0.6, 0.5] });
+      S.cells = cells;
+      S.discs = discs;
+      reg('心肌', '心肌細胞', 'Myocardial cells', '短、<b>分支</b>、有橫紋，大致平行排列；細胞首尾以間盤相接，斜向的分支把相鄰的細胞列連成網。每個細胞多為單一居中細胞核，富含粒線體；不隨意，節律點產生的動作電位經細胞網傳導。', cells, { anchor: [XC - 5.5, ROWS[1] + R, 0.3] });
+      const discAnchor = discs.find(m => Math.abs(m.position.x - (XC + 0.6)) < 0.01 && Math.abs(m.position.y - ROWS[1]) < 0.01) || discs[0];
+      reg('心肌', '間盤', 'Intercalated discs', '相鄰心肌細胞末端的連接處，染色後呈<b>階梯狀暗線</b>。橫向部分以胞橋小體等構造把細胞牢牢接在一起；縱向部分富含<b>隙型連結</b>，讓離子電流與動作電位傳到相鄰細胞。', discs, { anchor: [discAnchor.position.x, discAnchor.position.y + R, 0.2] });
+      reg('心肌', '細胞核（居中）', 'Central nuclei', '心肌細胞多為單核（偶有雙核），位於細胞中央。', cn, { anchor: [cn[1].position.x, cn[1].position.y, cn[1].position.z] });
+      reg('心肌', '粒線體', 'Mitochondria', '心肌持續收縮、主要依靠有氧代謝，細胞內含大量粒線體。', mito, { anchor: [mito[2].position.x, mito[2].position.y, mito[2].position.z] });
       textSprite('心肌', [XC, 5.2, 0], 1.3, '#ffd479', 'Cardiac muscle');
 
       // ── 平滑肌層
@@ -77,7 +112,10 @@
       for (let r = 0; r < 4; r++) for (let k = 0; k < 3; k++) for (let L = 0; L < 2; L++) {
         const x0 = XS - 9 + k * 6.2 + (r % 2) * 3.1 - 1, y = -3.3 + r * 1.0, z = L ? 0.6 : -0.6;
         if (x0 + 8 > XS + 10) continue;
-        sc.push(lathe(sp, 0xd88a80, 0.75, [x0, y, z], [1, 0, 0], 20)); sn.push(ell([x0 + 4, y, z], [1.0, 0.16, 0.16], 0x5060c8));
+        const cell = lathe(sp, 0xd88a80, 0.75, [x0, y, z], [1, 0, 0], 20);
+        cell.userData.restX = x0; sc.push(cell);
+        const nucleus = ell([x0 + 4, y, z], [1.0, 0.16, 0.16], 0x5060c8);
+        nucleus.userData.restScale = nucleus.scale.clone(); sn.push(nucleus);
       }
       reg('平滑肌', '平滑肌細胞', 'Smooth muscle cells', '<b>紡錘形</b>、單核、<b>無橫紋</b>（沒有肌節）；位於消化道、血管、支氣管、泌尿與生殖管道壁。環行與縱行肌層交替收縮產生<b>蠕動</b>。', sc, { anchor: [XS + 6, -3.3, 0.8] });
       reg('平滑肌', '細胞核（單一、居中）', 'Central nucleus', '每個平滑肌細胞一個細長的核，位於最寬的中央部。', sn, { anchor: [XS - 1, -1.3, 0.8] });
@@ -90,42 +128,150 @@
       const big = []; for (let h = 0; h <= 16; h += 0.25) big.push([0.1 + 1.9 * Math.sin(Math.PI * h / 16) ** 1.1, h]);
       const pts = [];
       const parts = [];
-      parts.push(reg('平滑肌放大', '平滑肌細胞（放大）', 'Smooth muscle cell (enlarged)', '肌絲斜向交錯成網，收縮時細胞變短變粗（扭轉狀）。', lathe(big, 0xf0b0a8, 0.18, [-8, 0, 0], [1, 0, 0], 36), { anchor: [-6, 1.2, 0.6] }));
+      parts.push(reg('平滑肌放大', '平滑肌細胞（放大）', 'Smooth muscle cell (enlarged)', '動畫依序呈現 Ca²⁺ 進入、結合攜鈣素、活化 MLCK；肌凝蛋白磷酸化後，細胞才開始縮短變粗。', lathe(big, 0xf0b0a8, 0.18, [-8, 0, 0], [1, 0, 0], 36), { anchor: [-6, 1.2, 0.6] }));
       const db = [], dbm = [];
       for (let i = 0; i < 26; i++) { const x = -6 + rr() * 12, rmax = 1.9 * Math.sin(Math.PI * (x + 8) / 16) * 0.75; db.push(V(x, (rr() - 0.5) * 2 * rmax, (rr() - 0.5) * 2 * rmax * 0.6)); }
       for (let i = 0; i < 18; i++) { const x = -6.5 + i * 0.75, rm = 1.9 * Math.sin(Math.PI * (x + 8) / 16) ** 1.1 + 0.08, a = i * 2.1; dbm.push(V(x, Math.cos(a) * rm, Math.sin(a) * rm)); }
       parts.push(reg('平滑肌放大', '緻密體', 'Dense bodies', '細肌絲的錨定點，功能相當於橫紋肌的 <b>Z 盤</b>；散在胞質中，也附著於細胞膜上。', [dots(db, 0.17, 0x402060), dots(dbm, 0.15, 0x402060)], { anchor: [db[0].x, db[0].y, db[0].z] }));
-      const all = db.concat(dbm), th = [], tk = [];
+      const all = db.concat(dbm), th = [], tk = [], pTargets = [];
       for (let i = 0; i < all.length; i++) {
         const a = all[i], cand = all.map((b, j) => [j, b.distanceTo(a), b.x - a.x]).filter(([j, d, dx]) => j !== i && dx > 0.8 && d < 3.6).sort((p, q) => p[1] - q[1]).slice(0, 2);
         cand.forEach(([j]) => {
           const b = all[j]; th.push([new THREE.CylinderGeometry(0.035, 0.035, a.distanceTo(b), 5), mtx([(a.x + b.x) / 2, (a.y + b.y) / 2, (a.z + b.z) / 2], [b.x - a.x, b.y - a.y, b.z - a.z])]);
-          if ((i + j) % 3 === 0) { const m = a.clone().lerp(b, 0.5).add(V(0, 0.12, 0.05)); tk.push([new THREE.CylinderGeometry(0.09, 0.09, Math.min(1.1, a.distanceTo(b) * 0.4), 6), mtx([m.x, m.y, m.z], [b.x - a.x, b.y - a.y, b.z - a.z])]); }
+          if ((i + j) % 3 === 0) {
+            const m = a.clone().lerp(b, 0.5).add(V(0, 0.12, 0.05));
+            tk.push([new THREE.CylinderGeometry(0.09, 0.09, Math.min(1.1, a.distanceTo(b) * 0.4), 6), mtx([m.x, m.y, m.z], [b.x - a.x, b.y - a.y, b.z - a.z])]);
+            if (pTargets.length < 3) pTargets.push(m.clone().add(V(0, 0, 0.18)));
+          }
         });
       }
       parts.push(reg('平滑肌放大', '細肌絲（肌動蛋白）', 'Thin filaments', '很長、數量多（細:粗 ≈ 16:1），一端固定在緻密體或細胞膜；排列不規則，所以沒有橫紋。', new THREE.Mesh(mergeGeo(th), mat(0x4fb3e8)), { anchor: [2, 0.6, 0.9] }));
       parts.push(reg('平滑肌放大', '粗肌絲（肌凝蛋白）', 'Thick filaments', '散在細肌絲之間；需<b>肌凝蛋白輕鏈被磷酸化</b>（MLCK）後才能形成橫橋。', new THREE.Mesh(mergeGeo(tk), mat(0xe0603a)), { anchor: [-2, -0.6, 0.8] }));
       parts.push(reg('平滑肌放大', '細胞核', 'Nucleus', '單一、居中。', ell([0, 0, 0], [2.4, 0.45, 0.45], 0x5060c8, 0.8), { anchor: [0.5, -0.5, 0.4] }));
+
+      // 平滑肌活化路徑：Ca²⁺ 進入 → 結合攜鈣素 → 活化 MLCK → 磷酸化肌凝蛋白。
+      const smoothRadius = x => 0.1 + 1.9 * Math.sin(Math.PI * (x + 8) / 16) ** 1.1;
+      const ionXs = [-4, 0, 4], channelMat = mat(0x42d8f2, 0.95, { emissive: 0x123c48 });
+      const channelMeshes = [];
+      S.caIons = []; S.calmodulins = []; S.pMarkers = [];
+      ionXs.forEach((x, i) => {
+        const radius = smoothRadius(x), membrane = V(x, 0, radius);
+        channelMeshes.push(cylM(membrane.clone().add(V(0, 0, -0.22)), membrane.clone().add(V(0, 0, 0.22)), 0.13, channelMat, 12));
+        const start = membrane.clone().add(V(0, 0, 0.88));
+        const inside = membrane.clone().add(V(0, 0, -0.2));
+        const rest = V(x + 0.35, [-0.3, 0.15, -0.1][i], radius - 0.66);
+        const kinaseTarget = [V(2.45, -0.15, 0.55), V(3.15, 0.25, 0.72), V(3.85, -0.15, 0.55)][i];
+        const ion = ell([start.x, start.y, start.z], [0.18, 0.18, 0.18], 0x35d9ff);
+        ion.material.emissive.setHex(0x14566a); ion.material.emissiveIntensity = 0.7;
+        const cam = ell([rest.x, rest.y, rest.z], [0.3, 0.17, 0.17], 0x55d49b);
+        cam.material.emissive.setHex(0x15513a); cam.material.emissiveIntensity = 0;
+        S.caIons.push({ mesh: ion, start, inside, rest, offset: V(0, 0, 0.2), kinaseTarget });
+        S.calmodulins.push({ mesh: cam, rest, target: kinaseTarget, inactiveColor: cam.material.color.clone(), activeColor: new THREE.Color(0x9affc8) });
+      });
+      const kinasePos = V(3.15, -0.55, 0.28);
+      S.mlck = ell([kinasePos.x, kinasePos.y, kinasePos.z], [0.48, 0.32, 0.28], 0x8e79dc);
+      S.mlck.material.emissive.setHex(0xb58b27); S.mlck.material.emissiveIntensity = 0;
+      S.mlckInactiveColor = S.mlck.material.color.clone(); S.mlckActiveColor = new THREE.Color(0xffc84c);
+      const firstRadius = smoothRadius(ionXs[0]);
+      pTargets.forEach((target, i) => {
+        const marker = ell([target.x, target.y, target.z], [0.15, 0.15, 0.15], 0x727d8d);
+        marker.material.emissive.setHex(0x382c16); marker.material.emissiveIntensity = 0.35;
+        S.pMarkers.push({ mesh: marker, target, inactiveColor: marker.material.color.clone(), activeColor: new THREE.Color(0xffd45e) });
+      });
+      S.pChannels = reg('平滑肌放大', 'Ca²⁺ 膜通道', 'Ca²⁺ channels', '細胞膜上的通道讓 Ca²⁺ 進入胞質；標籤引線指向膜上的通道模型。', channelMeshes, { anchor: [ionXs[0], 0, firstRadius] }); parts.push(S.pChannels);
+      S.pCalcium = reg('平滑肌放大', 'Ca²⁺ 離子', 'Calcium ions', '藍色球體表示 Ca²⁺：收縮訊號開始時穿過膜通道進入，之後與攜鈣素結合。', S.caIons.map(x => x.mesh), { anchor: [ionXs[1], 0, smoothRadius(ionXs[1]) + 0.88] }); parts.push(S.pCalcium);
+      S.pCalmodulin = reg('平滑肌放大', '攜鈣素（calmodulin）', 'Calmodulin', '胞質中的 Ca²⁺ 感受蛋白；結合 Ca²⁺ 後移向並活化 MLCK。', S.calmodulins.map(x => x.mesh), { anchor: [S.calmodulins[1].rest.x, S.calmodulins[1].rest.y, S.calmodulins[1].rest.z] }); parts.push(S.pCalmodulin);
+      S.pMLCK = reg('平滑肌放大', '肌凝蛋白輕鏈激酶（MLCK）', 'Myosin light-chain kinase', '由 Ca²⁺－攜鈣素複合體活化；接著磷酸化肌凝蛋白輕鏈，讓橫橋得以形成。', S.mlck, { anchor: [kinasePos.x, kinasePos.y, kinasePos.z] }); parts.push(S.pMLCK);
+      S.pPhospho = reg('平滑肌放大', '肌凝蛋白輕鏈磷酸化位點', 'Myosin light-chain phosphorylation sites', '標記肌凝蛋白上的作用位置；④步驟中由 MLCK 磷酸化後亮起，細胞隨後開始收縮。', S.pMarkers.map(x => x.mesh), { anchor: [pTargets[1].x, pTargets[1].y, pTargets[1].z] }); parts.push(S.pPhospho);
       parts.forEach(p => attachPart(p, g));
       textSprite('平滑肌', [XS, 9.8, 0], 1.3, '#ffd479', 'Smooth muscle');
 
       const dt = dtClock();
       CUR.tick = () => {
         const d = dt();
+        const stepDuration = 0.8, latchAt = 4.9;
         S.sm += (S.smT - S.sm) * Math.min(1, d * 1.6);
-        S.smG.scale.set(1 - 0.32 * S.sm, 1 + 0.2 * S.sm, 1 + 0.2 * S.sm); S.smG.rotation.x = 0.5 * S.sm;
-        sc.forEach(m => m.scale.set(1 + 0.15 * S.sm, 1 - 0.18 * S.sm, 1 + 0.15 * S.sm));
-        updateAnchors();
-        if (S.hw >= 0) {
-          S.hw += d * 6;
-          S.cells.forEach(m => { const x = m.userData.ord - (XC - 7); m.material.emissive.setHex(S.hw > x && S.hw < x + 3 ? 0x804000 : 0); });
-          if (S.hw > 20) { S.hw = -1; S.cells.forEach(m => m.material.emissive.setHex(0)); }
+        if (S.smSequence && S.smStep < 4) {
+          S.smStepTime += d;
+          const t = S.smStepTime;
+          const step = t < stepDuration ? 0 : t < 2 * stepDuration ? 1 : t < 3 * stepDuration ? 2 : t < latchAt ? 3 : 4;
+          if (step !== S.smStep) { S.smStep = step; S.setStep(step); }
         }
+        const ease01 = x => { x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x); };
+        const t = S.smStepTime;
+        const entry = ease01(t / stepDuration), binding = ease01((t - stepDuration) / stepDuration);
+        const activation = ease01((t - 2 * stepDuration) / stepDuration);
+        const phosphorylation = ease01((t - 3 * stepDuration) / 0.5);
+        if (S.smSequence) {
+          S.calmodulins.forEach(c => {
+            c.mesh.position.copy(c.rest).lerp(c.target, activation);
+            c.mesh.material.emissiveIntensity = t >= stepDuration ? 0.65 : 0;
+          });
+          S.caIons.forEach((ion, i) => {
+            const c = S.calmodulins[i];
+            if (t < stepDuration) ion.mesh.position.copy(ion.start).lerp(ion.inside, entry);
+            else if (t < 2 * stepDuration) ion.mesh.position.copy(ion.inside).lerp(c.rest.clone().add(ion.offset), binding);
+            else ion.mesh.position.copy(c.mesh.position).add(ion.offset);
+          });
+          S.mlck.material.emissiveIntensity = ease01((t - 2 * stepDuration) / 0.32) * 1.2;
+          S.mlck.material.color.copy(S.mlckInactiveColor).lerp(S.mlckActiveColor, activation);
+          S.pMarkers.forEach(p => {
+            p.mesh.position.copy(p.target);
+            p.mesh.material.color.copy(p.inactiveColor).lerp(p.activeColor, phosphorylation);
+          });
+          // 磷酸化位點完成亮起後，才啟動細胞縮短與增粗。
+          S.smT = phosphorylation >= 1 ? 1 : 0;
+        } else {
+          S.smReleaseTime = Math.min(0.55, S.smReleaseTime + d);
+          const release = ease01(S.smReleaseTime / 0.55);
+          S.calmodulins.forEach(c => {
+            c.mesh.position.copy(c.releaseStart || c.rest).lerp(c.rest, release);
+            c.mesh.material.emissiveIntensity = 0;
+            c.mesh.material.color.copy(c.inactiveColor);
+          });
+          S.caIons.forEach(ion => {
+            ion.mesh.position.copy(ion.releaseStart || ion.start).lerp(ion.start, release);
+          });
+          S.mlck.material.emissiveIntensity = 0;
+          S.mlck.material.color.copy(S.mlckActiveColor).lerp(S.mlckInactiveColor, release);
+          S.pMarkers.forEach(p => {
+            p.mesh.material.color.copy(p.activeColor).lerp(p.inactiveColor, release);
+          });
+        }
+        S.smG.scale.set(1 - 0.32 * S.sm, 1 + 0.2 * S.sm, 1 + 0.2 * S.sm); S.smG.rotation.x = 0.5 * S.sm;
+        const axial = 1 - 0.18 * S.sm, radial = 1 + 0.15 * S.sm;
+        sc.forEach(m => {
+          m.scale.set(radial, axial, radial);
+          // Lathe profiles run from local y=0 to 8 along world x; compensate half the lost length to shorten about the cell center.
+          m.position.x = m.userData.restX + 4 * (1 - axial);
+        });
+        sn.forEach(m => m.scale.copy(m.userData.restScale).multiply(V(axial, radial, radial)));
+        S.pCalcium._loc.copy(S.caIons[1].mesh.position);
+        S.pCalmodulin._loc.copy(S.calmodulins[1].mesh.position);
+        updateAnchors();
+        if (S.hw >= 0) S.hw += d * 5;
+        S.cells.forEach(m => {
+          const active = S.hw >= 0 && S.hw >= m.userData.waveFrom - 0.2 && S.hw <= m.userData.waveTo + 0.2;
+          m.material.emissive.setHex(active ? 0x804000 : 0);
+        });
+        S.discs.forEach(m => {
+          const active = S.hw >= 0 && Math.abs(S.hw - m.userData.wave) < 0.65;
+          m.material.emissive.setHex(active ? 0x805020 : 0);
+        });
+        if (S.hw > 14.8) S.hw = -1;
       };
     },
     panel(box) {
       btn(box, '⚡ 心肌：動作電位經間盤擴散', () => S.hw = 0);
-      checkbox(box, '平滑肌收縮（Ca²⁺ 升高）', false, v => { S.smT = v ? 1 : 0; S.setStep(v ? 3 : 5); });
+      checkbox(box, '平滑肌收縮（Ca²⁺ 升高）', false, v => {
+        if (v) {
+          S.smSequence = true; S.smT = 0; S.smStep = 0; S.smStepTime = 0; S.smReleaseTime = 0; S.setStep(0);
+        } else {
+          S.smSequence = false; S.smT = 0; S.smStep = 5; S.smReleaseTime = 0; S.setStep(5);
+          S.caIons.forEach(c => { c.releaseStart = c.mesh.position.clone(); });
+          S.calmodulins.forEach(c => { c.releaseStart = c.mesh.position.clone(); });
+        }
+      });
       S.setStep = stepList(box, ['① Ca²⁺ 經細胞膜電壓閘控通道進入（SR 少）', '② Ca²⁺ 與<b>攜鈣素</b>結合', '③ Ca²⁺-攜鈣素活化 <b>MLCK</b>', '④ MLCK 使肌凝蛋白輕鏈<b>磷酸化</b> → 形成橫橋、收縮', '⑤ 可進入<b>門閂狀態</b>，低耗能維持張力', '⑥ Ca²⁺ 下降 → 肌凝蛋白磷酸酶去磷酸化 → 舒張']);
     }
   });

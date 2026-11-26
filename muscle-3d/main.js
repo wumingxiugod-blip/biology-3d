@@ -74,6 +74,9 @@ function loadScene(i) {
   const sc = SCENES[i];
   $('extra').innerHTML = '';
   sc.build();
+  // 附著在可動 Group 的標籤錨點需先由局部座標轉成世界座標，
+  // 否則場景載入後、動畫開始前會指向錯誤位置。
+  updateAnchors();
   // 記錄原始透明度，供孤立顯示使用
   CUR.parts.forEach(p => p.meshes.forEach(m => {
     m.material.userData.baseO = m.material.opacity;

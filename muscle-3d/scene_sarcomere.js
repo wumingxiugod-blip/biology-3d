@@ -2,6 +2,8 @@
 (function () {
   const U = 10;                       // 1 µm = 10 單位
   const THICK = 1.6, THIN = 1.0, BARE = 0.25; // µm：粗肌絲長、單側細肌絲長、粗肌絲中央無頭區
+  const NEBULIN_FRAC = 0.88, NEBULIN_OFFSET = 0.14;
+  const NEBULIN_LEN = THIN * U * NEBULIN_FRAC;
   let S = null;                       // 目前場景狀態
 
   // 長度-張力曲線（示意：依上述肌絲長度）
@@ -44,6 +46,7 @@
     S.pThin.anchor.set(-Lu / 2 - 1.5, 0.95, 0.8); S.pThick.anchor.set(-Lu / 2 + 3, -0.6, 0.6);
     S.pHead.anchor.set(Lu / 2 + 4, 0.7, 0.4); S.pZ.anchor.set(0, 1.9, 0); S.pM.anchor.set(-Lu / 2, -1.75, 0);
     S.pTit.anchor.set(-Lu + (Lu - THICK * U) / 4, S.titY, S.titZ);
+    S.pNeb.anchor.set(S.zG[1].position.x + 0.08 + NEBULIN_LEN / 2, S.nebY, S.nebZ);
     S.pA.anchor.set(-Lu / 2, 2.8, 0); S.pI.anchor.set(0, 2.8, 0); S.pH.anchor.set(Lu / 2, 2.8, 0); S.pS.anchor.set(-Lu / 2, -2.7, 0);
     // 讀數
     if (S.rd) {
@@ -59,11 +62,23 @@
     g.clearRect(0, 0, W, H); g.strokeStyle = '#35516d'; g.lineWidth = 1;
     g.beginPath(); g.moveTo(x0, 8); g.lineTo(x0, y0); g.lineTo(W - 6, y0); g.stroke();
     g.fillStyle = '#9fb6c8'; g.font = '10px sans-serif';
-    [1.5, 2, 2.5, 3, 3.5].forEach(L => g.fillText(L, X(L) - 7, y0 + 12));
+    [1.27, 1.6, 2, 2.5, 3, 3.5].forEach(L => g.fillText(L.toFixed(L % 1 ? 2 : 1), X(L) - 9, y0 + 12));
     g.fillText('肌節長度 (µm)', W - 80, H - 1); g.save(); g.translate(10, H / 2 + 22); g.rotate(-Math.PI / 2); g.fillText('張力 %', 0, 0); g.restore();
-    g.strokeStyle = '#6bb2ff'; g.lineWidth = 2; g.beginPath();
-    for (let L = 1.2; L <= 3.6; L += 0.01) { const p = [X(L), Y(tension(L))]; L === 1.2 ? g.moveTo(...p) : g.lineTo(...p); }
-    g.stroke(); g.fillStyle = '#ffd479'; g.beginPath(); g.arc(X(S.L), Y(tension(S.L)), 4.5, 0, 7); g.fill();
+    // 1.27–1.60 µm 保留參考張力曲線，但不延伸 3D 模型；此時固定長度的粗肌絲會越過 Z 盤。
+    const curve = (from, to, dash) => {
+      g.setLineDash(dash); g.beginPath(); g.moveTo(X(from), Y(tension(from)));
+      for (let L = from + 0.01; L < to; L += 0.01) g.lineTo(X(L), Y(tension(L)));
+      g.lineTo(X(to), Y(tension(to))); g.stroke();
+    };
+    g.strokeStyle = '#6bb2ff'; g.lineWidth = 2;
+    curve(1.2, 1.27, []); curve(1.27, 1.6, [4, 3]); curve(1.6, 3.6, []);
+    g.setLineDash([]);
+    g.strokeStyle = '#ffd479'; g.lineWidth = 1; g.setLineDash([3, 3]);
+    g.beginPath(); g.moveTo(X(1.6), 8); g.lineTo(X(1.6), y0); g.stroke(); g.setLineDash([]);
+    g.strokeStyle = '#6bb2ff'; g.fillStyle = '#9fb6c8'; g.font = '9px sans-serif';
+    g.setLineDash([4, 3]); g.beginPath(); g.moveTo(W - 112, 12); g.lineTo(W - 91, 12); g.stroke(); g.setLineDash([]);
+    g.fillText('虛線＝未做 3D 模擬', W - 87, 15);
+    g.fillStyle = '#ffd479'; g.beginPath(); g.arc(X(S.L), Y(tension(S.L)), 4.5, 0, 7); g.fill();
   }
 
   SCENES.push({
@@ -83,11 +98,15 @@
   <tr><td><b>H 帶</b></td><td>A 帶中央只有粗肌絲的部分</td></tr>
   <tr><td><b>M 線</b></td><td>A 帶中央連結粗肌絲的蛋白</td></tr>
   <tr><td><b>肌聯蛋白</b><br>titin</td><td>巨大彈性蛋白，自 M 線穿過粗肌絲到 Z 盤；穩定粗肌絲位置，並提供肌肉被拉長後的<b>彈性回縮</b></td></tr>
+  <tr><td><b>伴肌動蛋白</b><br>nebulin</td><td>沿細肌絲大部分長度排列，協助穩定並調節細肌絲長度</td></tr>
   </table>
+  <p><b>Nebulin</b>：骨骼肌中的大型肌節蛋白，C 端錨定於 Z 盤，沿肌動蛋白細肌絲排列。收縮時它隨細肌絲滑向 M 線，本身不縮短、也不產生拉力；它參與細肌絲的穩定與長度調節。細肌絲末端也受其他蛋白調控，因此此處不把 nebulin 畫成唯一的「分子尺」。</p>
   <p><b>收縮時</b>（Table 12.2）：肌絲本身<b>長度不變</b>，而是細肌絲在粗肌絲之間<b>滑向肌節中央</b>：</p>
   <ul><li>Z 盤靠近 → 肌節變短</li><li><b>A 帶長度不變</b>，相鄰 A 帶彼此靠近</li><li><b>I 帶變短</b></li><li><b>H 帶變短</b>（甚至消失）</li></ul>
   <p><b>長度-張力關係</b>（Fig 12.21）：肌節長 <b>2.0–2.25 µm</b>（＝肌肉正常的靜止長度）時重疊最適當、可形成最多橫橋，張力最大；拉得太長重疊少、張力下降，完全不重疊就無法產生張力；太短時細肌絲互相重疊、粗肌絲頂到 Z 盤，張力也下降。</p>
-  <p class="hint">右側滑桿可改變肌節長度；肌絲長度（粗 1.6 µm、細 1.0 µm）為示意值，使張力高原落在課本的 2.0–2.25 µm。橫向間距已放大以便觀察。</p>`,
+  <p class="hint">右側滑桿可改變肌節長度；肌絲長度（粗 1.6 µm、細 1.0 µm）為示意值，使張力高原落在課本的 2.0–2.25 µm。橫向間距已放大以便觀察。</p>
+  <p class="hint"><b>為何虛線段不做 3D：</b>依 Fox《Human Physiology》16e 第 12 章第 12.3 節，肌節短於 2.0 µm 時，肌纖維越短越粗，肌漿液體壓力等反向力增加、粗細肌絲間距變大，細肌絲彼此的雙重重疊也會降低橫橋作用效率。到約 1.7 µm，粗肌絲抵達 Z 盤，肌凝蛋白可能進一步變形；約 1.25 µm 時張力降至零（第 376 頁，圖 12.21）。</p>
+  <p class="hint">本 3D 場景只做剛性肌絲的相對滑動，沒有計算肌纖維變粗、肌絲間距與反向力、細肌絲雙重重疊造成的橫橋效率變化，也沒有粗肌絲抵住 Z 盤後的形變。因此低於 1.6 µm 若繼續播放，只會讓剛性幾何互相穿越，不能呈現課本所述的力學變化。<b>1.6 µm 是這個 3D 模型的幾何下限</b>；虛線 1.27–1.60 µm 留在長度－張力圖作課本概念參考，不表示生理上不能再短。（Fox, <i>Human Physiology</i>, 16e, Ch. 12, §12.3, pp. 375–376, Fig. 12.21。）</p>`,
     build() {
       S = { L: 2.2 }; const Lu = S.L * U;
       const s = 1.25, thickP = [], thinP = [];
@@ -101,11 +120,11 @@
       }
       S.titY = thickP[1][0]; S.titZ = thickP[1][1];
 
-      // Z 盤群組（細肌絲隨 Z 盤移動）
+      // Z 盤群組（細肌絲與 nebulin 隨 Z 盤移動）
       S.zG = [0, 1, 2].map(() => { const g = new THREE.Group(); CUR.root.add(g); return g; });
-      const thinMs = [], zMs = [];
+      const thinMs = [], zMs = [], nebMs = [], nebByGroup = [];
       S.zG.forEach((g, k) => {
-        const it = [];
+        const it = [], nb = [];
         [-1, 1].forEach(dir => {
           if ((k === 0 && dir < 0) || (k === 2 && dir > 0)) return;
           thinP.forEach(([y, z]) => {
@@ -115,14 +134,21 @@
               const xx = dir * (q * 0.11 + st * 0.055 + 0.05), ang = q * 0.11 / 0.8 * Math.PI * 2 + st * Math.PI + y * 3;
               it.push(M4().compose(V(xx, y + Math.cos(ang) * 0.055, z + dz + Math.sin(ang) * 0.055), new THREE.Quaternion(), V(0.072, 0.072, 0.072)));
             }
+            // Nebulin 沿 actin 細肌絲排列；以表面偏移的綠色細線呈現，並保留末端一小段 actin。
+            const x0 = dir * 0.08, x1 = dir * NEBULIN_LEN;
+            nb.push(cylM([x0, y, z + dz + NEBULIN_OFFSET], [x1, y, z + dz + NEBULIN_OFFSET], 0.045, mat(0x62e58a), 8));
           });
         });
         const m = inst(new THREE.SphereGeometry(1, 8, 6), it, 0x4fb3e8); thinMs.push(m);
         zMs.push(cylM([-0.12, 0, 0], [0.12, 0, 0], 1.95, mat(0xa070ff, 0.85), 32));
+        nebMs.push(...nb); nebByGroup.push(nb);
       });
+      S.nebY = thinP[0][0]; S.nebZ = thinP[0][1] + NEBULIN_OFFSET;
       S.pThin = reg('肌絲', '細肌絲（肌動蛋白）', 'Thin filament (actin)', '一端固定在 Z 盤、伸向肌節中央；由肌動蛋白、肌旋蛋白、肌鈣蛋白組成（見③）。收縮時被橫橋拉向中央，<b>本身長度不變</b>。', thinMs, { anchor: [0, 0, 0] });
+      S.pNeb = reg('肌絲', '伴肌動蛋白（nebulin）', 'Nebulin', '大型肌節蛋白，沿細肌絲大部分長度排列並錨定於 Z 盤；參與細肌絲穩定與長度調節。綠色線為示意，隨 actin 細肌絲滑動，但長度不變。', nebMs, { anchor: [NEBULIN_LEN / 2, S.nebY, S.nebZ] });
       S.pZ = reg('肌絲', 'Z 盤', 'Z disc', 'I 帶中央、細肌絲的錨定處；縱切面看是 Z 線，橫切面看是盤狀。兩個 Z 盤之間即一個肌節。', zMs, { anchor: [0, 0, 0] });
       thinMs.forEach((m, k) => S.zG[k].add(m)); zMs.forEach((m, k) => S.zG[k].add(m));
+      nebByGroup.forEach((ms, k) => ms.forEach(m => S.zG[k].add(m)));
 
       // 粗肌絲群組
       S.tG = [0, 1].map(() => { const g = new THREE.Group(); CUR.root.add(g); return g; });
@@ -179,6 +205,8 @@
     },
     panel(box) {
       S.sl = slider(box, '肌節長度 (µm)', 1.6, 3.6, S.L, 0.02, v => setL(v));
+      note(box, '滑桿下限 1.60 µm 是本模型的幾何限制；短肌節的張力變化與原因見左側第 12 章說明。');
+      checkbox(box, '顯示 Nebulin', true, v => { S.pNeb.visible = v; rebuildList(); refresh(); });
       S.rd = note(box, '', 'rd');
       const cv = document.createElement('canvas'); cv.width = 290; cv.height = 130; box.appendChild(cv); S.cv = cv;
       note(box, '長度-張力關係（Length-tension relationship）');
