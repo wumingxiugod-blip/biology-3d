@@ -1520,43 +1520,43 @@
     "faceCount": 62
   },
   "radius_ulna_l_36": {
-    "groupId": "carpus_inter_ulnar",
-    "nameZh": "左側中間腕骨與尺腕骨 (近列外側)",
-    "nameEn": "Left Intermediate & Ulnar Carpal Bones",
-    "latin": "Os carpi intermedium et ulnare",
+    "groupId": "carpus_intermediate",
+    "nameZh": "左側中間腕骨 (近列中央)",
+    "nameEn": "Left Intermediate Carpal Bone",
+    "latin": "Os carpi intermedium",
     "grp": "前肢承重系統",
-    "desc": "位於近列腕骨中央與外側，上接橈骨、下接第 3 與第 4 腕骨，後方接副腕骨。",
-    "clinical": "中間腕骨背側緣亦為賽馬腕關節碎片骨折高發點。",
+    "desc": "位於近列腕骨中央呈楔形（前寬後窄），上接橈骨遠端中央關節面，下接第三與第四腕骨。",
+    "clinical": "與橈腕骨同為賽馬腕關節背側碎片骨折（Chip fracture）最常發生的部位。",
     "faceCount": 68
   },
-  "radius_ulna_l_40": {
-    "groupId": "carpus_inter_ulnar",
-    "nameZh": "左側中間腕骨與尺腕骨 (近列外側)",
-    "nameEn": "Left Intermediate & Ulnar Carpal Bones",
-    "latin": "Os carpi intermedium et ulnare",
-    "grp": "前肢承重系統",
-    "desc": "位於近列腕骨中央與外側，上接橈骨、下接第 3 與第 4 腕骨，後方接副腕骨。",
-    "clinical": "中間腕骨背側緣亦為賽馬腕關節碎片骨折高發點。",
-    "faceCount": 61
-  },
   "radius_ulna_r_45": {
-    "groupId": "carpus_inter_ulnar",
-    "nameZh": "右側中間腕骨與尺腕骨 (近列外側)",
-    "nameEn": "Right Intermediate & Ulnar Carpal Bones",
-    "latin": "Os carpi intermedium et ulnare",
+    "groupId": "carpus_intermediate",
+    "nameZh": "右側中間腕骨 (近列中央)",
+    "nameEn": "Right Intermediate Carpal Bone",
+    "latin": "Os carpi intermedium",
     "grp": "前肢承重系統",
-    "desc": "位於近列腕骨中央與外側，上接橈骨、下接第 3 與第 4 腕骨，後方接副腕骨。",
-    "clinical": "中間腕骨背側緣亦為賽馬腕關節碎片骨折高發點。",
+    "desc": "位於近列腕骨中央呈楔形（前寬後窄），上接橈骨遠端中央關節面，下接第三與第四腕骨。",
+    "clinical": "與橈腕骨同為賽馬腕關節背側碎片骨折（Chip fracture）最常發生的部位。",
     "faceCount": 66
   },
-  "radius_ulna_r_49": {
-    "groupId": "carpus_inter_ulnar",
-    "nameZh": "右側中間腕骨與尺腕骨 (近列外側)",
-    "nameEn": "Right Intermediate & Ulnar Carpal Bones",
-    "latin": "Os carpi intermedium et ulnare",
+  "radius_ulna_l_40": {
+    "groupId": "carpus_ulnar",
+    "nameZh": "左側尺腕骨 (近列外側)",
+    "nameEn": "Left Ulnar Carpal Bone",
+    "latin": "Os carpi ulnare",
     "grp": "前肢承重系統",
-    "desc": "位於近列腕骨中央與外側，上接橈骨、下接第 3 與第 4 腕骨，後方接副腕骨。",
-    "clinical": "中間腕骨背側緣亦為賽馬腕關節碎片骨折高發點。",
+    "desc": "近列腕骨最外側且體積最小、形狀最不規則之短骨，上接橈骨外側、下接第四腕骨、掌側接副腕骨。",
+    "clinical": "掌側面具關節面與副腕骨相連，參與穩定腕關節外側柱。",
+    "faceCount": 61
+  },
+  "radius_ulna_r_49": {
+    "groupId": "carpus_ulnar",
+    "nameZh": "右側尺腕骨 (近列外側)",
+    "nameEn": "Right Ulnar Carpal Bone",
+    "latin": "Os carpi ulnare",
+    "grp": "前肢承重系統",
+    "desc": "近列腕骨最外側且體積最小、形狀最不規則之短骨，上接橈骨外側、下接第四腕骨、掌側接副腕骨。",
+    "clinical": "掌側面具關節面與副腕骨相連，參與穩定腕關節外側柱。",
     "faceCount": 61
   },
   "radius_ulna_l_44": {
@@ -1620,43 +1620,43 @@
     "faceCount": 62
   },
   "carpal_l_38": {
-    "groupId": "carpus_c3_c4",
-    "nameZh": "左側第三與第四腕骨 (遠列中外側)",
-    "nameEn": "Left Third & Fourth Carpal Bones (C3, C4)",
-    "latin": "Os carpale tertium et quartum",
+    "groupId": "carpus_c3",
+    "nameZh": "左側第三腕骨 (遠列中央・最大)",
+    "nameEn": "Left Third Carpal Bone (C3)",
+    "latin": "Os carpale tertium",
     "grp": "前肢承重系統",
-    "desc": "第 3 腕骨占遠列 2/3 為遠列最大骨，直接承接大砲骨；第 4 腕骨位於外側承接第三、四掌骨。",
-    "clinical": "第 3 腕骨承受極大垂直壓應力，賽馬常見板狀骨折（Slab fracture）與骨硬化。",
+    "desc": "占遠列腕骨約三分之二、為遠列最大骨，上接橈腕骨與中間腕骨，下幾乎完全直接承接第三掌骨（前大砲骨）。",
+    "clinical": "承受高速奔馳最強垂直壓應力，賽馬常見第三腕骨板狀骨折（Slab fracture）與軟骨下骨硬化。",
+    "faceCount": 59
+  },
+  "carpal_r_47": {
+    "groupId": "carpus_c3",
+    "nameZh": "右側第三腕骨 (遠列中央・最大)",
+    "nameEn": "Right Third Carpal Bone (C3)",
+    "latin": "Os carpale tertium",
+    "grp": "前肢承重系統",
+    "desc": "占遠列腕骨約三分之二、為遠列最大骨，上接橈腕骨與中間腕骨，下幾乎完全直接承接第三掌骨（前大砲骨）。",
+    "clinical": "承受高速奔馳最強垂直壓應力，賽馬常見第三腕骨板狀骨折（Slab fracture）與軟骨下骨硬化。",
     "faceCount": 59
   },
   "carpal_l_42": {
-    "groupId": "carpus_c3_c4",
-    "nameZh": "左側第三與第四腕骨 (遠列中外側)",
-    "nameEn": "Left Third & Fourth Carpal Bones (C3, C4)",
-    "latin": "Os carpale tertium et quartum",
+    "groupId": "carpus_c4",
+    "nameZh": "左側第四腕骨 (遠列外側)",
+    "nameEn": "Left Fourth Carpal Bone (C4)",
+    "latin": "Os carpale quartum",
     "grp": "前肢承重系統",
-    "desc": "第 3 腕骨占遠列 2/3 為遠列最大骨，直接承接大砲骨；第 4 腕骨位於外側承接第三、四掌骨。",
-    "clinical": "第 3 腕骨承受極大垂直壓應力，賽馬常見板狀骨折（Slab fracture）與骨硬化。",
+    "desc": "位於遠列腕骨外側呈楔形，上接中間腕骨與尺腕骨，下接第三掌骨外側及第四掌骨（外側夾骨）。",
+    "clinical": "中腕關節與腕掌關節囊常於第三、第四腕骨之間相通，關節內注射時具重要臨床意義。",
     "faceCount": 60
   },
-  "carpal_r_47": {
-    "groupId": "carpus_c3_c4",
-    "nameZh": "右側第三與第四腕骨 (遠列中外側)",
-    "nameEn": "Right Third & Fourth Carpal Bones (C3, C4)",
-    "latin": "Os carpale tertium et quartum",
-    "grp": "前肢承重系統",
-    "desc": "第 3 腕骨占遠列 2/3 為遠列最大骨，直接承接大砲骨；第 4 腕骨位於外側承接第三、四掌骨。",
-    "clinical": "第 3 腕骨承受極大垂直壓應力，賽馬常見板狀骨折（Slab fracture）與骨硬化。",
-    "faceCount": 59
-  },
   "radius_ulna_r_51": {
-    "groupId": "carpus_c3_c4",
-    "nameZh": "右側第三與第四腕骨 (遠列中外側)",
-    "nameEn": "Right Third & Fourth Carpal Bones (C3, C4)",
-    "latin": "Os carpale tertium et quartum",
+    "groupId": "carpus_c4",
+    "nameZh": "右側第四腕骨 (遠列外側)",
+    "nameEn": "Right Fourth Carpal Bone (C4)",
+    "latin": "Os carpale quartum",
     "grp": "前肢承重系統",
-    "desc": "第 3 腕骨占遠列 2/3 為遠列最大骨，直接承接大砲骨；第 4 腕骨位於外側承接第三、四掌骨。",
-    "clinical": "第 3 腕骨承受極大垂直壓應力，賽馬常見板狀骨折（Slab fracture）與骨硬化。",
+    "desc": "位於遠列腕骨外側呈楔形，上接中間腕骨與尺腕骨，下接第三掌骨外側及第四掌骨（外側夾骨）。",
+    "clinical": "中腕關節與腕掌關節囊常於第三、第四腕骨之間相通，關節內注射時具重要臨床意義。",
     "faceCount": 58
   },
   "cannon_fore_l_16": {
@@ -2008,5 +2008,115 @@
     "desc": "包覆於後蹄匣內，外形較前蹄骨尖窄、蹄底較凹，利於抓地蹬推加速。",
     "clinical": "後蹄承重約 40%，蹄葉炎發生率遠低於前蹄。",
     "faceCount": 200
+  },
+  "wolf_tooth_l": {
+    "groupId": "wolf_tooth",
+    "nameZh": "左側狼齒 (第一前臼齒 P1)",
+    "nameEn": "Left Wolf Tooth (First Premolar, P1)",
+    "latin": "Dens lupinus",
+    "grp": "頭顱與牙齒",
+    "desc": "位於上第一頰齒（P2）前方之退化小型釘狀齒；並非每匹馬皆具狼齒（約 50–70% 存在於上頜，下頜極少見）。",
+    "clinical": "易與騎乘銜鐵（Bit）碰撞造成疼痛或拒咬，馬匹馴調前常由獸醫評估予以拔除。",
+    "faceCount": 60
+  },
+  "wolf_tooth_r": {
+    "groupId": "wolf_tooth",
+    "nameZh": "右側狼齒 (第一前臼齒 P1)",
+    "nameEn": "Right Wolf Tooth (First Premolar, P1)",
+    "latin": "Dens lupinus",
+    "grp": "頭顱與牙齒",
+    "desc": "位於上第一頰齒（P2）前方之退化小型釘狀齒；並非每匹馬皆具狼齒（約 50–70% 存在於上頜，下頜極少見）。",
+    "clinical": "易與騎乘銜鐵（Bit）碰撞造成疼痛或拒咬，馬匹馴調前常由獸醫評估予以拔除。",
+    "faceCount": 60
+  },
+  "hyoid_apparatus": {
+    "groupId": "hyoid_apparatus",
+    "nameZh": "舌骨裝置",
+    "nameEn": "Hyoid Apparatus",
+    "latin": "Apparatus hyoideus",
+    "grp": "頭顱與牙齒",
+    "desc": "由基舌骨（具向前突出之舌突）、成對甲狀舌骨、角舌骨與長條狀莖舌骨構成，懸吊於顱底顳骨鼓部與下頜支之間，支撐舌根與喉頭。",
+    "clinical": "喉囊內視鏡檢查（Guttural pouch endoscopy）時，莖舌骨將喉囊清楚分隔為內側室與外側室；顳舌骨骨關節病（THO）可導致面神經麻痺。",
+    "faceCount": 472
+  },
+  "sesamoid_prox_fore_l": {
+    "groupId": "sesamoid_proximal",
+    "nameZh": "左側近端種子骨 (每肢 2 枚)",
+    "nameEn": "Left Proximal Sesamoid Bones",
+    "latin": "Ossa sesamoidea proximalia",
+    "grp": "前肢承重系統",
+    "desc": "成對（內側與外側）三角錐形種子骨，位於球節（掌／蹠指關節）掌／蹠側，為懸韌帶（骨間中肌）附著處並構成屈肌腱滑車。",
+    "clinical": "賽馬高速衝刺球節過度背屈時，極易發生近端種子骨骨折或種子骨炎（Sesamoiditis）。",
+    "faceCount": 504
+  },
+  "sesamoid_prox_fore_r": {
+    "groupId": "sesamoid_proximal",
+    "nameZh": "右側近端種子骨 (每肢 2 枚)",
+    "nameEn": "Right Proximal Sesamoid Bones",
+    "latin": "Ossa sesamoidea proximalia",
+    "grp": "前肢承重系統",
+    "desc": "成對（內側與外側）三角錐形種子骨，位於球節（掌／蹠指關節）掌／蹠側，為懸韌帶（骨間中肌）附著處並構成屈肌腱滑車。",
+    "clinical": "賽馬高速衝刺球節過度背屈時，極易發生近端種子骨骨折或種子骨炎（Sesamoiditis）。",
+    "faceCount": 504
+  },
+  "sesamoid_prox_hind_l": {
+    "groupId": "sesamoid_proximal",
+    "nameZh": "左側近端種子骨 (每肢 2 枚)",
+    "nameEn": "Left Proximal Sesamoid Bones",
+    "latin": "Ossa sesamoidea proximalia",
+    "grp": "前肢承重系統",
+    "desc": "成對（內側與外側）三角錐形種子骨，位於球節（掌／蹠指關節）掌／蹠側，為懸韌帶（骨間中肌）附著處並構成屈肌腱滑車。",
+    "clinical": "賽馬高速衝刺球節過度背屈時，極易發生近端種子骨骨折或種子骨炎（Sesamoiditis）。",
+    "faceCount": 504
+  },
+  "sesamoid_prox_hind_r": {
+    "groupId": "sesamoid_proximal",
+    "nameZh": "右側近端種子骨 (每肢 2 枚)",
+    "nameEn": "Right Proximal Sesamoid Bones",
+    "latin": "Ossa sesamoidea proximalia",
+    "grp": "前肢承重系統",
+    "desc": "成對（內側與外側）三角錐形種子骨，位於球節（掌／蹠指關節）掌／蹠側，為懸韌帶（骨間中肌）附著處並構成屈肌腱滑車。",
+    "clinical": "賽馬高速衝刺球節過度背屈時，極易發生近端種子骨骨折或種子骨炎（Sesamoiditis）。",
+    "faceCount": 504
+  },
+  "navicular_fore_l": {
+    "groupId": "navicular_bone",
+    "nameZh": "左側舟骨 (遠端種子骨)",
+    "nameEn": "Left Distal Sesamoid (Navicular Bone)",
+    "latin": "Os sesamoideum distale",
+    "grp": "前肢承重系統",
+    "desc": "呈梭舟形，位於蹄關節掌／蹠側（緊貼第二與第三指／趾骨後方），提供指深屈肌腱繞行附著於蹄骨前的支點滑車。",
+    "clinical": "舟骨症（Navicular syndrome）是馬前肢慢性雙側跛行的兩大主因之一，常伴隨舟骨滑液囊炎與屈肌面骨質侵蝕。",
+    "faceCount": 252
+  },
+  "navicular_fore_r": {
+    "groupId": "navicular_bone",
+    "nameZh": "右側舟骨 (遠端種子骨)",
+    "nameEn": "Right Distal Sesamoid (Navicular Bone)",
+    "latin": "Os sesamoideum distale",
+    "grp": "前肢承重系統",
+    "desc": "呈梭舟形，位於蹄關節掌／蹠側（緊貼第二與第三指／趾骨後方），提供指深屈肌腱繞行附著於蹄骨前的支點滑車。",
+    "clinical": "舟骨症（Navicular syndrome）是馬前肢慢性雙側跛行的兩大主因之一，常伴隨舟骨滑液囊炎與屈肌面骨質侵蝕。",
+    "faceCount": 252
+  },
+  "navicular_hind_l": {
+    "groupId": "navicular_bone",
+    "nameZh": "左側舟骨 (遠端種子骨)",
+    "nameEn": "Left Distal Sesamoid (Navicular Bone)",
+    "latin": "Os sesamoideum distale",
+    "grp": "前肢承重系統",
+    "desc": "呈梭舟形，位於蹄關節掌／蹠側（緊貼第二與第三指／趾骨後方），提供指深屈肌腱繞行附著於蹄骨前的支點滑車。",
+    "clinical": "舟骨症（Navicular syndrome）是馬前肢慢性雙側跛行的兩大主因之一，常伴隨舟骨滑液囊炎與屈肌面骨質侵蝕。",
+    "faceCount": 252
+  },
+  "navicular_hind_r": {
+    "groupId": "navicular_bone",
+    "nameZh": "右側舟骨 (遠端種子骨)",
+    "nameEn": "Right Distal Sesamoid (Navicular Bone)",
+    "latin": "Os sesamoideum distale",
+    "grp": "前肢承重系統",
+    "desc": "呈梭舟形，位於蹄關節掌／蹠側（緊貼第二與第三指／趾骨後方），提供指深屈肌腱繞行附著於蹄骨前的支點滑車。",
+    "clinical": "舟骨症（Navicular syndrome）是馬前肢慢性雙側跛行的兩大主因之一，常伴隨舟骨滑液囊炎與屈肌面骨質侵蝕。",
+    "faceCount": 252
   }
 }
