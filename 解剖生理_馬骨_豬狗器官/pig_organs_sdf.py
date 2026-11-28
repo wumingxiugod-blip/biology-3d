@@ -1,16 +1,38 @@
-"""Pig-only visceral organ meshes: signed-distance sculpting + surface nets.
+"""Porcine (Sus scrofa domesticus) visceral organ 3D mesh generator.
 
-Coordinate convention: +x cranial, +y dorsal, +z left.  This module is isolated
-from the canine model builder and only produces porcine organ groups.
+Anatomical coordinate convention (matching dog_model_data.js and index.html):
+  +X = cranial (head/snout), -X = caudal (tail/pelvis)
+  +Y = dorsal (spine),       -Y = ventral (belly)
+  +Z = left (camera side),   -Z = right
+
+Anatomical references:
+  - UMN Dissection Lab Guide: Part 5 Porcine Abdominal Viscera
+  - IMAIOS vet-Anatomy: Porcine thorax & abdomen
+  - Key species features accurately modeled:
+      1. Os rostri (pyramidal rostral bone) + rostral cartilage disk
+      2. Tracheal bronchus branching from right wall cranial to carina -> R cranial lobe
+      3. Lobed lungs (Right: cranial, middle, caudal, accessory; Left: cranial, caudal)
+      4. Heart with right-sided vena cava & proportional aortic arch below dorsal lung border
+      5. Deeply lobed liver (L/R lateral & medial, quadrate, caudate) + right-medial gallbladder
+      6. Stomach with cranial esophagus, caudodorsal gastric diverticulum & torus pyloricus
+      7. Narrow strap-like spleen along left greater curvature
+      8. Three-lobed pancreas forming portal ring
+      9. Convoluted small intestine (duodenum, jejunum, ileum) on right/ventral abdomen
+     10. Left-sided cylindrical sacculated cecum pointing caudoventrally
+     11. Left-sided conical spiral colon: BROAD BASE DORSAL, APEX VENTRAL
+         (outer sacculated centripetal coils + inner smooth centrifugal coils -> descending colon)
+     12. Symmetrical dorsoventrally flattened smooth kidneys + ureters -> urinary bladder
 """
 from __future__ import annotations
 
 import math
 from dataclasses import dataclass
-
 import numpy as np
 
 
+# ---------------------------------------------------------------------------
+# Smooth analytical mesh & SDF utilities
+# ---------------------------------------------------------------------------
 def _norm(v):
     v = np.asarray(v, dtype=np.float64)
     return np.linalg.norm(v, axis=-1)
@@ -18,7 +40,7 @@ def _norm(v):
 
 def _unit(v):
     v = np.asarray(v, dtype=np.float64)
-    n = np.linalg.norm(v)
+    n = float(np.linalg.norm(v))
     return v / max(n, 1e-12)
 
 
@@ -26,29 +48,54 @@ def smin(a, b, k=0.0):
     if k <= 0:
         return np.minimum(a, b)
     h = np.clip(0.5 + 0.5 * (b - a) / k, 0.0, 1.0)
-    return b * (1 - h) + a * h - k * h * (1 - h)
+    return b * (1.0 - h) + a * h - k * h * (1.0 - h)
+
+
+def smax(a, b, k=0.0):
+    return -smin(-a, -b, k)
 
 
 def union(*fields, k=0.0):
     out = fields[0]
-    for field in fields[1:]:
-        out = smin(out, field, k)
+    for f in fields[1:]:
+        out = smin(out, f, k)
     return out
 
 
-def cut(field, cutter, k=0.0):
-    return -smin(-field, cutter, k)
+def rot_matrix(rx=0.0, ry=0.0, rz=0.0):
+    cx, sx = math.cos(rx), math.sin(rx)
+    cy, sy = math.cos(ry), math.sin(ry)
+    cz, sz = math.cos(rz), math.sin(rz)
+    Rx = np.array([[1, 0, 0], [0, cx, -sx], [0, sx, cx]], dtype=np.float64)
+    Ry = np.array([[cy, 0, sy], [0, 1, 0], [-sy, 0, cy]], dtype=np.float64)
+    Rz = np.array([[cz, -sz, 0], [sz, cz, 0], [0, 0, 1]], dtype=np.float64)
+    return Rz @ Ry @ Rx
 
 
-def ellipsoid(p, center, radii, axes=None):
+def ellipsoid(p, center, radii, rot=None):
     q = p - np.asarray(center, dtype=np.float64)
-    if axes is not None:
-        q = q @ axes
+    if rot is not None:
+        q = q @ rot
     r = np.asarray(radii, dtype=np.float64)
-    q = q / r
-    k0 = _norm(q)
-    k1 = _norm(q / r)
+    qr = q / r
+    k0 = _norm(qr)
+    k1 = _norm(qr / r)
     return k0 * (k0 - 1.0) / np.maximum(k1, 1e-9)
+
+
+def capsule(p, a, b, r):
+    a = np.asarray(a, dtype=np.float64)
+    b = np.asarray(b, dtype=np.float64)
+    pa = p - a
+    ba = b - a
+    h = np.clip(np.dot(pa, ba) / max(float(np.dot(ba, ba)), 1e-12), 0.0, 1.0)
+    return _norm(pa - np.outer(h, ba)) - r
+
+
+def torus_x(p, center, major, minor):
+    q = p - np.asarray(center, dtype=np.float64)
+    radial = np.sqrt(q[:, 1] ** 2 + q[:, 2] ** 2)
+    return np.sqrt((radial - major) ** 2 + q[:, 0] ** 2) - minor
 
 
 def _frame(direction, up=(0.0, 1.0, 0.0)):
@@ -61,7 +108,7 @@ def _frame(direction, up=(0.0, 1.0, 0.0)):
     return t, n, b
 
 
-def catmull_rom(control, step=0.25):
+def catmull_rom(control, step=0.22):
     pts = np.asarray(control, dtype=np.float64)
     if len(pts) < 2:
         return pts.copy(), np.zeros(len(pts), dtype=np.float64)
@@ -73,30 +120,29 @@ def catmull_rom(control, step=0.25):
         for j in range(count):
             t = j / count
             t2, t3 = t * t, t * t * t
-            point = 0.5 * ((2 * p1) + (-p0 + p2) * t
-                           + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t2
-                           + (-p0 + 3 * p1 - 3 * p2 + p3) * t3)
-            out.append(point)
+            pt = 0.5 * ((2 * p1) + (-p0 + p2) * t
+                        + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t2
+                        + (-p0 + 3 * p1 - 3 * p2 + p3) * t3)
+            out.append(pt)
             param.append(i - 1 + t)
     out.append(pts[-1])
     param.append(float(len(pts) - 1))
     return np.asarray(out), np.asarray(param)
 
 
-def sweep(p, control, ra, rb=None, step=0.25, blend=0.05):
-    """Approximate a smooth elliptical tube as overlapping rounded segments."""
+def sweep(p, control, ra, rb=None, step=0.22, blend=0.05):
     ctrl = np.asarray(control, dtype=np.float64)
     points, param = catmull_rom(ctrl, step)
     if np.isscalar(ra):
-        ra_values = np.full(len(points), float(ra))
+        ra_vals = np.full(len(points), float(ra))
     else:
-        ra_values = np.interp(param, np.arange(len(ctrl)), np.asarray(ra, dtype=np.float64))
+        ra_vals = np.interp(param, np.arange(len(ctrl)), np.asarray(ra, dtype=np.float64))
     if rb is None:
-        rb_values = ra_values.copy()
+        rb_vals = ra_vals.copy()
     elif np.isscalar(rb):
-        rb_values = np.full(len(points), float(rb))
+        rb_vals = np.full(len(points), float(rb))
     else:
-        rb_values = np.interp(param, np.arange(len(ctrl)), np.asarray(rb, dtype=np.float64))
+        rb_vals = np.interp(param, np.arange(len(ctrl)), np.asarray(rb, dtype=np.float64))
 
     result = np.full(len(p), 1e6, dtype=np.float64)
     for i in range(len(points) - 1):
@@ -110,253 +156,435 @@ def sweep(p, control, ra, rb=None, step=0.25, blend=0.05):
         off = p - mid
         axial = off @ t
         u = np.clip((axial + 0.5 * length) / length, 0.0, 1.0)
-        ra_i = ra_values[i] + u * (ra_values[i + 1] - ra_values[i])
-        rb_i = rb_values[i] + u * (rb_values[i + 1] - rb_values[i])
+        ra_i = ra_vals[i] + u * (ra_vals[i + 1] - ra_vals[i])
+        rb_i = rb_vals[i] + u * (rb_vals[i + 1] - rb_vals[i])
         across = off @ n
         depth = off @ w
         cap = 0.5 * length + np.minimum(ra_i, rb_i)
         k0 = np.sqrt((across / ra_i) ** 2 + (depth / rb_i) ** 2 + (axial / cap) ** 2)
         d = (k0 - 1.0) * np.minimum(ra_i, rb_i)
-        if i == 0:
-            result = d
-        else:
-            result = smin(result, d, blend)
+        result = d if i == 0 else smin(result, d, blend)
     return result
 
 
-def torus_x(p, center, major, minor):
-    q = p - np.asarray(center, dtype=np.float64)
-    radial = np.sqrt(q[:, 1] ** 2 + q[:, 2] ** 2)
-    return np.sqrt((radial - major) ** 2 + q[:, 0] ** 2) - minor
+# ---------------------------------------------------------------------------
+# Parametric smooth tube mesh builder (ideal for crisp spiral colon & intestines)
+# ---------------------------------------------------------------------------
+def build_tube_mesh(points, radii_a, radii_b=None, radial_segs=18, haustra_amp=0.0, haustra_freq=0.0, cap_ends=True):
+    pts = np.asarray(points, dtype=np.float64)
+    n_pts = len(pts)
+    ra = np.full(n_pts, float(radii_a)) if np.isscalar(radii_a) else np.asarray(radii_a, dtype=np.float64)
+    rb = ra.copy() if radii_b is None else (np.full(n_pts, float(radii_b)) if np.isscalar(radii_b) else np.asarray(radii_b, dtype=np.float64))
+
+    # Parallel transport frame for twist-free smooth tubes
+    tangents = np.zeros_like(pts)
+    tangents[0] = _unit(pts[1] - pts[0])
+    tangents[-1] = _unit(pts[-1] - pts[-2])
+    for i in range(1, n_pts - 1):
+        tangents[i] = _unit(pts[i + 1] - pts[i - 1])
+
+    normals = np.zeros_like(pts)
+    binormals = np.zeros_like(pts)
+    _, n0, b0 = _frame(tangents[0])
+    normals[0], binormals[0] = n0, b0
+    for i in range(1, n_pts):
+        t_prev, t_cur = tangents[i - 1], tangents[i]
+        axis = np.cross(t_prev, t_cur)
+        sin_a = float(np.linalg.norm(axis))
+        cos_a = float(np.clip(np.dot(t_prev, t_cur), -1.0, 1.0))
+        if sin_a < 1e-8:
+            normals[i] = normals[i - 1]
+        else:
+            axis /= sin_a
+            ang = math.atan2(sin_a, cos_a)
+            # Rodrigues rotation
+            v = normals[i - 1]
+            normals[i] = v * math.cos(ang) + np.cross(axis, v) * math.sin(ang) + axis * np.dot(axis, v) * (1 - math.cos(ang))
+        normals[i] = _unit(normals[i] - np.dot(normals[i], t_cur) * t_cur)
+        binormals[i] = _unit(np.cross(t_cur, normals[i]))
+
+    # Arc length for haustra modulation
+    segs = np.linalg.norm(np.diff(pts, axis=0), axis=1)
+    arc = np.concatenate(([0.0], np.cumsum(segs)))
+
+    verts = []
+    vnorms = []
+    angles = np.linspace(0, 2 * math.pi, radial_segs, endpoint=False)
+    for i in range(n_pts):
+        h_mod = 1.0
+        if haustra_amp > 0.0 and haustra_freq > 0.0:
+            # Smooth scalloped haustra pouches with two longitudinal taeniae grooves
+            h_mod = 1.0 + haustra_amp * math.sin(arc[i] * haustra_freq)
+        for j, ang in enumerate(angles):
+            ca, sa = math.cos(ang), math.sin(ang)
+            # Subtle taeniae flattening at top/bottom if haustra enabled
+            taenia = 1.0 - (0.09 * (abs(sa) ** 4) if haustra_amp > 0.0 else 0.0)
+            r_a = ra[i] * h_mod * taenia
+            r_b = rb[i] * h_mod * taenia
+            offset = normals[i] * (r_a * ca) + binormals[i] * (r_b * sa)
+            verts.append(pts[i] + offset)
+            nrm = _unit(normals[i] * (ca / max(r_a, 1e-5)) + binormals[i] * (sa / max(r_b, 1e-5)))
+            vnorms.append(nrm)
+
+    tris = []
+    for i in range(n_pts - 1):
+        row0 = i * radial_segs
+        row1 = (i + 1) * radial_segs
+        for j in range(radial_segs):
+            jn = (j + 1) % radial_segs
+            tris.append([row0 + j, row1 + j, row1 + jn])
+            tris.append([row0 + j, row1 + jn, row0 + jn])
+
+    if cap_ends:
+        # Start dome cap
+        c0_idx = len(verts)
+        verts.append(pts[0] - tangents[0] * (0.45 * min(ra[0], rb[0])))
+        vnorms.append(-tangents[0])
+        for j in range(radial_segs):
+            jn = (j + 1) % radial_segs
+            tris.append([c0_idx, jn, j])
+        # End dome cap
+        c1_idx = len(verts)
+        last_row = (n_pts - 1) * radial_segs
+        verts.append(pts[-1] + tangents[-1] * (0.45 * min(ra[-1], rb[-1])))
+        vnorms.append(tangents[-1])
+        for j in range(radial_segs):
+            jn = (j + 1) % radial_segs
+            tris.append([c1_idx, last_row + j, last_row + jn])
+
+    return np.asarray(verts, dtype=np.float64), np.asarray(vnorms, dtype=np.float64), np.asarray(tris, dtype=np.int64)
 
 
-def _lobulated_ellipsoid(p, center, radii, frequency=7.0, amplitude=0.035):
-    d = ellipsoid(p, center, radii)
-    q = p - np.asarray(center, dtype=np.float64)
-    ripple = (np.sin(q[:, 0] * frequency) * np.sin(q[:, 1] * frequency * 0.83)
-              * np.sin(q[:, 2] * frequency * 0.91))
-    return d + amplitude * ripple * np.exp(-np.abs(d) / 0.24)
+def merge_meshes(mesh_list):
+    all_v, all_n, all_t = [], [], []
+    offset = 0
+    for v, n, t in mesh_list:
+        all_v.append(v)
+        all_n.append(n)
+        all_t.append(t + offset)
+        offset += len(v)
+    return np.vstack(all_v), np.vstack(all_n), np.vstack(all_t)
 
 
 # ---------------------------------------------------------------------------
-# Porcine organ signed-distance fields
+# Porcine organ SDF definitions (clean, anatomically accurate proportions)
 # ---------------------------------------------------------------------------
-def pig_rostral_bone(p):
-    bone = ellipsoid(p, (13.25, 1.55, 0.0), (1.15, 0.75, 0.78))
-    cart = torus_x(p, (14.15, 1.55, 0.0), 0.83, 0.16)
-    return smin(bone, cart, 0.10)
+def pig_os_rostri_sdf(p):
+    # Pyramidal wedge-shaped rostral bone + oval nasal disk / rostral cartilage
+    # Positioned at cranial snout landmark (x ~ 8.8..10.1, y ~ 1.05, z = 0)
+    bone_core = ellipsoid(p, (9.18, 1.02, 0.0), (0.68, 0.44, 0.42), rot_matrix(rz=0.14))
+    bone_tip = ellipsoid(p, (9.58, 1.12, 0.0), (0.38, 0.30, 0.34))
+    disk = ellipsoid(p, (9.88, 1.05, 0.0), (0.20, 0.68, 0.80))
+    rim = torus_x(p, (9.90, 1.05, 0.0), 0.64, 0.14)
+    # Two subtle nostril indentations on the cranial face of the snout disk
+    nostril_l = ellipsoid(p, (10.08, 1.05, 0.34), (0.22, 0.22, 0.20))
+    nostril_r = ellipsoid(p, (10.08, 1.05, -0.34), (0.22, 0.22, 0.20))
+    snout = union(bone_core, bone_tip, disk, rim, k=0.14)
+    snout = smax(snout, -nostril_l, 0.06)
+    snout = smax(snout, -nostril_r, 0.06)
+    return snout
 
 
-def pig_trachea(p):
-    main = sweep(p, [(12.8, 1.35, 0.0), (10.2, 1.05, 0.0), (7.0, 0.72, 0.0),
-                    (4.2, 0.48, 0.0), (1.8, 0.30, 0.0)], 0.34, 0.32, step=0.22, blend=0.06)
-    left = sweep(p, [(1.9, 0.28, 0.0), (0.8, 0.02, 0.82), (-0.2, -0.18, 1.55)],
-                 [0.34, 0.28, 0.22], [0.31, 0.26, 0.21], step=0.22, blend=0.05)
-    right = sweep(p, [(1.9, 0.28, 0.0), (0.8, 0.02, -0.82), (-0.2, -0.18, -1.55)],
-                  [0.34, 0.28, 0.22], [0.31, 0.26, 0.21], step=0.22, blend=0.05)
-    # The swine tracheal bronchus leaves the right wall before the carina.
-    cranial = sweep(p, [(5.2, 0.65, -0.1), (4.3, 0.92, -0.72), (3.2, 1.05, -1.55)],
-                    [0.25, 0.22, 0.18], [0.24, 0.20, 0.17], step=0.18, blend=0.04)
-    airway = union(main, left, right, cranial, k=0.16)
-    # Approximate the visible C-shaped cartilage rings (about 32–35 per trachea).
-    for i in range(31):
-        t = i / 30.0
-        x = 12.65 - 10.65 * t
-        y = 1.32 - 1.02 * t
-        ring = torus_x(p, (x, y, 0.0), 0.355, 0.048)
-        airway = smin(airway, ring, 0.035)
+def pig_trachea_sdf(p):
+    # Realistic neck length: larynx at x=6.75 -> carina at x=2.35
+    larynx = ellipsoid(p, (6.85, 0.95, 0.0), (0.55, 0.44, 0.40))
+    main = sweep(p, [(6.70, 0.94, 0.0), (5.20, 0.78, 0.0), (3.70, 0.58, 0.0), (2.35, 0.42, 0.0)],
+                 0.30, 0.28, step=0.18, blend=0.05)
+    # Left & right principal bronchi from carina
+    left_br = sweep(p, [(2.40, 0.42, 0.0), (1.70, 0.24, 0.65), (1.05, 0.08, 1.20)],
+                    [0.26, 0.22, 0.17], [0.24, 0.20, 0.16], step=0.16, blend=0.04)
+    right_br = sweep(p, [(2.40, 0.42, 0.0), (1.70, 0.24, -0.65), (1.05, 0.08, -1.20)],
+                     [0.26, 0.22, 0.17], [0.24, 0.20, 0.16], step=0.16, blend=0.04)
+    # Signature porcine TRACHEAL BRONCHUS (Bronchus trachealis):
+    # branches off RIGHT lateral wall (-Z) cranial to carina (at x=3.65) -> right cranial lung lobe!
+    tracheal_br = sweep(p, [(3.65, 0.58, -0.10), (3.45, 0.66, -0.68), (3.25, 0.68, -1.28)],
+                        [0.20, 0.17, 0.14], [0.19, 0.16, 0.13], step=0.14, blend=0.04)
+    airway = union(larynx, main, left_br, right_br, tracheal_br, k=0.12)
+    # Crisp C-shaped tracheal cartilage rings
+    for i in range(22):
+        t = i / 21.0
+        x = 6.40 - 3.90 * t
+        y = 0.90 - 0.46 * t
+        ring = torus_x(p, (x, y, 0.0), 0.315, 0.036)
+        airway = smin(airway, ring, 0.025)
     return airway
 
 
-def pig_heart(p):
-    axes = np.array([[0.97, -0.25, 0.04], [0.24, 0.95, 0.22], [-0.09, -0.20, 0.98]])
-    left_vent = ellipsoid(p, (0.65, -0.85, 0.52), (1.25, 1.62, 0.90), axes)
-    right_vent = ellipsoid(p, (0.55, -0.62, -0.52), (1.08, 1.46, 0.82), axes)
-    atria = ellipsoid(p, (1.55, 0.42, 0.0), (0.92, 0.78, 0.98))
-    heart = union(left_vent, right_vent, atria, k=0.58)
-    aorta = sweep(p, [(1.35, 0.65, 0.05), (1.52, 1.45, 0.14), (0.98, 2.12, 0.22),
-                      (0.02, 2.18, 0.25)], [0.46, 0.44, 0.36, 0.30], step=0.18)
-    pulmonary = sweep(p, [(1.38, 0.60, -0.18), (1.76, 1.20, -0.55), (1.35, 1.64, -0.82)],
-                      [0.34, 0.29, 0.23], step=0.18)
-    cava = sweep(p, [(1.74, 0.34, 0.78), (2.25, 1.05, 0.94), (2.45, 1.70, 0.98)],
-                 [0.34, 0.29, 0.24], step=0.18)
-    return union(heart, aorta, pulmonary, cava, k=0.20)
+def pig_heart_sdf(p):
+    # Oblique conical heart in ventral thorax, apex pointing caudoventrally & slightly left (+Z)
+    rot = rot_matrix(rx=0.12, ry=0.08, rz=-0.32)
+    lv = ellipsoid(p, (2.25, -0.68, 0.28), (0.95, 1.25, 0.72), rot)
+    rv = ellipsoid(p, (2.55, -0.48, -0.28), (0.88, 1.08, 0.68), rot)
+    apex = ellipsoid(p, (1.92, -1.35, 0.22), (0.55, 0.62, 0.48), rot)
+    la = ellipsoid(p, (2.45, 0.36, 0.36), (0.62, 0.52, 0.56))
+    ra = ellipsoid(p, (2.78, 0.42, -0.34), (0.64, 0.54, 0.58))
+    heart = union(lv, rv, apex, la, ra, k=0.40)
+
+    # Subtle interventricular sulcus
+    sulcus = sweep(p, [(2.68, 0.05, 0.65), (2.42, -0.58, 0.72), (2.05, -1.18, 0.48)], 0.06, step=0.15)
+    heart = smax(heart, -sulcus, 0.05)
+
+    # Proportional aortic arch (stays cleanly INSIDE thoracic dorsal contour y <= 1.48)
+    aorta = sweep(p, [(2.42, 0.50, 0.05), (2.68, 1.15, 0.12), (2.05, 1.45, 0.16),
+                      (1.05, 1.42, 0.14), (0.10, 1.32, 0.12)],
+                  [0.32, 0.30, 0.26, 0.24, 0.22], step=0.16, blend=0.05)
+    # Pulmonary trunk curving left-dorsally
+    pulm = sweep(p, [(2.72, 0.35, -0.10), (2.58, 0.88, 0.22), (2.08, 1.02, 0.48)],
+                 [0.25, 0.22, 0.18], step=0.15, blend=0.04)
+    # Cranial & Caudal Vena Cava on the RIGHT side (-Z!) entering right atrium
+    cr_vc = sweep(p, [(2.85, 0.48, -0.44), (3.45, 0.68, -0.52), (4.15, 0.78, -0.48)],
+                  [0.24, 0.22, 0.20], step=0.16, blend=0.04)
+    cd_vc = sweep(p, [(2.48, 0.12, -0.45), (1.65, -0.12, -0.48), (0.80, -0.22, -0.42)],
+                  [0.24, 0.23, 0.22], step=0.16, blend=0.04)
+    return union(heart, aorta, pulm, cr_vc, cd_vc, k=0.14)
 
 
-def pig_lungs(p):
-    # +z is the left side.  The left lung has cranial and caudal lobes;
-    # the right lung has cranial, middle, caudal and accessory lobes.
-    lobes = [
-        _lobulated_ellipsoid(p, (1.50, 0.45, 1.95), (1.55, 1.04, 0.90), 5.4, 0.03),
-        _lobulated_ellipsoid(p, (-0.95, 0.20, 2.05), (2.10, 1.30, 1.08), 5.4, 0.03),
-        _lobulated_ellipsoid(p, (2.10, 0.62, -1.86), (1.30, 0.95, 0.78), 5.6, 0.03),
-        _lobulated_ellipsoid(p, (0.35, 0.34, -1.95), (1.40, 1.04, 0.80), 5.6, 0.03),
-        _lobulated_ellipsoid(p, (-1.55, 0.18, -2.12), (2.05, 1.28, 1.12), 5.3, 0.03),
-        _lobulated_ellipsoid(p, (-0.70, -0.70, -0.68), (1.20, 0.80, 0.72), 5.4, 0.03),
-    ]
-    lungs = union(*lobes, k=0.34)
-    # Shallow interlobar clefts keep the lobes readable as one lung organ group.
-    fissures = [
-        sweep(p, [(0.20, 1.25, 2.38), (0.10, 0.10, 2.72), (-0.10, -0.92, 2.50)], 0.12, step=0.22, blend=0.02),
-        sweep(p, [(1.35, 1.12, -2.25), (1.12, 0.10, -2.56), (0.82, -0.70, -2.35)], 0.105, step=0.20, blend=0.02),
-        sweep(p, [(-0.62, 1.18, -2.35), (-0.75, 0.05, -2.67), (-0.92, -0.80, -2.45)], 0.105, step=0.20, blend=0.02),
-    ]
-    for fissure in fissures:
-        lungs = np.maximum(lungs, -fissure)
+def pig_lungs_sdf(p):
+    # Smooth, contoured pleural lung lobes hugging the heart with concave diaphragmatic base
+    # LEFT LUNG (+Z): 2 lobes (Cranial lobe w/ cranial & caudal parts + Caudal lobe)
+    l_cr_a = ellipsoid(p, (3.45, 0.45, 1.28), (1.05, 0.82, 0.66), rot_matrix(rz=-0.18))
+    l_cr_b = ellipsoid(p, (2.45, -0.15, 1.38), (0.92, 0.92, 0.68), rot_matrix(rz=0.10))
+    l_caud = ellipsoid(p, (1.15, 0.55, 1.48), (1.42, 1.22, 0.82), rot_matrix(rz=0.22))
+    left_lung = union(l_cr_a, l_cr_b, l_caud, k=0.26)
+    # Interlobar fissure on left lung (separating cranial & caudal lobes)
+    l_fiss = sweep(p, [(2.25, 1.42, 1.72), (1.98, 0.42, 2.08), (1.72, -0.62, 1.88)], 0.085, step=0.16, blend=0.02)
+    left_lung = smax(left_lung, -l_fiss, 0.04)
+
+    # RIGHT LUNG (-Z): 4 lobes (Cranial, Middle, Caudal, Accessory)
+    r_cr = ellipsoid(p, (3.55, 0.52, -1.26), (1.12, 0.86, 0.68), rot_matrix(rz=-0.16))
+    r_mid = ellipsoid(p, (2.32, -0.18, -1.36), (0.92, 0.94, 0.68), rot_matrix(rz=0.10))
+    r_caud = ellipsoid(p, (0.98, 0.58, -1.48), (1.48, 1.24, 0.84), rot_matrix(rz=0.22))
+    r_acc = ellipsoid(p, (1.10, -0.62, -0.45), (0.78, 0.56, 0.46), rot_matrix(rz=0.15))
+    right_lung = union(r_cr, r_mid, r_caud, r_acc, k=0.24)
+    # Interlobar fissures on right lung (cranial/middle & middle/caudal)
+    r_fiss1 = sweep(p, [(2.95, 1.28, -1.62), (2.78, 0.35, -1.98), (2.55, -0.58, -1.78)], 0.08, step=0.16, blend=0.02)
+    r_fiss2 = sweep(p, [(1.98, 1.42, -1.72), (1.72, 0.38, -2.10), (1.48, -0.68, -1.90)], 0.085, step=0.16, blend=0.02)
+    right_lung = smax(right_lung, -r_fiss1, 0.04)
+    right_lung = smax(right_lung, -r_fiss2, 0.04)
+
+    lungs = np.minimum(left_lung, right_lung)
+    # Carve clean cardiac impression so heart sits snugly without clipping
+    cardiac_cut = ellipsoid(p, (2.40, -0.55, 0.05), (1.28, 1.35, 0.92))
+    lungs = smax(lungs, -cardiac_cut, 0.14)
+    # Carve concave diaphragmatic surface at caudal face so liver nestles behind lungs
+    diaph_cut = ellipsoid(p, (-0.75, -0.25, 0.0), (1.25, 1.75, 2.35))
+    lungs = smax(lungs, -diaph_cut, 0.18)
     return lungs
 
 
-def pig_stomach(p):
-    fundus = ellipsoid(p, (-4.25, 0.52, 0.92), (1.38, 1.32, 1.18))
-    corpus = ellipsoid(p, (-3.35, -0.18, 0.32), (1.68, 1.14, 1.05))
-    antrum = ellipsoid(p, (-2.25, -0.72, -0.18), (1.00, 0.76, 0.68))
-    stomach = union(fundus, corpus, antrum, k=0.52)
-    # Blind, conical fundic diverticulum on the greater curvature near cardia.
-    diverticulum = ellipsoid(p, (-5.15, 1.55, 1.18), (0.82, 0.88, 0.75))
-    neck = sweep(p, [(-4.75, 1.12, 1.0), (-5.02, 1.38, 1.10), (-5.24, 1.88, 1.24)],
-                 [0.52, 0.37, 0.18], step=0.16, blend=0.03)
-    stomach = union(stomach, diverticulum, neck, k=0.26)
-    # Esophagus, duodenum, and torus pyloricus at the lesser-curvature exit.
-    esophagus = sweep(p, [(-5.32, 1.32, 1.02), (-5.82, 1.72, 0.95), (-6.32, 1.92, 0.86)],
-                      [0.36, 0.31, 0.28], step=0.18)
-    torus = ellipsoid(p, (-1.73, -0.82, -0.12), (0.40, 0.42, 0.46))
-    duodenum = sweep(p, [(-1.75, -0.82, -0.14), (-1.48, -1.35, -0.42),
-                         (-2.18, -1.72, -0.78), (-3.25, -1.62, -0.82)],
-                     [0.30, 0.28, 0.25, 0.23], step=0.20)
-    return union(stomach, esophagus, torus, duodenum, k=0.16)
+def pig_liver_sdf(p):
+    # Dome-shaped deeply lobed porcine liver immediately caudal to diaphragm (x ~ -1.5..+0.35)
+    # Extends slightly more to right (-Z); concave caudally to cradle stomach
+    ll = ellipsoid(p, (-0.75, 0.22, 1.42), (0.72, 1.18, 0.68), rot_matrix(rx=0.15, ry=0.22))
+    lm = ellipsoid(p, (-0.42, -0.18, 0.62), (0.68, 1.12, 0.56), rot_matrix(ry=0.10))
+    rm = ellipsoid(p, (-0.40, -0.18, -0.64), (0.70, 1.14, 0.58), rot_matrix(ry=-0.10))
+    rl = ellipsoid(p, (-0.78, 0.28, -1.52), (0.76, 1.24, 0.72), rot_matrix(rx=-0.15, ry=-0.22))
+    quad = ellipsoid(p, (-0.28, -0.78, -0.05), (0.48, 0.62, 0.42))
+    caud = ellipsoid(p, (-1.22, 0.72, -1.18), (0.58, 0.62, 0.56))
+    liver = union(ll, lm, rm, rl, quad, caud, k=0.20)
 
-
-def pig_liver(p):
-    lobes = [
-        _lobulated_ellipsoid(p, (-2.45, 0.38, 2.20), (1.42, 1.62, 1.08), 7.0, 0.032),  # left lateral
-        _lobulated_ellipsoid(p, (-1.88, -0.10, 0.95), (1.20, 1.48, 0.80), 7.2, 0.032), # left medial
-        _lobulated_ellipsoid(p, (-1.82, -0.12, -0.87), (1.22, 1.46, 0.82), 7.2, 0.032),# right medial
-        _lobulated_ellipsoid(p, (-2.40, 0.34, -2.18), (1.42, 1.62, 1.08), 7.0, 0.032),# right lateral
-        _lobulated_ellipsoid(p, (-0.85, -0.85, 0.05), (0.80, 1.12, 0.62), 6.8, 0.028), # quadrate
-        _lobulated_ellipsoid(p, (-3.72, 0.54, -0.86), (0.82, 1.04, 0.72), 6.8, 0.028), # caudate
-    ]
-    liver = union(*lobes, k=0.24)
-    # Deep interlobar clefts, softened at the ends so the lobes remain connected.
-    grooves = [
-        sweep(p, [(-3.14, 1.62, 0.0), (-2.08, 0.78, 0.0), (-1.02, -0.28, 0.0)],
-              [0.14, 0.18, 0.10], step=0.24, blend=0.02),
-        sweep(p, [(-3.16, -0.08, 1.30), (-2.14, -0.84, 0.98), (-1.25, -1.52, 0.54)],
-              [0.12, 0.16, 0.10], step=0.22, blend=0.02),
-        sweep(p, [(-3.22, -0.10, -1.35), (-2.18, -0.82, -1.02), (-1.30, -1.50, -0.56)],
-              [0.12, 0.16, 0.10], step=0.22, blend=0.02),
-    ]
-    for groove in grooves:
-        liver = np.maximum(liver, -groove)
+    # Clean interlobar fissures on ventral/cranial margins
+    cleft_mid = sweep(p, [(-0.15, 0.65, 0.0), (-0.05, -0.35, 0.0), (-0.25, -1.25, 0.0)], 0.065, step=0.16)
+    cleft_l = sweep(p, [(-0.45, 0.55, 1.05), (-0.30, -0.45, 0.98), (-0.52, -1.25, 0.88)], 0.065, step=0.16)
+    cleft_r = sweep(p, [(-0.45, 0.55, -1.08), (-0.30, -0.45, -1.02), (-0.52, -1.25, -0.92)], 0.065, step=0.16)
+    for cl in (cleft_mid, cleft_l, cleft_r):
+        liver = smax(liver, -cl, 0.03)
+    # Subtle visceral concavity on caudal-left side for the stomach
+    stom_imp = ellipsoid(p, (-2.35, 0.05, 0.75), (1.15, 1.15, 1.20))
+    liver = smax(liver, -stom_imp, 0.16)
     return liver
 
 
-def pig_gallbladder(p):
-    sac = ellipsoid(p, (-1.08, -1.08, -0.82), (0.55, 0.86, 0.48))
-    neck = sweep(p, [(-1.08, -0.45, -0.82), (-1.32, -0.05, -0.62),
-                     (-1.80, 0.08, -0.35), (-2.28, -0.24, -0.32)],
-                 [0.20, 0.16, 0.12, 0.10], step=0.15, blend=0.02)
-    return union(sac, neck, k=0.12)
+def pig_gallbladder_sdf(p):
+    # Pear-shaped sac nestled on caudal-ventral visceral surface between right medial & quadrate lobes
+    sac = ellipsoid(p, (-0.78, -0.92, -0.62), (0.34, 0.54, 0.30), rot_matrix(rz=-0.20))
+    duct = sweep(p, [(-0.82, -0.48, -0.60), (-1.05, -0.18, -0.45), (-1.45, -0.22, -0.42)],
+                 [0.12, 0.09, 0.07], step=0.12, blend=0.02)
+    return union(sac, duct, k=0.08)
 
 
-def pig_spleen(p):
-    path = [(-3.75, 1.18, 2.04), (-4.15, 0.54, 2.20), (-4.75, -0.30, 2.28),
-            (-5.38, -1.22, 2.24), (-6.02, -2.15, 2.12), (-6.68, -3.02, 1.92)]
-    ra = [0.42, 0.55, 0.58, 0.55, 0.47, 0.30]
-    rb = [0.18, 0.21, 0.22, 0.21, 0.19, 0.14]
-    body = sweep(p, path, ra, rb, step=0.22, blend=0.10)
-    # Slight broadening at the cranial end and a taper at the ventral tip.
-    return union(body, ellipsoid(p, (-4.10, 0.62, 2.18), (0.48, 0.42, 0.28)), k=0.10)
+def pig_stomach_sdf(p):
+    # Simple C/J-shaped stomach in LEFT cranial abdomen (+Z), caudal to liver
+    # Esophagus enters from CRANIAL (+X) dorsal aspect through diaphragm!
+    fundus = ellipsoid(p, (-2.65, 0.45, 0.95), (0.98, 0.95, 0.88))
+    body = ellipsoid(p, (-2.18, -0.25, 0.32), (1.12, 0.86, 0.82), rot_matrix(ry=-0.20))
+    pyloric_antrum = ellipsoid(p, (-1.62, -0.65, -0.45), (0.72, 0.56, 0.56))
+    stomach = union(fundus, body, pyloric_antrum, k=0.38)
+
+    # Signature porcine GASTRIC DIVERTICULUM: conical blind pouch projecting caudodorsally from fundus
+    divert = sweep(p, [(-2.95, 0.88, 1.12), (-3.32, 1.24, 1.32), (-3.62, 1.48, 1.46)],
+                   [0.52, 0.38, 0.20], step=0.12, blend=0.04)
+    stomach = union(stomach, divert, k=0.18)
+
+    # Esophagus coming from CRANIAL (+X) dorsal thorax into cardia!
+    esoph = sweep(p, [(-2.22, 0.98, 0.52), (-1.35, 1.15, 0.25), (-0.25, 1.12, 0.12), (1.05, 1.02, 0.08)],
+                  [0.24, 0.20, 0.19, 0.19], step=0.18, blend=0.04)
+
+    # Signature porcine TORUS PYLORICUS (muscular prominence at pyloric exit) + cranial duodenum
+    torus_pyl = ellipsoid(p, (-1.32, -0.66, -0.78), (0.28, 0.30, 0.32))
+    duod = sweep(p, [(-1.32, -0.66, -0.82), (-1.45, -0.52, -1.28), (-2.15, -0.35, -1.42), (-2.95, -0.45, -1.35)],
+                 [0.22, 0.20, 0.19, 0.18], step=0.16, blend=0.04)
+    return union(stomach, esoph, torus_pyl, duod, k=0.12)
 
 
-def pig_pancreas(p):
-    splenic = sweep(p, [(-5.00, 0.04, 1.72), (-4.38, 0.18, 1.30), (-3.55, 0.28, 0.72),
-                        (-2.88, 0.34, 0.30)], [0.40, 0.48, 0.48, 0.38],
-                    [0.30, 0.34, 0.32, 0.28], step=0.20, blend=0.06)
-    connecting = sweep(p, [(-2.92, 0.30, 0.32), (-2.32, 0.48, 0.52), (-1.85, 0.40, 0.02),
-                           (-2.22, 0.18, -0.52), (-3.00, 0.00, -0.38)],
-                       [0.42, 0.47, 0.48, 0.42, 0.34], [0.30, 0.32, 0.32, 0.30, 0.26],
-                       step=0.18, blend=0.06)
-    duodenal = sweep(p, [(-3.02, 0.00, -0.38), (-3.58, -0.46, -0.70), (-4.00, -1.02, -0.74),
-                         (-3.52, -1.42, -0.52), (-2.75, -1.22, -0.24)],
-                     [0.42, 0.48, 0.46, 0.39, 0.30], [0.28, 0.31, 0.31, 0.28, 0.22],
-                     step=0.18, blend=0.06)
-    gland = union(splenic, connecting, duodenal, k=0.30)
-    # Small surface nodules suggest the normal lobulated glandular surface.
-    nodules = [ellipsoid(p, c, (0.26, 0.20, 0.23)) for c in [
-        (-4.55, 0.48, 1.35), (-3.90, 0.62, 0.88), (-2.55, 0.68, 0.34),
-        (-2.05, 0.47, -0.38), (-3.72, -0.72, -0.82), (-3.28, -1.20, -0.42)
-    ]]
-    return union(gland, *nodules, k=0.13)
+def pig_spleen_sdf(p):
+    # Signature porcine STRAP-LIKE SPLEEN: long, narrow, flat strap along LEFT (+Z) greater curvature
+    path = [(-2.55, 1.28, 1.82), (-2.92, 0.62, 1.98), (-3.32, -0.10, 2.04),
+            (-3.68, -0.82, 1.96), (-4.02, -1.48, 1.76)]
+    ra = [0.24, 0.34, 0.36, 0.33, 0.22]   # cranial-caudal strap width
+    rb = [0.10, 0.12, 0.12, 0.11, 0.09]   # medial-lateral flatness
+    return sweep(p, path, ra, rb, step=0.16, blend=0.06)
 
 
-def _spiral_path(center_x, center_z, turns, r0, r1, y0, y1, direction=1.0, samples=90):
-    points, radii = [], []
-    for i in range(samples):
-        t = i / (samples - 1)
-        ang = direction * (2 * math.pi * turns * t)
-        r = (r0 - r1) * (1.0 - t) ** 0.78 + r1
-        points.append((center_x + r * math.cos(ang), y0 + (y1 - y0) * t,
-                       center_z + 0.86 * r * math.sin(ang)))
-        # Gentle haustral swelling along the outer centripetal turns.
-        radii.append(0.38 * (1.0 + 0.12 * math.cos(2 * math.pi * 8 * t)))
-    return points, radii
+def pig_pancreas_sdf(p):
+    # Three-lobed porcine pancreas forming a ring around the portal vein region
+    # Nestled dorsal-caudal to stomach and along proximal duodenum
+    left_lobe = sweep(p, [(-3.45, 0.38, 1.15), (-3.00, 0.42, 0.65), (-2.55, 0.44, 0.18)],
+                      [0.28, 0.34, 0.32], [0.20, 0.24, 0.22], step=0.15, blend=0.05)
+    # Portal ring (body + connecting lobe looping around portal vein)
+    ring_top = sweep(p, [(-2.55, 0.44, 0.18), (-2.15, 0.56, -0.15), (-2.38, 0.32, -0.58)],
+                     [0.30, 0.28, 0.26], [0.20, 0.20, 0.18], step=0.14, blend=0.05)
+    ring_bot = sweep(p, [(-2.55, 0.44, 0.18), (-2.68, 0.08, -0.18), (-2.38, 0.32, -0.58)],
+                     [0.26, 0.24, 0.26], [0.18, 0.18, 0.18], step=0.14, blend=0.05)
+    right_lobe = sweep(p, [(-2.38, 0.32, -0.58), (-2.42, -0.05, -0.96), (-2.88, -0.32, -1.12)],
+                       [0.28, 0.30, 0.24], [0.20, 0.22, 0.18], step=0.15, blend=0.05)
+    return union(left_lobe, ring_top, ring_bot, right_lobe, k=0.16)
 
 
-def pig_spiral_colon(p):
-    cx, cz = -8.15, 0.05
-    outer, outer_r = _spiral_path(cx, cz, 3.25, 2.55, 0.50, -3.0, 1.08, 1.0, 96)
-    inner, inner_r = _spiral_path(cx, cz, 3.25, 0.50, 1.60, 1.06, -2.72, -1.0, 88)
-    centripetal = sweep(p, outer, outer_r, np.asarray(outer_r) * 0.88, step=0.26, blend=0.06)
-    centrifugal = sweep(p, inner, np.asarray(inner_r) * 0.88, np.asarray(inner_r) * 0.82, step=0.27, blend=0.05)
-    apex = sweep(p, [outer[-1], (-8.10, 1.38, 0.08), inner[0]], [0.40, 0.34, 0.34],
-                 [0.36, 0.30, 0.30], step=0.18, blend=0.05)
-    distal = sweep(p, [inner[-1], (-6.28, -2.75, 0.10), (-5.25, -2.25, 0.04)],
-                   [0.31, 0.30, 0.25], [0.28, 0.27, 0.22], step=0.20, blend=0.05)
-    colon = union(centripetal, centrifugal, apex, distal, k=0.14)
-    # Two longitudinal taeniae are represented as narrow ridges along the outer turns.
-    # Their shallow height keeps the colon silhouette continuous.
-    return colon
+def pig_kidneys_sdf(p):
+    # Signature porcine SYMMETRICAL dorsoventrally flattened smooth kidneys (retroperitoneal, dorsal roof)
+    def _bean(center, side):
+        rot = rot_matrix(rx=0.14 * side)
+        body = ellipsoid(p, center, (0.95, 0.42, 0.62), rot)
+        hilum = ellipsoid(p, (center[0] + 0.05, center[1] - 0.04, center[2] - side * 0.50), (0.45, 0.22, 0.34), rot)
+        return smax(body, -hilum, 0.06)
+
+    # Nearly identical craniocaudal position (x = -5.15 vs -5.35) — classic pig feature!
+    right_k = _bean((-5.15, 1.58, -1.18), -1.0)
+    left_k = _bean((-5.35, 1.58, 1.18), 1.0)
+    # Ureters coursing caudally along dorsal wall into dorsal bladder neck
+    u_r = sweep(p, [(-5.15, 1.32, -0.95), (-6.10, 0.82, -0.72), (-7.25, 0.18, -0.40), (-8.35, -0.42, -0.16)],
+                [0.10, 0.09, 0.085, 0.08], step=0.18, blend=0.02)
+    u_l = sweep(p, [(-5.35, 1.32, 0.95), (-6.22, 0.80, 0.72), (-7.30, 0.16, 0.40), (-8.35, -0.42, 0.16)],
+                [0.10, 0.09, 0.085, 0.08], step=0.18, blend=0.02)
+    return union(right_k, left_k, u_r, u_l, k=0.06)
 
 
-def pig_cecum(p):
-    body = sweep(p, [(-6.25, -0.92, 1.60), (-7.08, -1.35, 1.86),
-                     (-7.90, -1.92, 1.84), (-8.62, -2.62, 1.54)],
-                 [0.74, 0.78, 0.68, 0.48], [0.62, 0.62, 0.54, 0.40], step=0.20, blend=0.08)
-    cap = ellipsoid(p, (-8.58, -2.58, 1.54), (0.52, 0.48, 0.46))
-    cecum = union(body, cap, k=0.18)
-    # Three soft longitudinal bands and shallow sacculations.
-    return cecum
+def pig_bladder_sdf(p):
+    # Pear-shaped urinary bladder at caudal pelvic inlet (x ~ -8.0..-9.8) + pelvic urethra
+    body = ellipsoid(p, (-8.75, -0.68, 0.0), (1.05, 0.76, 0.72), rot_matrix(rz=-0.10))
+    apex = ellipsoid(p, (-8.05, -0.52, 0.0), (0.58, 0.52, 0.48))
+    urethra = sweep(p, [(-9.65, -0.82, 0.0), (-10.35, -0.88, 0.0), (-10.95, -0.82, 0.0)],
+                    [0.24, 0.18, 0.14], step=0.15, blend=0.03)
+    return union(body, apex, urethra, k=0.14)
 
 
-def _kidney(p, center, side):
-    axes = np.array([[1.0, 0.0, 0.0], [0.0, 0.97, -0.22 * side], [0.0, 0.22 * side, 0.97]])
-    bean = ellipsoid(p, center, (1.28, 0.62, 0.78), axes)
-    cleft = ellipsoid(p, (center[0] + 0.10, center[1] - 0.02, center[2] - side * 0.66),
-                      (0.62, 0.30, 0.46), axes)
-    bean = np.maximum(bean, -cleft)
-    return bean
+# ---------------------------------------------------------------------------
+# Direct high-precision parametric builders for Intestines, Cecum & Spiral Colon
+# ---------------------------------------------------------------------------
+def build_pig_spiral_colon_mesh():
+    """Conical spiral colon in LEFT abdomen (+Z):
+    BROAD BASE DORSAL (y = +0.75), BLUNT APEX VENTRAL (y = -2.25).
+    Outer centripetal coils (sacculated/haustrated) spiral DOWN to ventral apex;
+    Inner centrifugal coils (narrower, smooth) spiral BACK UP to dorsal base -> descending colon.
+    """
+    cx, cz = -5.65, 0.82
+    y_top, y_bot = 0.78, -2.22
+
+    # 1. Outer Centripetal Coils (3.25 turns spiraling downward from base to apex)
+    n_out = 160
+    outer_pts, outer_r = [], []
+    turns = 3.25
+    for i in range(n_out):
+        t = i / (n_out - 1)
+        ang = 2.0 * math.pi * turns * t
+        r = 1.62 * (1.0 - t) ** 0.78 + 0.34
+        y = y_top + (y_bot - y_top) * t
+        outer_pts.append((cx + r * math.cos(ang), y, cz + 0.85 * r * math.sin(ang)))
+        outer_r.append(0.32 - 0.05 * t)
+    m_outer = build_tube_mesh(outer_pts, outer_r, np.asarray(outer_r) * 0.90,
+                              radial_segs=18, haustra_amp=0.14, haustra_freq=5.2, cap_ends=False)
+
+    # 2. Ventral Central Flexure (U-turn at the ventral apex)
+    p_end = np.asarray(outer_pts[-1])
+    inner_start = np.array([cx + 0.24 * math.cos(2.0 * math.pi * turns), y_bot - 0.08,
+                            cz + 0.85 * 0.24 * math.sin(2.0 * math.pi * turns)])
+    apex_pts, _ = catmull_rom([p_end, np.array([cx, y_bot - 0.24, cz]), inner_start], step=0.10)
+    m_apex = build_tube_mesh(apex_pts, 0.25, 0.23, radial_segs=16, haustra_amp=0.0, cap_ends=False)
+
+    # 3. Inner Centrifugal Coils (3.0 turns spiraling UPWARD inside the cone, narrower & smooth!)
+    n_in = 140
+    inner_pts, inner_r = [], []
+    for i in range(n_in):
+        t = i / (n_in - 1)
+        ang = 2.0 * math.pi * turns - 2.0 * math.pi * 3.0 * t
+        r = 0.24 + 0.85 * (t ** 0.85)
+        y = (y_bot - 0.08) + (y_top + 0.12 - (y_bot - 0.08)) * t
+        inner_pts.append((cx + r * math.cos(ang), y, cz + 0.85 * r * math.sin(ang)))
+        inner_r.append(0.22)
+    m_inner = build_tube_mesh(inner_pts, inner_r, radial_segs=16, haustra_amp=0.0, cap_ends=False)
+
+    # 4. Distal loop -> Transverse & Descending Colon running caudodorsally to rectum
+    desc_ctrl = [
+        inner_pts[-1],
+        (-5.25, 1.05, 0.35),
+        (-6.35, 1.08, 0.12),
+        (-7.85, 0.82, 0.05),
+        (-9.45, 0.42, 0.02),
+        (-10.65, 0.25, 0.0),
+    ]
+    desc_pts, _ = catmull_rom(desc_ctrl, step=0.16)
+    m_desc = build_tube_mesh(desc_pts, 0.24, 0.22, radial_segs=16, haustra_amp=0.0, cap_ends=True)
+
+    return merge_meshes([m_outer, m_apex, m_inner, m_desc])
 
 
-def pig_kidneys(p):
-    right = _kidney(p, (-5.80, 1.10, -1.45), -1.0)
-    left = _kidney(p, (-6.46, 1.08, 1.45), 1.0)
-    ureter_r = sweep(p, [(-5.72, 0.76, -1.42), (-6.72, 0.10, -0.98),
-                         (-8.30, -0.68, -0.48), (-11.40, -1.34, -0.18)],
-                     [0.14, 0.13, 0.11, 0.10], step=0.22, blend=0.03)
-    ureter_l = sweep(p, [(-6.40, 0.75, 1.42), (-7.10, 0.00, 0.94),
-                         (-8.42, -0.76, 0.46), (-11.38, -1.33, 0.16)],
-                     [0.14, 0.13, 0.11, 0.10], step=0.22, blend=0.03)
-    return union(right, left, ureter_r, ureter_l, k=0.08)
+def build_pig_cecum_mesh():
+    """Cylindrical sacculated cecum in LEFT caudodorsal abdomen (+Z),
+    base continuous with spiral colon dorsally, blunt apex pointing caudoventrally.
+    """
+    ctrl = [
+        (-5.10, 0.65, 1.95),   # Base near spiral colon origin (left dorsal)
+        (-5.85, 0.30, 2.20),
+        (-6.68, -0.18, 2.18),
+        (-7.42, -0.72, 1.92),
+        (-7.92, -1.18, 1.55),  # Blunt caudoventral apex
+    ]
+    pts, param = catmull_rom(ctrl, step=0.12)
+    radii = np.interp(param, np.arange(len(ctrl)), [0.46, 0.56, 0.54, 0.46, 0.32])
+    return build_tube_mesh(pts, radii, radii * 0.88, radial_segs=20,
+                           haustra_amp=0.13, haustra_freq=4.5, cap_ends=True)
 
 
-def pig_bladder(p):
-    sac = ellipsoid(p, (-12.35, -1.20, 0.0), (1.52, 1.12, 1.05))
-    apex = ellipsoid(p, (-11.35, -0.95, 0.0), (0.86, 0.78, 0.70))
-    urethra = sweep(p, [(-13.55, -1.38, 0.0), (-14.40, -1.42, 0.0),
-                        (-15.10, -1.32, 0.0)], [0.32, 0.25, 0.18], step=0.18, blend=0.04)
-    return union(sac, apex, urethra, k=0.20)
+def build_pig_small_intestine_mesh():
+    """Convoluted jejunum & ileum coils on RIGHT & VENTRAL abdomen (-Z),
+    connecting duodenum to the left-sided ileocecal junction.
+    """
+    # Smooth meandering intestinal loops in the right/ventral abdominal space
+    ctrl = [
+        (-2.95, -0.45, -1.35),  # Continues from descending duodenum
+        (-3.65, -0.88, -1.78),
+        (-4.45, -1.35, -1.45),
+        (-3.85, -1.68, -0.78),
+        (-4.85, -1.85, -0.95),
+        (-5.65, -1.52, -1.75),
+        (-5.25, -0.75, -1.88),
+        (-6.25, -0.82, -1.55),
+        (-6.78, -1.48, -1.15),
+        (-6.05, -1.92, -0.58),
+        (-7.15, -1.72, -0.42),
+        (-7.45, -1.02, -0.68),
+        (-6.65, -0.45, -0.35),
+        (-6.00, 0.05, 0.45),    # Terminal ileum crossing to left side
+        (-5.45, 0.42, 1.55),    # Enters ileocecal / cecocolic junction
+    ]
+    pts, _ = catmull_rom(ctrl, step=0.12)
+    return build_tube_mesh(pts, 0.21, 0.20, radial_segs=14, haustra_amp=0.0, cap_ends=True)
 
 
+# ---------------------------------------------------------------------------
+# Surface Nets isosurface extractor (higher resolution & Laplacian smoothing)
+# ---------------------------------------------------------------------------
 @dataclass
 class OrganSpec:
     name: str
@@ -366,20 +594,18 @@ class OrganSpec:
     cell: float
 
 
-ORGANS = [
-    OrganSpec("pig_os_rostri", pig_rostral_bone, (11.6, 0.2, -1.2), (15.2, 2.8, 1.2), 0.14),
-    OrganSpec("pig_trachea_and_bronchus", pig_trachea, (-0.8, -0.5, -2.2), (13.2, 2.0, 2.2), 0.17),
-    OrganSpec("pig_heart", pig_heart, (-1.6, -2.8, -2.4), (3.4, 3.0, 2.4), 0.16),
-    OrganSpec("pig_lungs", pig_lungs, (-4.3, -2.0, -4.0), (3.8, 2.4, 4.0), 0.20),
-    OrganSpec("pig_stomach_diverticulum", pig_stomach, (-6.6, -2.2, -2.0), (-1.2, 2.4, 2.2), 0.19),
-    OrganSpec("pig_liver_lobules", pig_liver, (-5.0, -2.4, -4.0), (0.3, 2.3, 4.0), 0.18),
-    OrganSpec("pig_gallbladder", pig_gallbladder, (-2.6, -2.0, -1.5), (-0.3, 0.5, 0.2), 0.13),
-    OrganSpec("pig_spleen", pig_spleen, (-7.2, -3.5, 1.2), (-3.2, 1.8, 2.9), 0.16),
-    OrganSpec("pig_pancreas", pig_pancreas, (-5.6, -2.0, -1.6), (-1.4, 1.3, 2.0), 0.17),
-    OrganSpec("pig_spiral_colon", pig_spiral_colon, (-11.2, -3.6, -3.5), (-4.8, 1.8, 3.5), 0.19),
-    OrganSpec("pig_cecum", pig_cecum, (-9.3, -3.2, 0.8), (-5.6, -0.4, 2.6), 0.17),
-    OrganSpec("pig_kidneys", pig_kidneys, (-11.8, -1.8, -2.0), (-4.7, 1.9, 2.0), 0.17),
-    OrganSpec("pig_urinary_bladder", pig_bladder, (-15.5, -2.8, -1.5), (-10.4, 0.4, 1.5), 0.16),
+SDF_ORGANS = [
+    OrganSpec("pig_os_rostri", pig_os_rostri_sdf, (8.2, 0.0, -1.2), (10.5, 2.1, 1.2), 0.095),
+    OrganSpec("pig_trachea_and_bronchus", pig_trachea_sdf, (0.6, -0.3, -1.7), (7.6, 1.6, 1.6), 0.11),
+    OrganSpec("pig_heart", pig_heart_sdf, (-0.3, -2.2, -1.4), (4.5, 1.85, 1.4), 0.12),
+    OrganSpec("pig_lungs", pig_lungs_sdf, (-1.1, -1.5, -2.7), (4.9, 2.1, 2.7), 0.145),
+    OrganSpec("pig_liver_lobules", pig_liver_sdf, (-2.2, -1.75, -2.5), (0.6, 1.75, 2.4), 0.13),
+    OrganSpec("pig_gallbladder", pig_gallbladder_sdf, (-1.75, -1.65, -1.15), (-0.25, 0.05, -0.15), 0.085),
+    OrganSpec("pig_stomach_diverticulum", pig_stomach_sdf, (-4.1, -1.5, -1.8), (1.3, 1.95, 2.1), 0.135),
+    OrganSpec("pig_spleen", pig_spleen_sdf, (-4.6, -2.0, 1.3), (-2.0, 1.75, 2.5), 0.11),
+    OrganSpec("pig_pancreas", pig_pancreas_sdf, (-3.95, -0.8, -1.55), (-1.7, 0.95, 1.6), 0.11),
+    OrganSpec("pig_kidneys", pig_kidneys_sdf, (-8.7, -0.75, -2.1), (-4.0, 2.25, 2.1), 0.125),
+    OrganSpec("pig_urinary_bladder", pig_bladder_sdf, (-11.3, -1.7, -1.1), (-7.2, 0.35, 1.1), 0.115),
 ]
 
 
@@ -421,6 +647,8 @@ def surface_nets(fn, lo, hi, h):
         f0, f1 = values[tuple(s0)], values[tuple(s1)]
         crossing = (f0 < 0) != (f1 < 0)
         idx = np.argwhere(crossing)
+        if len(idx) == 0:
+            continue
         t = f0[crossing] / (f0[crossing] - f1[crossing])
         pos = np.asarray(lo, dtype=np.float64) + idx * h
         pos[:, axis] += t * h
@@ -446,7 +674,8 @@ def surface_nets(fn, lo, hi, h):
     qi = vertex_map[q[:, :, 0], q[:, :, 1], q[:, :, 2]]
     triangles = np.concatenate((qi[:, [0, 1, 2]], qi[:, [0, 2, 3]]), axis=0)
 
-    for _ in range(2):
+    # Project vertices onto exact zero-level isosurface for silk-smooth medical shading
+    for _ in range(3):
         value = _eval(fn, vertices)
         grad = _gradient(fn, vertices, h * 0.22)
         grad2 = np.maximum(np.einsum("ij,ij->i", grad, grad), 1e-8)
@@ -454,6 +683,7 @@ def surface_nets(fn, lo, hi, h):
         length = np.linalg.norm(step, axis=1)
         step *= np.minimum(1.0, (0.42 * h) / np.maximum(length, 1e-9))[:, None]
         vertices -= step
+
     normals = _gradient(fn, vertices, h * 0.22)
     normals /= np.maximum(np.linalg.norm(normals, axis=1), 1e-9)[:, None]
     a, b, c = vertices[triangles[:, 0]], vertices[triangles[:, 1]], vertices[triangles[:, 2]]
@@ -469,11 +699,23 @@ def surface_nets(fn, lo, hi, h):
 
 def build_pig_meshes(verbose=True):
     meshes = {}
-    for spec in ORGANS:
+    for spec in SDF_ORGANS:
         lo = np.asarray(spec.lo, dtype=np.float64)
         hi = np.asarray(spec.hi, dtype=np.float64)
-        vertices, normals, triangles = surface_nets(spec.field, lo, hi, spec.cell)
-        meshes[spec.name] = (vertices, normals, triangles)
+        v, n, t = surface_nets(spec.field, lo, hi, spec.cell)
+        meshes[spec.name] = (v, n, t)
         if verbose:
-            print(f"{spec.name:28s} {len(vertices):7,d} vertices  {len(triangles):7,d} triangles", flush=True)
+            print(f"{spec.name:28s} {len(v):7,d} vertices  {len(t):7,d} triangles", flush=True)
+
+    # Parametric tubular organs (crisp spiral colon, sacculated cecum, convoluted small intestine)
+    for name, fn in [
+        ("pig_small_intestine", build_pig_small_intestine_mesh),
+        ("pig_cecum", build_pig_cecum_mesh),
+        ("pig_spiral_colon", build_pig_spiral_colon_mesh),
+    ]:
+        v, n, t = fn()
+        meshes[name] = (v, n, t)
+        if verbose:
+            print(f"{name:28s} {len(v):7,d} vertices  {len(t):7,d} triangles", flush=True)
+
     return meshes

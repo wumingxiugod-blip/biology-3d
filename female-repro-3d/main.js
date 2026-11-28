@@ -220,22 +220,64 @@ function updateLabels() {
   const cols = { L: items.filter(L => L.s.x < w / 2), R: items.filter(L => L.s.x >= w / 2) };
   while (cols.L.length - cols.R.length > 2) { cols.L.sort((a, b) => a.s.x - b.s.x); cols.R.push(cols.L.pop()); }
   while (cols.R.length - cols.L.length > 2) { cols.R.sort((a, b) => a.s.x - b.s.x); cols.L.push(cols.R.shift()); }
-  const GAP = Math.min(30, (h - 12) / Math.max(1, cols.L.length, cols.R.length));
+  const useCompact = items.length > 14 || h < 680;
+  items.forEach(L => L.d.classList.toggle('compact', useCompact));
   ['L', 'R'].forEach(side => {
     const col = cols[side].sort((a, b) => a.s.y - b.s.y);
-    let prev = -1e9;
-    col.forEach(L => { L.y = Math.max(5, L.s.y - 14, prev + GAP); prev = L.y; });
-    let next = h - 5;
-    for (let i = col.length - 1; i >= 0; i--) { col[i].y = Math.min(col[i].y, next - GAP); next = col[i].y; }
+    if (!col.length) return;
+    const heights = col.map(L => (L.d.offsetHeight || (useCompact ? 20 : 32)) + 3);
+    const totalH = heights.reduce((a, b) => a + b, 0);
+    const availH = Math.max(40, h - 14);
+    const scaleStep = totalH > availH ? (availH / totalH) : 1;
+    let prevBottom = 6;
+    col.forEach((L, idx) => {
+      const stepH = heights[idx] * scaleStep;
+      L.y = Math.max(prevBottom, L.s.y - stepH * 0.5);
+      prevBottom = L.y + stepH;
+    });
+    let nextTop = h - 6;
+    for (let i = col.length - 1; i >= 0; i--) {
+      const stepH = heights[i] * scaleStep;
+      col[i].y = Math.max(5, Math.min(col[i].y, nextTop - stepH));
+      nextTop = col[i].y;
+    }
     col.forEach(L => {
-      const lw = L.d.offsetWidth || 90;
+      const lw = L.d.offsetWidth || 100, lh = L.d.offsetHeight || 20;
       const x = side === 'L' ? 6 : w - lw - 6;
       L.d.style.left = x + 'px'; L.d.style.top = L.y + 'px';
       L.ln.setAttribute('x1', L.s.x); L.ln.setAttribute('y1', L.s.y);
-      L.ln.setAttribute('x2', side === 'L' ? x + lw : x); L.ln.setAttribute('y2', L.y + 14);
+      L.ln.setAttribute('x2', side === 'L' ? x + lw : x); L.ln.setAttribute('y2', L.y + lh * 0.5);
     });
   });
 }
 
 try { init(); } catch (e) { $('err').textContent = '初始化失敗：' + e.message; console.error(e); }
 
+
+
+// Responsive mobile drawer & panel toggle wiring
+(function(){
+  const bd = document.getElementById('drawer-backdrop');
+  const ml = document.getElementById('mleft');
+  const mr = document.getElementById('mright');
+  const wb = document.getElementById('wbtn');
+  function closeDrawers(){
+    document.body.classList.remove('open-left','open-right');
+    if(ml) ml.classList.remove('on');
+    if(mr) mr.classList.remove('on');
+  }
+  if(ml) ml.addEventListener('click', ()=>{
+    const on = !document.body.classList.contains('open-left');
+    closeDrawers();
+    if(on){ document.body.classList.add('open-left'); ml.classList.add('on'); }
+  });
+  if(mr) mr.addEventListener('click', ()=>{
+    const on = !document.body.classList.contains('open-right');
+    closeDrawers();
+    if(on){ document.body.classList.add('open-right'); mr.classList.add('on'); }
+  });
+  if(bd) bd.addEventListener('click', closeDrawers);
+  if(wb && !wb.onclick){
+    wb.onclick = ()=>{ document.body.classList.toggle('wide'); if(typeof resize==='function') resize(); };
+  }
+})();

@@ -5,6 +5,7 @@ SCENES.push({
   name: '② 陰莖橫切',
   title: '陰莖橫切面（逐層剝開）',
   camera: { pos: [2.6, 2.2, 4.2], target: [0, 0, 0] },
+  controls: [{ label: '💥 逐層展開／復原', fn() { window._penisExp = !window._penisExp; } }],
   desc: `<p>自外而內逐層剝開：<b>皮膚→淺筋膜→疏鬆結締組織→深筋膜→白膜</b>，白膜之下有三條平行的勃起組織：背側成對的<b>陰莖海綿體</b>、腹側中央圍繞尿道的<b>尿道海綿體</b>。</p>
   <p>勃起機制：與陰道交接前，進入陰莖的血量多於離開者，血液容積增加使陰莖膨大變硬。肌肉海綿型（馬）勃起時變長變粗；彈性纖維型（牛、豬）結締組織多、脹大少，主要靠S形屈曲伸直。</p>
   <p>另提醒：模型為簡化示意，實際上陰莖海綿體由白膜包圍並在中間形成中隔，尿道海綿體外面亦被白膜與深筋膜包圍。</p>`,
@@ -45,6 +46,17 @@ SCENES.push({
     CUR.root.children[CUR.root.children.length - 1].position.y = -0.42;
     const hole = disc(0.055, LEN + 0.02, 0x3a2a10, 1, 0, -0.42, Z0);
     reg('勃起組織', '尿道腔', 'Urethral lumen', '尿液與精液流經的管腔。', hole, { anchor: [0, -0.42, Z0 + LEN + 0.05], nolabel: true });
+    window._penisExp = false;
+    let expT = 0;
+    const layerParts = CUR.parts.slice(0, 5);
+    layerParts.forEach((p, idx) => p.meshes.forEach(m => { m.userData._z0 = m.position.z; m.userData._dz = -idx * 0.28; }));
+    CUR.tick = () => {
+      const tgt = window._penisExp ? 1 : 0;
+      if (Math.abs(expT - tgt) > 0.002) {
+        expT += (tgt - expT) * 0.08;
+        layerParts.forEach(p => p.meshes.forEach(m => { m.position.z = m.userData._z0 + m.userData._dz * expT; }));
+      }
+    };
   }
 });
 
@@ -93,6 +105,7 @@ SCENES.push({
   name: '④ 睪丸內部與附睪',
   title: '睪丸剖面：縱隔、小葉、生精細管、睪丸網與附睪',
   camera: { pos: [0.3, 0.3, 3.8], target: [-0.1, 0.05, 0] },
+  controls: [{ label: '🧬 精子輸出路徑動畫', fn() { window._spermPath = !window._spermPath; } }],
   desc: `<p><b>精子輸出路徑</b>：生精細管（曲管部→直管部）→睪丸網→睪丸輸出小管→附睪管（頭→體→尾）→輸精管→射精管→尿道。</p>
   <p>白膜向內發出<b>睪丸中隔</b>，連到中央的<b>睪丸縱隔</b>（豬、牛、山羊、犬明顯），把睪丸分成許多<b>睪丸小葉</b>（功能單位）。小葉內為屈曲的生精細管，管間為含來狄吉細胞的間隙組織。</p>`,
   build() {
@@ -161,6 +174,24 @@ SCENES.push({
     reg('輸出管道', '輸精管起始', 'Vas deferens (start)', '附睪尾接近陰囊韌帶處管徑變粗，環繞睪丸韌帶後向上延續為輸精管，肌肉層厚（內縱、中斜、外縱），蠕動收縮輸送精子。',
       tube([[-0.4, -0.8, 0], [-0.55, -0.7, -0.05], [-0.78, -0.2, -0.05], [-0.8, 0.5, -0.02], [-0.7, 1.1, 0]], 0.03, 0xffffff), { anchor: [-0.8, 0.5, -0.02] });
     reg('輸出管道', '陰囊韌帶／睪丸韌帶', 'Scrotal ligament', '在睪丸遠端，陰囊韌帶把鞘膜層牢固附著於陰囊。', cyl([-0.05, -0.74, 0], [-0.05, -1.1, 0], 0.04, 0xe3d6b4), { anchor: [-0.05, -1.0, 0] });
+    window._spermPath = true;
+    const pathCurve = new THREE.CatmullRomCurve3(PV([
+      [0.26, -0.15, 0.12], [0.04, 0.15, 0.02], [0.0, 0.55, 0], [-0.12, 0.85, 0], [-0.32, 0.88, 0],
+      [-0.52, 0.72, 0], [-0.63, 0.28, 0], [-0.64, -0.18, 0], [-0.56, -0.60, 0], [-0.40, -0.80, 0],
+      [-0.58, -0.68, -0.05], [-0.78, -0.15, -0.05], [-0.80, 0.50, -0.02], [-0.70, 1.10, 0]
+    ]), false, 'centripetal');
+    const sBalls = [];
+    const sg = new THREE.SphereGeometry(0.036, 12, 8), sm = new THREE.MeshBasicMaterial({ color: 0x38f8ff });
+    for (let k = 0; k < 8; k++) { const b = new THREE.Mesh(sg, sm); CUR.root.add(b); sBalls.push(b); }
+    let ph = 0;
+    CUR.tick = () => {
+      if (window._spermPath) {
+        ph = (ph + 0.004) % 1;
+        sBalls.forEach((b, k) => { b.visible = true; b.position.copy(pathCurve.getPointAt((ph + k / sBalls.length) % 1)); });
+      } else {
+        sBalls.forEach(b => { b.visible = false; });
+      }
+    };
   }
 });
 

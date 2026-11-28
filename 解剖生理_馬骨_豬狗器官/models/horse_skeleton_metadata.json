@@ -1,1409 +1,2012 @@
 {
-  "humerus_l_0": {
-    "nameZh": "左側肱骨 (Humerus)",
-    "nameEn": "Left Humerus",
-    "latin": "Humerus",
-    "desc": "粗壯長骨，近端具巨大大結節與結節間溝，傳導前肢強大衝擊力。",
-    "faceCount": 1639
-  },
-  "humerus_r_1": {
-    "nameZh": "右側肱骨 (Humerus)",
-    "nameEn": "Right Humerus",
-    "latin": "Humerus",
-    "desc": "粗壯長骨，近端具巨大大結節與結節間溝，傳導前肢強大衝擊力。",
-    "faceCount": 1636
-  },
-  "pelvis_l_2": {
-    "nameZh": "左側骨盆 (Pelvis - 髂骨與坐骨)",
-    "nameEn": "Left Pelvis",
-    "latin": "Pelvis",
-    "desc": "包含髖結節(腰角)、薦結節與坐骨結節(臀角)，構成強大後肢推進支架。",
-    "faceCount": 1631
-  },
-  "pelvis_r_3": {
-    "nameZh": "右側骨盆 (Pelvis - 髂骨與坐骨)",
-    "nameEn": "Right Pelvis",
-    "latin": "Pelvis",
-    "desc": "包含髖結節(腰角)、薦結節與坐骨結節(臀角)，構成強大後肢推進支架。",
-    "faceCount": 1634
-  },
-  "femur_l_4": {
-    "nameZh": "左側股骨 (Os femoris - 第三轉子)",
-    "nameEn": "Left Femur & Third Trochanter",
-    "latin": "Os femoris",
-    "desc": "體內最粗大長骨，外側特化顯著之「第三轉子(Third trochanter)」，為馬特徵。",
-    "faceCount": 138
-  },
-  "femur_r_5": {
-    "nameZh": "右側股骨 (Os femoris - 第三轉子)",
-    "nameEn": "Right Femur & Third Trochanter",
-    "latin": "Os femoris",
-    "desc": "體內最粗大長骨，外側特化顯著之「第三轉子(Third trochanter)」，為馬特徵。",
-    "faceCount": 138
-  },
-  "tibia_fibula_l_6": {
-    "nameZh": "左側脛骨與腓骨 (Tibia & Fibula)",
-    "nameEn": "Left Tibia & Fibula",
-    "latin": "Tibia et Fibula",
-    "desc": "脛骨為小腿主要承重骨，腓骨退化為近端小骨刺；近側形成膝關節。",
-    "faceCount": 503
-  },
-  "tibia_fibula_r_7": {
-    "nameZh": "右側脛骨與腓骨 (Tibia & Fibula)",
-    "nameEn": "Right Tibia & Fibula",
-    "latin": "Tibia et Fibula",
-    "desc": "脛骨為小腿主要承重骨，腓骨退化為近端小骨刺；近側形成膝關節。",
-    "faceCount": 505
-  },
-  "tibia_fibula_l_8": {
-    "nameZh": "左側脛骨與腓骨 (Tibia & Fibula)",
-    "nameEn": "Left Tibia & Fibula",
-    "latin": "Tibia et Fibula",
-    "desc": "脛骨為小腿主要承重骨，腓骨退化為近端小骨刺；近側形成膝關節。",
-    "faceCount": 1547
-  },
-  "tibia_fibula_r_9": {
-    "nameZh": "右側脛骨與腓骨 (Tibia & Fibula)",
-    "nameEn": "Right Tibia & Fibula",
-    "latin": "Tibia et Fibula",
-    "desc": "脛骨為小腿主要承重骨，腓骨退化為近端小骨刺；近側形成膝關節。",
-    "faceCount": 1537
-  },
-  "tibia_fibula_l_10": {
-    "nameZh": "左側脛骨與腓骨 (Tibia & Fibula)",
-    "nameEn": "Left Tibia & Fibula",
-    "latin": "Tibia et Fibula",
-    "desc": "脛骨為小腿主要承重骨，腓骨退化為近端小骨刺；近側形成膝關節。",
-    "faceCount": 250
-  },
-  "tibia_fibula_r_11": {
-    "nameZh": "右側脛骨與腓骨 (Tibia & Fibula)",
-    "nameEn": "Right Tibia & Fibula",
-    "latin": "Tibia et Fibula",
-    "desc": "脛骨為小腿主要承重骨，腓骨退化為近端小骨刺；近側形成膝關節。",
-    "faceCount": 253
-  },
-  "tibia_fibula_l_12": {
-    "nameZh": "左側脛骨與腓骨 (Tibia & Fibula)",
-    "nameEn": "Left Tibia & Fibula",
-    "latin": "Tibia et Fibula",
-    "desc": "脛骨為小腿主要承重骨，腓骨退化為近端小骨刺；近側形成膝關節。",
-    "faceCount": 129
-  },
-  "tibia_fibula_r_13": {
-    "nameZh": "右側脛骨與腓骨 (Tibia & Fibula)",
-    "nameEn": "Right Tibia & Fibula",
-    "latin": "Tibia et Fibula",
-    "desc": "脛骨為小腿主要承重骨，腓骨退化為近端小骨刺；近側形成膝關節。",
-    "faceCount": 131
-  },
-  "cannon_hind_l_14": {
-    "nameZh": "左側後大砲骨 (第三蹠骨 Metatarsal III)",
-    "nameEn": "Left Hind Cannon Bone",
-    "latin": "Os metatarsale III",
-    "desc": "斷面呈圓形，較前砲骨略長，後肢主要支撐與推進骨。",
-    "faceCount": 1046
-  },
-  "cannon_hind_r_15": {
-    "nameZh": "右側後大砲骨 (第三蹠骨 Metatarsal III)",
-    "nameEn": "Right Hind Cannon Bone",
-    "latin": "Os metatarsale III",
-    "desc": "斷面呈圓形，較前砲骨略長，後肢主要支撐與推進骨。",
-    "faceCount": 1039
-  },
-  "cannon_fore_l_16": {
-    "nameZh": "左側前大砲骨 (第三掌骨 Metacarpal III)",
-    "nameEn": "Left Fore Cannon Bone",
-    "latin": "Os metacarpale III",
-    "desc": "馬最主要之單趾承重長骨，兩側緊附第二、第四副掌骨(夾骨)。",
-    "faceCount": 1031
-  },
-  "cannon_fore_r_17": {
-    "nameZh": "右側前大砲骨 (第三掌骨 Metacarpal III)",
-    "nameEn": "Right Fore Cannon Bone",
-    "latin": "Os metacarpale III",
-    "desc": "馬最主要之單趾承重長骨，兩側緊附第二、第四副掌骨(夾骨)。",
-    "faceCount": 1049
-  },
-  "pastern_hind_l_18": {
-    "nameZh": "左側後肢繫骨 (第一趾骨)",
-    "nameEn": "Left Hind Pastern Bone",
-    "latin": "Phalanx proximalis",
-    "desc": "後肢球節下方第一趾骨，呈短管狀斜向下方。",
-    "faceCount": 188
-  },
-  "pastern_hind_r_19": {
-    "nameZh": "右側後肢繫骨 (第一趾骨)",
-    "nameEn": "Right Hind Pastern Bone",
-    "latin": "Phalanx proximalis",
-    "desc": "後肢球節下方第一趾骨，呈短管狀斜向下方。",
-    "faceCount": 190
-  },
-  "coronet_hind_l_20": {
-    "nameZh": "左側後肢冠骨 (第二趾骨)",
-    "nameEn": "Left Hind Coronet Bone",
-    "latin": "Phalanx media",
-    "desc": "後肢第二趾骨，介於繫骨與後蹄骨之間。",
-    "faceCount": 209
-  },
-  "coronet_hind_r_21": {
-    "nameZh": "右側後肢冠骨 (第二趾骨)",
-    "nameEn": "Right Hind Coronet Bone",
-    "latin": "Phalanx media",
-    "desc": "後肢第二趾骨，介於繫骨與後蹄骨之間。",
-    "faceCount": 210
-  },
-  "coronet_fore_l_22": {
-    "nameZh": "左側前肢冠骨與舟狀骨 (Phalanx media)",
-    "nameEn": "Left Fore Coronet Bone",
-    "latin": "Phalanx media",
-    "desc": "短柱狀第二指骨，掌側深面緊鄰舟狀骨滑車關節。",
-    "faceCount": 216
-  },
-  "pastern_fore_l_23": {
-    "nameZh": "左側前肢繫骨 (第一指骨 Phalanx proximalis)",
-    "nameEn": "Left Fore Pastern Bone",
-    "latin": "Phalanx proximalis",
-    "desc": "連接球節與冠骨，斜向地面，吸收奔跑時的垂直下壓震盪。",
-    "faceCount": 282
-  },
-  "coronet_fore_r_24": {
-    "nameZh": "右側前肢冠骨與舟狀骨 (Phalanx media)",
-    "nameEn": "Right Fore Coronet Bone",
-    "latin": "Phalanx media",
-    "desc": "短柱狀第二指骨，掌側深面緊鄰舟狀骨滑車關節。",
-    "faceCount": 214
-  },
-  "pastern_fore_r_25": {
-    "nameZh": "右側前肢繫骨 (第一指骨 Phalanx proximalis)",
-    "nameEn": "Right Fore Pastern Bone",
-    "latin": "Phalanx proximalis",
-    "desc": "連接球節與冠骨，斜向地面，吸收奔跑時的垂直下壓震盪。",
-    "faceCount": 278
-  },
-  "coffin_fore_l_26": {
-    "nameZh": "左側前肢蹄骨 (第三指骨 Os ungulare)",
-    "nameEn": "Left Fore Coffin Bone",
-    "latin": "Os ungulare",
-    "desc": "形如馬蹄之半月錐形骨，完全包覆於蹄壁角質鞘內，易發蹄葉炎。",
-    "faceCount": 202
-  },
-  "coronet_fore_r_27": {
-    "nameZh": "右側前肢冠骨與舟狀骨 (Phalanx media)",
-    "nameEn": "Right Fore Coronet Bone",
-    "latin": "Phalanx media",
-    "desc": "短柱狀第二指骨，掌側深面緊鄰舟狀骨滑車關節。",
-    "faceCount": 205
-  },
-  "coronet_hind_l_28": {
-    "nameZh": "左側後肢冠骨 (第二趾骨)",
-    "nameEn": "Left Hind Coronet Bone",
-    "latin": "Phalanx media",
-    "desc": "後肢第二趾骨，介於繫骨與後蹄骨之間。",
-    "faceCount": 203
-  },
-  "coronet_hind_r_29": {
-    "nameZh": "右側後肢冠骨 (第二趾骨)",
-    "nameEn": "Right Hind Coronet Bone",
-    "latin": "Phalanx media",
-    "desc": "後肢第二趾骨，介於繫骨與後蹄骨之間。",
-    "faceCount": 200
-  },
-  "tarsus_calcaneus_l_30": {
-    "nameZh": "左側飛節與跟骨結節 (Tarsus & Calcaneus)",
-    "nameEn": "Left Hock & Calcaneus",
-    "latin": "Tarsus et Calcaneus",
-    "desc": "相當於人類腳後跟，跟骨結節向後上方突出形成飛節尖，附著跟腱。",
-    "faceCount": 103
-  },
-  "tarsus_calcaneus_l_31": {
-    "nameZh": "左側飛節與跟骨結節 (Tarsus & Calcaneus)",
-    "nameEn": "Left Hock & Calcaneus",
-    "latin": "Tarsus et Calcaneus",
-    "desc": "相當於人類腳後跟，跟骨結節向後上方突出形成飛節尖，附著跟腱。",
-    "faceCount": 83
-  },
-  "tarsus_calcaneus_l_32": {
-    "nameZh": "左側飛節與跟骨結節 (Tarsus & Calcaneus)",
-    "nameEn": "Left Hock & Calcaneus",
-    "latin": "Tarsus et Calcaneus",
-    "desc": "相當於人類腳後跟，跟骨結節向後上方突出形成飛節尖，附著跟腱。",
-    "faceCount": 88
-  },
-  "tarsus_calcaneus_r_33": {
-    "nameZh": "右側飛節與跟骨結節 (Tarsus & Calcaneus)",
-    "nameEn": "Right Hock & Calcaneus",
-    "latin": "Tarsus et Calcaneus",
-    "desc": "相當於人類腳後跟，跟骨結節向後上方突出形成飛節尖，附著跟腱。",
-    "faceCount": 104
-  },
-  "tarsus_calcaneus_r_34": {
-    "nameZh": "右側飛節與跟骨結節 (Tarsus & Calcaneus)",
-    "nameEn": "Right Hock & Calcaneus",
-    "latin": "Tarsus et Calcaneus",
-    "desc": "相當於人類腳後跟，跟骨結節向後上方突出形成飛節尖，附著跟腱。",
-    "faceCount": 83
-  },
-  "tarsus_calcaneus_r_35": {
-    "nameZh": "右側飛節與跟骨結節 (Tarsus & Calcaneus)",
-    "nameEn": "Right Hock & Calcaneus",
-    "latin": "Tarsus et Calcaneus",
-    "desc": "相當於人類腳後跟，跟骨結節向後上方突出形成飛節尖，附著跟腱。",
-    "faceCount": 88
-  },
-  "radius_ulna_l_36": {
-    "nameZh": "左側橈骨與尺骨 (Radius & Ulna)",
-    "nameEn": "Left Radius & Ulna",
-    "latin": "Radius et Ulna",
-    "desc": "尺骨近端特化為粗大鷹嘴突(Olecranon)，遠端與橈骨緊密癒合。",
-    "faceCount": 68
-  },
-  "radius_ulna_l_37": {
-    "nameZh": "左側橈骨與尺骨 (Radius & Ulna)",
-    "nameEn": "Left Radius & Ulna",
-    "latin": "Radius et Ulna",
-    "desc": "尺骨近端特化為粗大鷹嘴突(Olecranon)，遠端與橈骨緊密癒合。",
-    "faceCount": 74
-  },
-  "carpal_l_38": {
-    "nameZh": "左側腕骨群 (Ossa carpi - 馬前膝)",
-    "nameEn": "Left Carpal Bones",
-    "latin": "Ossa carpi",
-    "desc": "相當於人類的手腕，由近側列與遠側列小骨構成，常受運動衝擊力。",
-    "faceCount": 59
-  },
-  "carpal_l_39": {
-    "nameZh": "左側腕骨群 (Ossa carpi - 馬前膝)",
-    "nameEn": "Left Carpal Bones",
-    "latin": "Ossa carpi",
-    "desc": "相當於人類的手腕，由近側列與遠側列小骨構成，常受運動衝擊力。",
-    "faceCount": 60
-  },
-  "radius_ulna_l_40": {
-    "nameZh": "左側橈骨與尺骨 (Radius & Ulna)",
-    "nameEn": "Left Radius & Ulna",
-    "latin": "Radius et Ulna",
-    "desc": "尺骨近端特化為粗大鷹嘴突(Olecranon)，遠端與橈骨緊密癒合。",
-    "faceCount": 61
-  },
-  "radius_ulna_l_41": {
-    "nameZh": "左側橈骨與尺骨 (Radius & Ulna)",
-    "nameEn": "Left Radius & Ulna",
-    "latin": "Radius et Ulna",
-    "desc": "尺骨近端特化為粗大鷹嘴突(Olecranon)，遠端與橈骨緊密癒合。",
-    "faceCount": 59
-  },
-  "carpal_l_42": {
-    "nameZh": "左側腕骨群 (Ossa carpi - 馬前膝)",
-    "nameEn": "Left Carpal Bones",
-    "latin": "Ossa carpi",
-    "desc": "相當於人類的手腕，由近側列與遠側列小骨構成，常受運動衝擊力。",
-    "faceCount": 60
-  },
-  "radius_ulna_l_43": {
-    "nameZh": "左側橈骨與尺骨 (Radius & Ulna)",
-    "nameEn": "Left Radius & Ulna",
-    "latin": "Radius et Ulna",
-    "desc": "尺骨近端特化為粗大鷹嘴突(Olecranon)，遠端與橈骨緊密癒合。",
-    "faceCount": 59
-  },
-  "radius_ulna_l_44": {
-    "nameZh": "左側橈骨與尺骨 (Radius & Ulna)",
-    "nameEn": "Left Radius & Ulna",
-    "latin": "Radius et Ulna",
-    "desc": "尺骨近端特化為粗大鷹嘴突(Olecranon)，遠端與橈骨緊密癒合。",
-    "faceCount": 88
-  },
-  "radius_ulna_r_45": {
-    "nameZh": "右側橈骨與尺骨 (Radius & Ulna)",
-    "nameEn": "Right Radius & Ulna",
-    "latin": "Radius et Ulna",
-    "desc": "尺骨近端特化為粗大鷹嘴突(Olecranon)，遠端與橈骨緊密癒合。",
-    "faceCount": 66
-  },
-  "radius_ulna_r_46": {
-    "nameZh": "右側橈骨與尺骨 (Radius & Ulna)",
-    "nameEn": "Right Radius & Ulna",
-    "latin": "Radius et Ulna",
-    "desc": "尺骨近端特化為粗大鷹嘴突(Olecranon)，遠端與橈骨緊密癒合。",
-    "faceCount": 73
-  },
-  "carpal_r_47": {
-    "nameZh": "右側腕骨群 (Ossa carpi - 馬前膝)",
-    "nameEn": "Right Carpal Bones",
-    "latin": "Ossa carpi",
-    "desc": "相當於人類的手腕，由近側列與遠側列小骨構成，常受運動衝擊力。",
-    "faceCount": 59
-  },
-  "carpal_r_48": {
-    "nameZh": "右側腕骨群 (Ossa carpi - 馬前膝)",
-    "nameEn": "Right Carpal Bones",
-    "latin": "Ossa carpi",
-    "desc": "相當於人類的手腕，由近側列與遠側列小骨構成，常受運動衝擊力。",
-    "faceCount": 62
-  },
-  "radius_ulna_r_49": {
-    "nameZh": "右側橈骨與尺骨 (Radius & Ulna)",
-    "nameEn": "Right Radius & Ulna",
-    "latin": "Radius et Ulna",
-    "desc": "尺骨近端特化為粗大鷹嘴突(Olecranon)，遠端與橈骨緊密癒合。",
-    "faceCount": 61
-  },
-  "radius_ulna_r_50": {
-    "nameZh": "右側橈骨與尺骨 (Radius & Ulna)",
-    "nameEn": "Right Radius & Ulna",
-    "latin": "Radius et Ulna",
-    "desc": "尺骨近端特化為粗大鷹嘴突(Olecranon)，遠端與橈骨緊密癒合。",
-    "faceCount": 62
-  },
-  "radius_ulna_r_51": {
-    "nameZh": "右側橈骨與尺骨 (Radius & Ulna)",
-    "nameEn": "Right Radius & Ulna",
-    "latin": "Radius et Ulna",
-    "desc": "尺骨近端特化為粗大鷹嘴突(Olecranon)，遠端與橈骨緊密癒合。",
-    "faceCount": 58
-  },
-  "radius_ulna_r_52": {
-    "nameZh": "右側橈骨與尺骨 (Radius & Ulna)",
-    "nameEn": "Right Radius & Ulna",
-    "latin": "Radius et Ulna",
-    "desc": "尺骨近端特化為粗大鷹嘴突(Olecranon)，遠端與橈骨緊密癒合。",
-    "faceCount": 62
-  },
-  "radius_ulna_r_53": {
-    "nameZh": "右側橈骨與尺骨 (Radius & Ulna)",
-    "nameEn": "Right Radius & Ulna",
-    "latin": "Radius et Ulna",
-    "desc": "尺骨近端特化為粗大鷹嘴突(Olecranon)，遠端與橈骨緊密癒合。",
-    "faceCount": 81
-  },
-  "radius_ulna_l_54": {
-    "nameZh": "左側橈骨與尺骨 (Radius & Ulna)",
-    "nameEn": "Left Radius & Ulna",
-    "latin": "Radius et Ulna",
-    "desc": "尺骨近端特化為粗大鷹嘴突(Olecranon)，遠端與橈骨緊密癒合。",
-    "faceCount": 1133
-  },
-  "radius_ulna_r_55": {
-    "nameZh": "右側橈骨與尺骨 (Radius & Ulna)",
-    "nameEn": "Right Radius & Ulna",
-    "latin": "Radius et Ulna",
-    "desc": "尺骨近端特化為粗大鷹嘴突(Olecranon)，遠端與橈骨緊密癒合。",
-    "faceCount": 1119
-  },
-  "caudal_vert_56": {
-    "nameZh": "尾椎 (Vertebrae caudales)",
-    "nameEn": "Caudal Vertebrae",
-    "latin": "Vertebrae caudales",
-    "desc": "馬尾椎約15-21枚，構成馬尾骨骼基底。",
-    "faceCount": 158
-  },
-  "caudal_vert_57": {
-    "nameZh": "尾椎 (Vertebrae caudales)",
-    "nameEn": "Caudal Vertebrae",
-    "latin": "Vertebrae caudales",
-    "desc": "馬尾椎約15-21枚，構成馬尾骨骼基底。",
-    "faceCount": 136
-  },
-  "limb_bone_mid_58": {
-    "nameZh": "中央四肢長骨 (Os longum)",
-    "nameEn": "Central Limb Bone",
-    "latin": "Os longum",
-    "desc": "支持體重與槓桿運動之管狀骨。",
-    "faceCount": 41
-  },
-  "limb_bone_mid_59": {
-    "nameZh": "中央四肢長骨 (Os longum)",
-    "nameEn": "Central Limb Bone",
-    "latin": "Os longum",
-    "desc": "支持體重與槓桿運動之管狀骨。",
-    "faceCount": 38
-  },
-  "limb_bone_mid_60": {
-    "nameZh": "中央四肢長骨 (Os longum)",
-    "nameEn": "Central Limb Bone",
-    "latin": "Os longum",
-    "desc": "支持體重與槓桿運動之管狀骨。",
-    "faceCount": 35
-  },
-  "limb_bone_mid_61": {
-    "nameZh": "中央四肢長骨 (Os longum)",
-    "nameEn": "Central Limb Bone",
-    "latin": "Os longum",
-    "desc": "支持體重與槓桿運動之管狀骨。",
-    "faceCount": 38
-  },
-  "limb_bone_mid_62": {
-    "nameZh": "中央四肢長骨 (Os longum)",
-    "nameEn": "Central Limb Bone",
-    "latin": "Os longum",
-    "desc": "支持體重與槓桿運動之管狀骨。",
-    "faceCount": 43
-  },
-  "limb_bone_mid_63": {
-    "nameZh": "中央四肢長骨 (Os longum)",
-    "nameEn": "Central Limb Bone",
-    "latin": "Os longum",
-    "desc": "支持體重與槓桿運動之管狀骨。",
-    "faceCount": 42
-  },
-  "vertebra_64": {
-    "nameZh": "脊柱椎骨 (Vertebra)",
-    "nameEn": "Vertebra",
-    "latin": "Vertebra",
-    "desc": "中軸脊柱保護脊髓，維持軀體縱向力學穩定性。",
-    "faceCount": 49
-  },
-  "vertebra_65": {
-    "nameZh": "脊柱椎骨 (Vertebra)",
-    "nameEn": "Vertebra",
-    "latin": "Vertebra",
-    "desc": "中軸脊柱保護脊髓，維持軀體縱向力學穩定性。",
-    "faceCount": 56
-  },
-  "vertebra_66": {
-    "nameZh": "脊柱椎骨 (Vertebra)",
-    "nameEn": "Vertebra",
-    "latin": "Vertebra",
-    "desc": "中軸脊柱保護脊髓，維持軀體縱向力學穩定性。",
-    "faceCount": 58
-  },
-  "vertebra_67": {
-    "nameZh": "脊柱椎骨 (Vertebra)",
-    "nameEn": "Vertebra",
-    "latin": "Vertebra",
-    "desc": "中軸脊柱保護脊髓，維持軀體縱向力學穩定性。",
-    "faceCount": 73
-  },
-  "vertebra_68": {
-    "nameZh": "脊柱椎骨 (Vertebra)",
-    "nameEn": "Vertebra",
-    "latin": "Vertebra",
-    "desc": "中軸脊柱保護脊髓，維持軀體縱向力學穩定性。",
-    "faceCount": 59
-  },
-  "caudal_vert_69": {
-    "nameZh": "尾椎 (Vertebrae caudales)",
-    "nameEn": "Caudal Vertebrae",
-    "latin": "Vertebrae caudales",
-    "desc": "馬尾椎約15-21枚，構成馬尾骨骼基底。",
-    "faceCount": 67
-  },
-  "caudal_vert_70": {
-    "nameZh": "尾椎 (Vertebrae caudales)",
-    "nameEn": "Caudal Vertebrae",
-    "latin": "Vertebrae caudales",
-    "desc": "馬尾椎約15-21枚，構成馬尾骨骼基底。",
-    "faceCount": 86
-  },
-  "caudal_vert_71": {
-    "nameZh": "尾椎 (Vertebrae caudales)",
-    "nameEn": "Caudal Vertebrae",
-    "latin": "Vertebrae caudales",
-    "desc": "馬尾椎約15-21枚，構成馬尾骨骼基底。",
-    "faceCount": 92
-  },
-  "caudal_vert_72": {
-    "nameZh": "尾椎 (Vertebrae caudales)",
-    "nameEn": "Caudal Vertebrae",
-    "latin": "Vertebrae caudales",
-    "desc": "馬尾椎約15-21枚，構成馬尾骨骼基底。",
-    "faceCount": 107
-  },
-  "caudal_vert_73": {
-    "nameZh": "尾椎 (Vertebrae caudales)",
-    "nameEn": "Caudal Vertebrae",
-    "latin": "Vertebrae caudales",
-    "desc": "馬尾椎約15-21枚，構成馬尾骨骼基底。",
-    "faceCount": 143
-  },
-  "scapula_l_74": {
-    "nameZh": "左側肩胛骨 (Scapula)",
-    "nameEn": "Left Scapula",
-    "latin": "Scapula",
-    "desc": "背側具肩胛軟骨擴充肌肉附著，無鎖骨，完全藉由肌肉懸吊前軀。",
-    "faceCount": 1118
-  },
-  "scapula_r_75": {
-    "nameZh": "右側肩胛骨 (Scapula)",
-    "nameEn": "Right Scapula",
-    "latin": "Scapula",
-    "desc": "背側具肩胛軟骨擴充肌肉附著，無鎖骨，完全藉由肌肉懸吊前軀。",
-    "faceCount": 1119
-  },
-  "mandible_76": {
-    "nameZh": "馬下頜骨 (Mandibula)",
+  "cranium_200": {
+    "groupId": "cranium",
+    "nameZh": "頭顱骨 (腦顱與面骨)",
+    "nameEn": "Skull (Cranium & Facial Bones)",
+    "latin": "Ossa cranii et faciei",
+    "grp": "頭頸部骨骼",
+    "desc": "包含腦顱骨（額骨、頂骨、枕骨、顳骨）與面骨（鼻骨、上頜骨、切齒骨、顴骨）；具完整骨性眼眶、顯著面脊（Facial crest）及相通的額竇與上頜竇。",
+    "clinical": "面脊為頭部重要體表定位標記；上頜竇蓄膿（齒源性竇炎）常於面脊上方行環鑽引流。",
+    "faceCount": 5113
+  },
+  "mandible_82": {
+    "groupId": "mandible",
+    "nameZh": "下頜骨",
     "nameEn": "Mandible",
     "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
+    "grp": "頭頸部骨骼",
+    "desc": "左右下頜骨於下頜聯合完全癒合，下頜體承載下切齒與下頰齒，後方寬大下頜支供咬肌與翼肌附著。",
+    "clinical": "下頜體腹緣的血管切跡（Incisura vasorum facialium）是臨床觸摸面動脈脈搏的標準部位。",
+    "faceCount": 2467
+  },
+  "mandible_76": {
+    "groupId": "incisors",
+    "nameZh": "切齒 (上下各 6 枚)",
+    "nameEn": "Incisor Teeth",
+    "latin": "Dentes incisivi",
+    "grp": "頭頸部骨骼",
+    "desc": "上下頷各 6 枚（中央齒 I1、中間齒 I2、隅齒 I3），呈弧形排列以切斷牧草。",
+    "clinical": "依切齒萌發時間、齒坎（黑窩/Cup）磨平順序與齒星形態，可準確推估馬匹年齡。",
     "faceCount": 61
   },
   "mandible_77": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
+    "groupId": "incisors",
+    "nameZh": "切齒 (上下各 6 枚)",
+    "nameEn": "Incisor Teeth",
+    "latin": "Dentes incisivi",
+    "grp": "頭頸部骨骼",
+    "desc": "上下頷各 6 枚（中央齒 I1、中間齒 I2、隅齒 I3），呈弧形排列以切斷牧草。",
+    "clinical": "依切齒萌發時間、齒坎（黑窩/Cup）磨平順序與齒星形態，可準確推估馬匹年齡。",
     "faceCount": 71
   },
   "mandible_78": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
+    "groupId": "incisors",
+    "nameZh": "切齒 (上下各 6 枚)",
+    "nameEn": "Incisor Teeth",
+    "latin": "Dentes incisivi",
+    "grp": "頭頸部骨骼",
+    "desc": "上下頷各 6 枚（中央齒 I1、中間齒 I2、隅齒 I3），呈弧形排列以切斷牧草。",
+    "clinical": "依切齒萌發時間、齒坎（黑窩/Cup）磨平順序與齒星形態，可準確推估馬匹年齡。",
     "faceCount": 60
   },
   "mandible_79": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
+    "groupId": "incisors",
+    "nameZh": "切齒 (上下各 6 枚)",
+    "nameEn": "Incisor Teeth",
+    "latin": "Dentes incisivi",
+    "grp": "頭頸部骨骼",
+    "desc": "上下頷各 6 枚（中央齒 I1、中間齒 I2、隅齒 I3），呈弧形排列以切斷牧草。",
+    "clinical": "依切齒萌發時間、齒坎（黑窩/Cup）磨平順序與齒星形態，可準確推估馬匹年齡。",
     "faceCount": 70
   },
   "mandible_80": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
+    "groupId": "incisors",
+    "nameZh": "切齒 (上下各 6 枚)",
+    "nameEn": "Incisor Teeth",
+    "latin": "Dentes incisivi",
+    "grp": "頭頸部骨骼",
+    "desc": "上下頷各 6 枚（中央齒 I1、中間齒 I2、隅齒 I3），呈弧形排列以切斷牧草。",
+    "clinical": "依切齒萌發時間、齒坎（黑窩/Cup）磨平順序與齒星形態，可準確推估馬匹年齡。",
     "faceCount": 58
   },
   "mandible_81": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
+    "groupId": "incisors",
+    "nameZh": "切齒 (上下各 6 枚)",
+    "nameEn": "Incisor Teeth",
+    "latin": "Dentes incisivi",
+    "grp": "頭頸部骨骼",
+    "desc": "上下頷各 6 枚（中央齒 I1、中間齒 I2、隅齒 I3），呈弧形排列以切斷牧草。",
+    "clinical": "依切齒萌發時間、齒坎（黑窩/Cup）磨平順序與齒星形態，可準確推估馬匹年齡。",
     "faceCount": 60
   },
-  "mandible_82": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
-    "faceCount": 2467
-  },
-  "mandible_83": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
-    "faceCount": 66
-  },
-  "mandible_84": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
-    "faceCount": 64
-  },
-  "mandible_85": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
-    "faceCount": 71
-  },
-  "mandible_86": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
-    "faceCount": 72
-  },
-  "mandible_87": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
-    "faceCount": 78
-  },
-  "mandible_88": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
-    "faceCount": 77
-  },
-  "mandible_89": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
-    "faceCount": 72
-  },
-  "mandible_90": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
-    "faceCount": 71
-  },
-  "mandible_91": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
-    "faceCount": 72
-  },
-  "mandible_92": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
-    "faceCount": 72
-  },
-  "mandible_93": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
-    "faceCount": 73
-  },
-  "mandible_94": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
-    "faceCount": 73
-  },
-  "sacrum_95": {
-    "nameZh": "薦骨 (Os sacrum)",
-    "nameEn": "Sacrum",
-    "latin": "Os sacrum",
-    "desc": "由5枚薦椎癒合而成之三角形堅固骨板，與骨盆髂骨緊密形成薦髂關節。",
-    "faceCount": 3816
-  },
-  "cervical_vert_96": {
-    "nameZh": "頸椎 (Vertebrae cervicales)",
-    "nameEn": "Cervical Vertebrae",
-    "latin": "Vertebrae cervicales",
-    "desc": "馬具7枚頸椎，包含寬大寰椎翼(C1)與發達齒突之樞椎(C2)。",
-    "faceCount": 725
-  },
-  "cervical_vert_97": {
-    "nameZh": "頸椎 (Vertebrae cervicales)",
-    "nameEn": "Cervical Vertebrae",
-    "latin": "Vertebrae cervicales",
-    "desc": "馬具7枚頸椎，包含寬大寰椎翼(C1)與發達齒突之樞椎(C2)。",
-    "faceCount": 1091
-  },
-  "cervical_vert_98": {
-    "nameZh": "頸椎 (Vertebrae cervicales)",
-    "nameEn": "Cervical Vertebrae",
-    "latin": "Vertebrae cervicales",
-    "desc": "馬具7枚頸椎，包含寬大寰椎翼(C1)與發達齒突之樞椎(C2)。",
-    "faceCount": 1099
-  },
-  "cervical_vert_99": {
-    "nameZh": "頸椎 (Vertebrae cervicales)",
-    "nameEn": "Cervical Vertebrae",
-    "latin": "Vertebrae cervicales",
-    "desc": "馬具7枚頸椎，包含寬大寰椎翼(C1)與發達齒突之樞椎(C2)。",
-    "faceCount": 1235
-  },
-  "cervical_vert_100": {
-    "nameZh": "頸椎 (Vertebrae cervicales)",
-    "nameEn": "Cervical Vertebrae",
-    "latin": "Vertebrae cervicales",
-    "desc": "馬具7枚頸椎，包含寬大寰椎翼(C1)與發達齒突之樞椎(C2)。",
-    "faceCount": 1084
-  },
-  "facial_bones_101": {
-    "nameZh": "顱面部骨骼 (Ossa faciei)",
-    "nameEn": "Facial Bones",
-    "latin": "Ossa faciei",
-    "desc": "包含上頜骨、鼻骨、切齒骨等面部骨骼結構。",
-    "faceCount": 371
-  },
-  "cervical_vert_102": {
-    "nameZh": "頸椎 (Vertebrae cervicales)",
-    "nameEn": "Cervical Vertebrae",
-    "latin": "Vertebrae cervicales",
-    "desc": "馬具7枚頸椎，包含寬大寰椎翼(C1)與發達齒突之樞椎(C2)。",
-    "faceCount": 823
-  },
-  "lumbar_vert_103": {
-    "nameZh": "腰椎 (Vertebrae lumbales)",
-    "nameEn": "Lumbar Vertebrae",
-    "latin": "Vertebrae lumbales",
-    "desc": "共6枚腰椎，特徵為寬扁水平橫突與橫突間關節。",
-    "faceCount": 724
-  },
-  "lumbar_vert_104": {
-    "nameZh": "腰椎 (Vertebrae lumbales)",
-    "nameEn": "Lumbar Vertebrae",
-    "latin": "Vertebrae lumbales",
-    "desc": "共6枚腰椎，特徵為寬扁水平橫突與橫突間關節。",
-    "faceCount": 728
-  },
-  "lumbar_vert_105": {
-    "nameZh": "腰椎 (Vertebrae lumbales)",
-    "nameEn": "Lumbar Vertebrae",
-    "latin": "Vertebrae lumbales",
-    "desc": "共6枚腰椎，特徵為寬扁水平橫突與橫突間關節。",
-    "faceCount": 719
-  },
-  "lumbar_vert_106": {
-    "nameZh": "腰椎 (Vertebrae lumbales)",
-    "nameEn": "Lumbar Vertebrae",
-    "latin": "Vertebrae lumbales",
-    "desc": "共6枚腰椎，特徵為寬扁水平橫突與橫突間關節。",
-    "faceCount": 729
-  },
-  "lumbar_vert_107": {
-    "nameZh": "腰椎 (Vertebrae lumbales)",
-    "nameEn": "Lumbar Vertebrae",
-    "latin": "Vertebrae lumbales",
-    "desc": "共6枚腰椎，特徵為寬扁水平橫突與橫突間關節。",
-    "faceCount": 721
-  },
-  "lumbar_vert_108": {
-    "nameZh": "腰椎 (Vertebrae lumbales)",
-    "nameEn": "Lumbar Vertebrae",
-    "latin": "Vertebrae lumbales",
-    "desc": "共6枚腰椎，特徵為寬扁水平橫突與橫突間關節。",
-    "faceCount": 602
-  },
-  "thoracic_vert_109": {
-    "nameZh": "胸椎與髻甲高棘突 (Vertebrae thoracicae)",
-    "nameEn": "Thoracic Vertebrae & Wither",
-    "latin": "Vertebrae thoracicae",
-    "desc": "T1-T5具有極高背側棘突，構成馬體最高點「髻甲部(Withers)」。",
-    "faceCount": 713
-  },
-  "thoracic_vert_110": {
-    "nameZh": "胸椎與髻甲高棘突 (Vertebrae thoracicae)",
-    "nameEn": "Thoracic Vertebrae & Wither",
-    "latin": "Vertebrae thoracicae",
-    "desc": "T1-T5具有極高背側棘突，構成馬體最高點「髻甲部(Withers)」。",
-    "faceCount": 666
-  },
-  "thoracic_vert_111": {
-    "nameZh": "胸椎與髻甲高棘突 (Vertebrae thoracicae)",
-    "nameEn": "Thoracic Vertebrae & Wither",
-    "latin": "Vertebrae thoracicae",
-    "desc": "T1-T5具有極高背側棘突，構成馬體最高點「髻甲部(Withers)」。",
-    "faceCount": 682
-  },
-  "thoracic_vert_112": {
-    "nameZh": "胸椎與髻甲高棘突 (Vertebrae thoracicae)",
-    "nameEn": "Thoracic Vertebrae & Wither",
-    "latin": "Vertebrae thoracicae",
-    "desc": "T1-T5具有極高背側棘突，構成馬體最高點「髻甲部(Withers)」。",
-    "faceCount": 714
-  },
-  "thoracic_vert_113": {
-    "nameZh": "胸椎與髻甲高棘突 (Vertebrae thoracicae)",
-    "nameEn": "Thoracic Vertebrae & Wither",
-    "latin": "Vertebrae thoracicae",
-    "desc": "T1-T5具有極高背側棘突，構成馬體最高點「髻甲部(Withers)」。",
-    "faceCount": 677
-  },
-  "thoracic_vert_114": {
-    "nameZh": "胸椎與髻甲高棘突 (Vertebrae thoracicae)",
-    "nameEn": "Thoracic Vertebrae & Wither",
-    "latin": "Vertebrae thoracicae",
-    "desc": "T1-T5具有極高背側棘突，構成馬體最高點「髻甲部(Withers)」。",
-    "faceCount": 669
-  },
-  "thoracic_vert_115": {
-    "nameZh": "胸椎與髻甲高棘突 (Vertebrae thoracicae)",
-    "nameEn": "Thoracic Vertebrae & Wither",
-    "latin": "Vertebrae thoracicae",
-    "desc": "T1-T5具有極高背側棘突，構成馬體最高點「髻甲部(Withers)」。",
-    "faceCount": 661
-  },
-  "lumbar_vert_116": {
-    "nameZh": "腰椎 (Vertebrae lumbales)",
-    "nameEn": "Lumbar Vertebrae",
-    "latin": "Vertebrae lumbales",
-    "desc": "共6枚腰椎，特徵為寬扁水平橫突與橫突間關節。",
-    "faceCount": 630
-  },
-  "lumbar_vert_117": {
-    "nameZh": "腰椎 (Vertebrae lumbales)",
-    "nameEn": "Lumbar Vertebrae",
-    "latin": "Vertebrae lumbales",
-    "desc": "共6枚腰椎，特徵為寬扁水平橫突與橫突間關節。",
-    "faceCount": 594
-  },
-  "lumbar_vert_118": {
-    "nameZh": "腰椎 (Vertebrae lumbales)",
-    "nameEn": "Lumbar Vertebrae",
-    "latin": "Vertebrae lumbales",
-    "desc": "共6枚腰椎，特徵為寬扁水平橫突與橫突間關節。",
-    "faceCount": 580
-  },
-  "lumbar_vert_119": {
-    "nameZh": "腰椎 (Vertebrae lumbales)",
-    "nameEn": "Lumbar Vertebrae",
-    "latin": "Vertebrae lumbales",
-    "desc": "共6枚腰椎，特徵為寬扁水平橫突與橫突間關節。",
-    "faceCount": 597
-  },
-  "lumbar_vert_120": {
-    "nameZh": "腰椎 (Vertebrae lumbales)",
-    "nameEn": "Lumbar Vertebrae",
-    "latin": "Vertebrae lumbales",
-    "desc": "共6枚腰椎，特徵為寬扁水平橫突與橫突間關節。",
-    "faceCount": 642
-  },
-  "lumbar_vert_121": {
-    "nameZh": "腰椎 (Vertebrae lumbales)",
-    "nameEn": "Lumbar Vertebrae",
-    "latin": "Vertebrae lumbales",
-    "desc": "共6枚腰椎，特徵為寬扁水平橫突與橫突間關節。",
-    "faceCount": 624
-  },
-  "lumbar_vert_122": {
-    "nameZh": "腰椎 (Vertebrae lumbales)",
-    "nameEn": "Lumbar Vertebrae",
-    "latin": "Vertebrae lumbales",
-    "desc": "共6枚腰椎，特徵為寬扁水平橫突與橫突間關節。",
-    "faceCount": 649
-  },
-  "thoracic_vert_123": {
-    "nameZh": "胸椎與髻甲高棘突 (Vertebrae thoracicae)",
-    "nameEn": "Thoracic Vertebrae & Wither",
-    "latin": "Vertebrae thoracicae",
-    "desc": "T1-T5具有極高背側棘突，構成馬體最高點「髻甲部(Withers)」。",
-    "faceCount": 733
-  },
-  "thoracic_vert_124": {
-    "nameZh": "胸椎與髻甲高棘突 (Vertebrae thoracicae)",
-    "nameEn": "Thoracic Vertebrae & Wither",
-    "latin": "Vertebrae thoracicae",
-    "desc": "T1-T5具有極高背側棘突，構成馬體最高點「髻甲部(Withers)」。",
-    "faceCount": 672
-  },
-  "thoracic_vert_125": {
-    "nameZh": "胸椎與髻甲高棘突 (Vertebrae thoracicae)",
-    "nameEn": "Thoracic Vertebrae & Wither",
-    "latin": "Vertebrae thoracicae",
-    "desc": "T1-T5具有極高背側棘突，構成馬體最高點「髻甲部(Withers)」。",
-    "faceCount": 718
-  },
-  "thoracic_vert_126": {
-    "nameZh": "胸椎與髻甲高棘突 (Vertebrae thoracicae)",
-    "nameEn": "Thoracic Vertebrae & Wither",
-    "latin": "Vertebrae thoracicae",
-    "desc": "T1-T5具有極高背側棘突，構成馬體最高點「髻甲部(Withers)」。",
-    "faceCount": 703
-  },
-  "limb_bone_mid_127": {
-    "nameZh": "中央四肢長骨 (Os longum)",
-    "nameEn": "Central Limb Bone",
-    "latin": "Os longum",
-    "desc": "支持體重與槓桿運動之管狀骨。",
-    "faceCount": 1291
-  },
-  "limb_bone_r_128": {
-    "nameZh": "右側四肢長骨 (Os longum)",
-    "nameEn": "Right Limb Bone",
-    "latin": "Os longum",
-    "desc": "支持體重與槓桿運動之管狀骨。",
-    "faceCount": 78
-  },
-  "limb_bone_l_129": {
-    "nameZh": "左側四肢長骨 (Os longum)",
-    "nameEn": "Left Limb Bone",
-    "latin": "Os longum",
-    "desc": "支持體重與槓桿運動之管狀骨。",
-    "faceCount": 76
-  },
-  "humerus_l_130": {
-    "nameZh": "左側肱骨 (Humerus)",
-    "nameEn": "Left Humerus",
-    "latin": "Humerus",
-    "desc": "粗壯長骨，近端具巨大大結節與結節間溝，傳導前肢強大衝擊力。",
-    "faceCount": 85
-  },
-  "humerus_r_131": {
-    "nameZh": "右側肱骨 (Humerus)",
-    "nameEn": "Right Humerus",
-    "latin": "Humerus",
-    "desc": "粗壯長骨，近端具巨大大結節與結節間溝，傳導前肢強大衝擊力。",
-    "faceCount": 84
-  },
-  "humerus_l_132": {
-    "nameZh": "左側肱骨 (Humerus)",
-    "nameEn": "Left Humerus",
-    "latin": "Humerus",
-    "desc": "粗壯長骨，近端具巨大大結節與結節間溝，傳導前肢強大衝擊力。",
-    "faceCount": 91
-  },
-  "humerus_r_133": {
-    "nameZh": "右側肱骨 (Humerus)",
-    "nameEn": "Right Humerus",
-    "latin": "Humerus",
-    "desc": "粗壯長骨，近端具巨大大結節與結節間溝，傳導前肢強大衝擊力。",
-    "faceCount": 90
-  },
-  "humerus_l_134": {
-    "nameZh": "左側肱骨 (Humerus)",
-    "nameEn": "Left Humerus",
-    "latin": "Humerus",
-    "desc": "粗壯長骨，近端具巨大大結節與結節間溝，傳導前肢強大衝擊力。",
-    "faceCount": 95
-  },
-  "humerus_r_135": {
-    "nameZh": "右側肱骨 (Humerus)",
-    "nameEn": "Right Humerus",
-    "latin": "Humerus",
-    "desc": "粗壯長骨，近端具巨大大結節與結節間溝，傳導前肢強大衝擊力。",
-    "faceCount": 97
-  },
-  "humerus_l_136": {
-    "nameZh": "左側肱骨 (Humerus)",
-    "nameEn": "Left Humerus",
-    "latin": "Humerus",
-    "desc": "粗壯長骨，近端具巨大大結節與結節間溝，傳導前肢強大衝擊力。",
-    "faceCount": 109
-  },
-  "humerus_r_137": {
-    "nameZh": "右側肱骨 (Humerus)",
-    "nameEn": "Right Humerus",
-    "latin": "Humerus",
-    "desc": "粗壯長骨，近端具巨大大結節與結節間溝，傳導前肢強大衝擊力。",
-    "faceCount": 111
-  },
-  "sternum_138": {
-    "nameZh": "胸骨 (Sternum)",
-    "nameEn": "Sternum",
-    "latin": "Sternum",
-    "desc": "由胸骨柄、胸骨體與劍突軟骨構成，保護心肺與胸腔臟器。",
-    "faceCount": 239
-  },
-  "ribs_r_139": {
-    "nameZh": "右側肋骨群 (Costae 18對)",
-    "nameEn": "Right Ribs",
-    "latin": "Costae",
-    "desc": "馬共18對肋骨（8對真肋、10對假肋），形成極為寬闊深邃的胸廓。",
-    "faceCount": 237
-  },
-  "ribs_l_140": {
-    "nameZh": "左側肋骨群 (Costae 18對)",
-    "nameEn": "Left Ribs",
-    "latin": "Costae",
-    "desc": "馬共18對肋骨（8對真肋、10對假肋），形成極為寬闊深邃的胸廓。",
-    "faceCount": 231
-  },
-  "ribs_r_141": {
-    "nameZh": "右側肋骨群 (Costae 18對)",
-    "nameEn": "Right Ribs",
-    "latin": "Costae",
-    "desc": "馬共18對肋骨（8對真肋、10對假肋），形成極為寬闊深邃的胸廓。",
-    "faceCount": 839
-  },
-  "ribs_l_142": {
-    "nameZh": "左側肋骨群 (Costae 18對)",
-    "nameEn": "Left Ribs",
-    "latin": "Costae",
-    "desc": "馬共18對肋骨（8對真肋、10對假肋），形成極為寬闊深邃的胸廓。",
-    "faceCount": 125
-  },
-  "ribs_r_143": {
-    "nameZh": "右側肋骨群 (Costae 18對)",
-    "nameEn": "Right Ribs",
-    "latin": "Costae",
-    "desc": "馬共18對肋骨（8對真肋、10對假肋），形成極為寬闊深邃的胸廓。",
-    "faceCount": 115
-  },
-  "ribs_l_144": {
-    "nameZh": "左側肋骨群 (Costae 18對)",
-    "nameEn": "Left Ribs",
-    "latin": "Costae",
-    "desc": "馬共18對肋骨（8對真肋、10對假肋），形成極為寬闊深邃的胸廓。",
-    "faceCount": 829
-  },
-  "scapula_l_145": {
-    "nameZh": "左側肩胛骨 (Scapula)",
-    "nameEn": "Left Scapula",
-    "latin": "Scapula",
-    "desc": "背側具肩胛軟骨擴充肌肉附著，無鎖骨，完全藉由肌肉懸吊前軀。",
-    "faceCount": 174
-  },
-  "scapula_l_146": {
-    "nameZh": "左側肩胛骨 (Scapula)",
-    "nameEn": "Left Scapula",
-    "latin": "Scapula",
-    "desc": "背側具肩胛軟骨擴充肌肉附著，無鎖骨，完全藉由肌肉懸吊前軀。",
-    "faceCount": 200
-  },
-  "scapula_l_147": {
-    "nameZh": "左側肩胛骨 (Scapula)",
-    "nameEn": "Left Scapula",
-    "latin": "Scapula",
-    "desc": "背側具肩胛軟骨擴充肌肉附著，無鎖骨，完全藉由肌肉懸吊前軀。",
-    "faceCount": 213
-  },
-  "scapula_l_148": {
-    "nameZh": "左側肩胛骨 (Scapula)",
-    "nameEn": "Left Scapula",
-    "latin": "Scapula",
-    "desc": "背側具肩胛軟骨擴充肌肉附著，無鎖骨，完全藉由肌肉懸吊前軀。",
-    "faceCount": 231
-  },
-  "scapula_l_149": {
-    "nameZh": "左側肩胛骨 (Scapula)",
-    "nameEn": "Left Scapula",
-    "latin": "Scapula",
-    "desc": "背側具肩胛軟骨擴充肌肉附著，無鎖骨，完全藉由肌肉懸吊前軀。",
-    "faceCount": 236
-  },
-  "scapula_l_150": {
-    "nameZh": "左側肩胛骨 (Scapula)",
-    "nameEn": "Left Scapula",
-    "latin": "Scapula",
-    "desc": "背側具肩胛軟骨擴充肌肉附著，無鎖骨，完全藉由肌肉懸吊前軀。",
-    "faceCount": 245
-  },
-  "ribs_l_151": {
-    "nameZh": "左側肋骨群 (Costae 18對)",
-    "nameEn": "Left Ribs",
-    "latin": "Costae",
-    "desc": "馬共18對肋骨（8對真肋、10對假肋），形成極為寬闊深邃的胸廓。",
-    "faceCount": 250
-  },
-  "ribs_l_152": {
-    "nameZh": "左側肋骨群 (Costae 18對)",
-    "nameEn": "Left Ribs",
-    "latin": "Costae",
-    "desc": "馬共18對肋骨（8對真肋、10對假肋），形成極為寬闊深邃的胸廓。",
-    "faceCount": 251
-  },
-  "ribs_l_153": {
-    "nameZh": "左側肋骨群 (Costae 18對)",
-    "nameEn": "Left Ribs",
-    "latin": "Costae",
-    "desc": "馬共18對肋骨（8對真肋、10對假肋），形成極為寬闊深邃的胸廓。",
-    "faceCount": 231
-  },
-  "ribs_l_154": {
-    "nameZh": "左側肋骨群 (Costae 18對)",
-    "nameEn": "Left Ribs",
-    "latin": "Costae",
-    "desc": "馬共18對肋骨（8對真肋、10對假肋），形成極為寬闊深邃的胸廓。",
-    "faceCount": 185
-  },
-  "ribs_l_155": {
-    "nameZh": "左側肋骨群 (Costae 18對)",
-    "nameEn": "Left Ribs",
-    "latin": "Costae",
-    "desc": "馬共18對肋骨（8對真肋、10對假肋），形成極為寬闊深邃的胸廓。",
-    "faceCount": 207
-  },
-  "ribs_l_156": {
-    "nameZh": "左側肋骨群 (Costae 18對)",
-    "nameEn": "Left Ribs",
-    "latin": "Costae",
-    "desc": "馬共18對肋骨（8對真肋、10對假肋），形成極為寬闊深邃的胸廓。",
-    "faceCount": 212
-  },
-  "ribs_l_157": {
-    "nameZh": "左側肋骨群 (Costae 18對)",
-    "nameEn": "Left Ribs",
-    "latin": "Costae",
-    "desc": "馬共18對肋骨（8對真肋、10對假肋），形成極為寬闊深邃的胸廓。",
-    "faceCount": 184
-  },
-  "ribs_l_158": {
-    "nameZh": "左側肋骨群 (Costae 18對)",
-    "nameEn": "Left Ribs",
-    "latin": "Costae",
-    "desc": "馬共18對肋骨（8對真肋、10對假肋），形成極為寬闊深邃的胸廓。",
-    "faceCount": 180
-  },
-  "coffin_hind_l_159": {
-    "nameZh": "左側後肢蹄骨 (第三趾骨)",
-    "nameEn": "Left Hind Coffin Bone",
-    "latin": "Os ungulare",
-    "desc": "後蹄內部骨骼，較前蹄骨略尖窄，推動馬體向前加速。",
-    "faceCount": 166
-  },
-  "ribs_l_160": {
-    "nameZh": "左側肋骨群 (Costae 18對)",
-    "nameEn": "Left Ribs",
-    "latin": "Costae",
-    "desc": "馬共18對肋骨（8對真肋、10對假肋），形成極為寬闊深邃的胸廓。",
-    "faceCount": 181
-  },
-  "ribs_l_161": {
-    "nameZh": "左側肋骨群 (Costae 18對)",
-    "nameEn": "Left Ribs",
-    "latin": "Costae",
-    "desc": "馬共18對肋骨（8對真肋、10對假肋），形成極為寬闊深邃的胸廓。",
-    "faceCount": 180
-  },
-  "coffin_hind_l_162": {
-    "nameZh": "左側後肢蹄骨 (第三趾骨)",
-    "nameEn": "Left Hind Coffin Bone",
-    "latin": "Os ungulare",
-    "desc": "後蹄內部骨骼，較前蹄骨略尖窄，推動馬體向前加速。",
-    "faceCount": 157
-  },
-  "scapula_r_163": {
-    "nameZh": "右側肩胛骨 (Scapula)",
-    "nameEn": "Right Scapula",
-    "latin": "Scapula",
-    "desc": "背側具肩胛軟骨擴充肌肉附著，無鎖骨，完全藉由肌肉懸吊前軀。",
-    "faceCount": 175
-  },
-  "scapula_r_164": {
-    "nameZh": "右側肩胛骨 (Scapula)",
-    "nameEn": "Right Scapula",
-    "latin": "Scapula",
-    "desc": "背側具肩胛軟骨擴充肌肉附著，無鎖骨，完全藉由肌肉懸吊前軀。",
-    "faceCount": 202
-  },
-  "scapula_r_165": {
-    "nameZh": "右側肩胛骨 (Scapula)",
-    "nameEn": "Right Scapula",
-    "latin": "Scapula",
-    "desc": "背側具肩胛軟骨擴充肌肉附著，無鎖骨，完全藉由肌肉懸吊前軀。",
-    "faceCount": 206
-  },
-  "scapula_r_166": {
-    "nameZh": "右側肩胛骨 (Scapula)",
-    "nameEn": "Right Scapula",
-    "latin": "Scapula",
-    "desc": "背側具肩胛軟骨擴充肌肉附著，無鎖骨，完全藉由肌肉懸吊前軀。",
-    "faceCount": 237
-  },
-  "scapula_r_167": {
-    "nameZh": "右側肩胛骨 (Scapula)",
-    "nameEn": "Right Scapula",
-    "latin": "Scapula",
-    "desc": "背側具肩胛軟骨擴充肌肉附著，無鎖骨，完全藉由肌肉懸吊前軀。",
-    "faceCount": 233
-  },
-  "scapula_r_168": {
-    "nameZh": "右側肩胛骨 (Scapula)",
-    "nameEn": "Right Scapula",
-    "latin": "Scapula",
-    "desc": "背側具肩胛軟骨擴充肌肉附著，無鎖骨，完全藉由肌肉懸吊前軀。",
-    "faceCount": 249
-  },
-  "ribs_r_169": {
-    "nameZh": "右側肋骨群 (Costae 18對)",
-    "nameEn": "Right Ribs",
-    "latin": "Costae",
-    "desc": "馬共18對肋骨（8對真肋、10對假肋），形成極為寬闊深邃的胸廓。",
-    "faceCount": 248
-  },
-  "ribs_r_170": {
-    "nameZh": "右側肋骨群 (Costae 18對)",
-    "nameEn": "Right Ribs",
-    "latin": "Costae",
-    "desc": "馬共18對肋骨（8對真肋、10對假肋），形成極為寬闊深邃的胸廓。",
-    "faceCount": 259
-  },
-  "ribs_r_171": {
-    "nameZh": "右側肋骨群 (Costae 18對)",
-    "nameEn": "Right Ribs",
-    "latin": "Costae",
-    "desc": "馬共18對肋骨（8對真肋、10對假肋），形成極為寬闊深邃的胸廓。",
-    "faceCount": 220
-  },
-  "ribs_r_172": {
-    "nameZh": "右側肋骨群 (Costae 18對)",
-    "nameEn": "Right Ribs",
-    "latin": "Costae",
-    "desc": "馬共18對肋骨（8對真肋、10對假肋），形成極為寬闊深邃的胸廓。",
-    "faceCount": 199
-  },
-  "ribs_r_173": {
-    "nameZh": "右側肋骨群 (Costae 18對)",
-    "nameEn": "Right Ribs",
-    "latin": "Costae",
-    "desc": "馬共18對肋骨（8對真肋、10對假肋），形成極為寬闊深邃的胸廓。",
-    "faceCount": 183
-  },
-  "ribs_r_174": {
-    "nameZh": "右側肋骨群 (Costae 18對)",
-    "nameEn": "Right Ribs",
-    "latin": "Costae",
-    "desc": "馬共18對肋骨（8對真肋、10對假肋），形成極為寬闊深邃的胸廓。",
-    "faceCount": 204
-  },
-  "ribs_r_175": {
-    "nameZh": "右側肋骨群 (Costae 18對)",
-    "nameEn": "Right Ribs",
-    "latin": "Costae",
-    "desc": "馬共18對肋骨（8對真肋、10對假肋），形成極為寬闊深邃的胸廓。",
-    "faceCount": 188
-  },
-  "ribs_r_176": {
-    "nameZh": "右側肋骨群 (Costae 18對)",
-    "nameEn": "Right Ribs",
-    "latin": "Costae",
-    "desc": "馬共18對肋骨（8對真肋、10對假肋），形成極為寬闊深邃的胸廓。",
-    "faceCount": 188
-  },
-  "ribs_r_177": {
-    "nameZh": "右側肋骨群 (Costae 18對)",
-    "nameEn": "Right Ribs",
-    "latin": "Costae",
-    "desc": "馬共18對肋骨（8對真肋、10對假肋），形成極為寬闊深邃的胸廓。",
-    "faceCount": 186
-  },
-  "ribs_r_178": {
-    "nameZh": "右側肋骨群 (Costae 18對)",
-    "nameEn": "Right Ribs",
-    "latin": "Costae",
-    "desc": "馬共18對肋骨（8對真肋、10對假肋），形成極為寬闊深邃的胸廓。",
-    "faceCount": 178
-  },
-  "coffin_hind_r_179": {
-    "nameZh": "右側後肢蹄骨 (第三趾骨)",
-    "nameEn": "Right Hind Coffin Bone",
-    "latin": "Os ungulare",
-    "desc": "後蹄內部骨骼，較前蹄骨略尖窄，推動馬體向前加速。",
-    "faceCount": 159
-  },
-  "coffin_hind_r_180": {
-    "nameZh": "右側後肢蹄骨 (第三趾骨)",
-    "nameEn": "Right Hind Coffin Bone",
-    "latin": "Os ungulare",
-    "desc": "後蹄內部骨骼，較前蹄骨略尖窄，推動馬體向前加速。",
-    "faceCount": 163
-  },
-  "sacrum_181": {
-    "nameZh": "薦骨 (Os sacrum)",
-    "nameEn": "Sacrum",
-    "latin": "Os sacrum",
-    "desc": "由5枚薦椎癒合而成之三角形堅固骨板，與骨盆髂骨緊密形成薦髂關節。",
-    "faceCount": 1465
-  },
-  "mandible_182": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
-    "faceCount": 87
-  },
-  "mandible_183": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
-    "faceCount": 86
-  },
-  "mandible_184": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
-    "faceCount": 86
-  },
-  "mandible_185": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
-    "faceCount": 85
-  },
-  "mandible_186": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
-    "faceCount": 95
-  },
-  "mandible_187": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
-    "faceCount": 94
-  },
-  "mandible_188": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
-    "faceCount": 81
-  },
-  "mandible_189": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
-    "faceCount": 82
-  },
-  "mandible_190": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
-    "faceCount": 92
-  },
-  "mandible_191": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
-    "faceCount": 93
-  },
-  "mandible_192": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
-    "faceCount": 101
-  },
-  "mandible_193": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
-    "faceCount": 98
-  },
   "mandible_194": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
+    "groupId": "incisors",
+    "nameZh": "切齒 (上下各 6 枚)",
+    "nameEn": "Incisor Teeth",
+    "latin": "Dentes incisivi",
+    "grp": "頭頸部骨骼",
+    "desc": "上下頷各 6 枚（中央齒 I1、中間齒 I2、隅齒 I3），呈弧形排列以切斷牧草。",
+    "clinical": "依切齒萌發時間、齒坎（黑窩/Cup）磨平順序與齒星形態，可準確推估馬匹年齡。",
     "faceCount": 56
   },
   "mandible_195": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
+    "groupId": "incisors",
+    "nameZh": "切齒 (上下各 6 枚)",
+    "nameEn": "Incisor Teeth",
+    "latin": "Dentes incisivi",
+    "grp": "頭頸部骨骼",
+    "desc": "上下頷各 6 枚（中央齒 I1、中間齒 I2、隅齒 I3），呈弧形排列以切斷牧草。",
+    "clinical": "依切齒萌發時間、齒坎（黑窩/Cup）磨平順序與齒星形態，可準確推估馬匹年齡。",
     "faceCount": 54
   },
   "mandible_196": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
+    "groupId": "incisors",
+    "nameZh": "切齒 (上下各 6 枚)",
+    "nameEn": "Incisor Teeth",
+    "latin": "Dentes incisivi",
+    "grp": "頭頸部骨骼",
+    "desc": "上下頷各 6 枚（中央齒 I1、中間齒 I2、隅齒 I3），呈弧形排列以切斷牧草。",
+    "clinical": "依切齒萌發時間、齒坎（黑窩/Cup）磨平順序與齒星形態，可準確推估馬匹年齡。",
     "faceCount": 56
   },
   "mandible_197": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
+    "groupId": "incisors",
+    "nameZh": "切齒 (上下各 6 枚)",
+    "nameEn": "Incisor Teeth",
+    "latin": "Dentes incisivi",
+    "grp": "頭頸部骨骼",
+    "desc": "上下頷各 6 枚（中央齒 I1、中間齒 I2、隅齒 I3），呈弧形排列以切斷牧草。",
+    "clinical": "依切齒萌發時間、齒坎（黑窩/Cup）磨平順序與齒星形態，可準確推估馬匹年齡。",
     "faceCount": 56
   },
   "mandible_198": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
+    "groupId": "incisors",
+    "nameZh": "切齒 (上下各 6 枚)",
+    "nameEn": "Incisor Teeth",
+    "latin": "Dentes incisivi",
+    "grp": "頭頸部骨骼",
+    "desc": "上下頷各 6 枚（中央齒 I1、中間齒 I2、隅齒 I3），呈弧形排列以切斷牧草。",
+    "clinical": "依切齒萌發時間、齒坎（黑窩/Cup）磨平順序與齒星形態，可準確推估馬匹年齡。",
     "faceCount": 54
   },
   "mandible_199": {
-    "nameZh": "馬下頜骨 (Mandibula)",
-    "nameEn": "Mandible",
-    "latin": "Mandibula",
-    "desc": "下頜切跡為面動脈搏動檢查點，具巨大下頜支供嚼肌附著。",
+    "groupId": "incisors",
+    "nameZh": "切齒 (上下各 6 枚)",
+    "nameEn": "Incisor Teeth",
+    "latin": "Dentes incisivi",
+    "grp": "頭頸部骨骼",
+    "desc": "上下頷各 6 枚（中央齒 I1、中間齒 I2、隅齒 I3），呈弧形排列以切斷牧草。",
+    "clinical": "依切齒萌發時間、齒坎（黑窩/Cup）磨平順序與齒星形態，可準確推估馬匹年齡。",
     "faceCount": 52
   },
-  "cranium_200": {
-    "nameZh": "馬頭顱骨 (Cranium)",
-    "nameEn": "Cranium",
-    "latin": "Os cranii",
-    "desc": "馬頭部腦顱與面部骨骼總成，包含額竇、面脊與骨性眼眶。",
-    "faceCount": 5113
+  "mandible_83": {
+    "groupId": "cheek_teeth",
+    "nameZh": "頰齒 (前臼齒與臼齒 24 枚)",
+    "nameEn": "Cheek Teeth (Premolars & Molars)",
+    "latin": "Dentes praemolares et molares",
+    "grp": "頭頸部骨骼",
+    "desc": "上下左右各 6 枚（P2–P4、M1–M3，不含偶發狼齒 P1），為高冠齒（Hypsodont），終生持續萌出補償研磨耗損。",
+    "clinical": "因上頜寬於下頜，上頰齒頰側與下頰齒舌側易磨出銳利齒尖刮傷黏膜，需定期銼牙（Floating）。",
+    "faceCount": 66
+  },
+  "mandible_84": {
+    "groupId": "cheek_teeth",
+    "nameZh": "頰齒 (前臼齒與臼齒 24 枚)",
+    "nameEn": "Cheek Teeth (Premolars & Molars)",
+    "latin": "Dentes praemolares et molares",
+    "grp": "頭頸部骨骼",
+    "desc": "上下左右各 6 枚（P2–P4、M1–M3，不含偶發狼齒 P1），為高冠齒（Hypsodont），終生持續萌出補償研磨耗損。",
+    "clinical": "因上頜寬於下頜，上頰齒頰側與下頰齒舌側易磨出銳利齒尖刮傷黏膜，需定期銼牙（Floating）。",
+    "faceCount": 64
+  },
+  "mandible_85": {
+    "groupId": "cheek_teeth",
+    "nameZh": "頰齒 (前臼齒與臼齒 24 枚)",
+    "nameEn": "Cheek Teeth (Premolars & Molars)",
+    "latin": "Dentes praemolares et molares",
+    "grp": "頭頸部骨骼",
+    "desc": "上下左右各 6 枚（P2–P4、M1–M3，不含偶發狼齒 P1），為高冠齒（Hypsodont），終生持續萌出補償研磨耗損。",
+    "clinical": "因上頜寬於下頜，上頰齒頰側與下頰齒舌側易磨出銳利齒尖刮傷黏膜，需定期銼牙（Floating）。",
+    "faceCount": 71
+  },
+  "mandible_86": {
+    "groupId": "cheek_teeth",
+    "nameZh": "頰齒 (前臼齒與臼齒 24 枚)",
+    "nameEn": "Cheek Teeth (Premolars & Molars)",
+    "latin": "Dentes praemolares et molares",
+    "grp": "頭頸部骨骼",
+    "desc": "上下左右各 6 枚（P2–P4、M1–M3，不含偶發狼齒 P1），為高冠齒（Hypsodont），終生持續萌出補償研磨耗損。",
+    "clinical": "因上頜寬於下頜，上頰齒頰側與下頰齒舌側易磨出銳利齒尖刮傷黏膜，需定期銼牙（Floating）。",
+    "faceCount": 72
+  },
+  "mandible_87": {
+    "groupId": "cheek_teeth",
+    "nameZh": "頰齒 (前臼齒與臼齒 24 枚)",
+    "nameEn": "Cheek Teeth (Premolars & Molars)",
+    "latin": "Dentes praemolares et molares",
+    "grp": "頭頸部骨骼",
+    "desc": "上下左右各 6 枚（P2–P4、M1–M3，不含偶發狼齒 P1），為高冠齒（Hypsodont），終生持續萌出補償研磨耗損。",
+    "clinical": "因上頜寬於下頜，上頰齒頰側與下頰齒舌側易磨出銳利齒尖刮傷黏膜，需定期銼牙（Floating）。",
+    "faceCount": 78
+  },
+  "mandible_88": {
+    "groupId": "cheek_teeth",
+    "nameZh": "頰齒 (前臼齒與臼齒 24 枚)",
+    "nameEn": "Cheek Teeth (Premolars & Molars)",
+    "latin": "Dentes praemolares et molares",
+    "grp": "頭頸部骨骼",
+    "desc": "上下左右各 6 枚（P2–P4、M1–M3，不含偶發狼齒 P1），為高冠齒（Hypsodont），終生持續萌出補償研磨耗損。",
+    "clinical": "因上頜寬於下頜，上頰齒頰側與下頰齒舌側易磨出銳利齒尖刮傷黏膜，需定期銼牙（Floating）。",
+    "faceCount": 77
+  },
+  "mandible_89": {
+    "groupId": "cheek_teeth",
+    "nameZh": "頰齒 (前臼齒與臼齒 24 枚)",
+    "nameEn": "Cheek Teeth (Premolars & Molars)",
+    "latin": "Dentes praemolares et molares",
+    "grp": "頭頸部骨骼",
+    "desc": "上下左右各 6 枚（P2–P4、M1–M3，不含偶發狼齒 P1），為高冠齒（Hypsodont），終生持續萌出補償研磨耗損。",
+    "clinical": "因上頜寬於下頜，上頰齒頰側與下頰齒舌側易磨出銳利齒尖刮傷黏膜，需定期銼牙（Floating）。",
+    "faceCount": 72
+  },
+  "mandible_90": {
+    "groupId": "cheek_teeth",
+    "nameZh": "頰齒 (前臼齒與臼齒 24 枚)",
+    "nameEn": "Cheek Teeth (Premolars & Molars)",
+    "latin": "Dentes praemolares et molares",
+    "grp": "頭頸部骨骼",
+    "desc": "上下左右各 6 枚（P2–P4、M1–M3，不含偶發狼齒 P1），為高冠齒（Hypsodont），終生持續萌出補償研磨耗損。",
+    "clinical": "因上頜寬於下頜，上頰齒頰側與下頰齒舌側易磨出銳利齒尖刮傷黏膜，需定期銼牙（Floating）。",
+    "faceCount": 71
+  },
+  "mandible_91": {
+    "groupId": "cheek_teeth",
+    "nameZh": "頰齒 (前臼齒與臼齒 24 枚)",
+    "nameEn": "Cheek Teeth (Premolars & Molars)",
+    "latin": "Dentes praemolares et molares",
+    "grp": "頭頸部骨骼",
+    "desc": "上下左右各 6 枚（P2–P4、M1–M3，不含偶發狼齒 P1），為高冠齒（Hypsodont），終生持續萌出補償研磨耗損。",
+    "clinical": "因上頜寬於下頜，上頰齒頰側與下頰齒舌側易磨出銳利齒尖刮傷黏膜，需定期銼牙（Floating）。",
+    "faceCount": 72
+  },
+  "mandible_92": {
+    "groupId": "cheek_teeth",
+    "nameZh": "頰齒 (前臼齒與臼齒 24 枚)",
+    "nameEn": "Cheek Teeth (Premolars & Molars)",
+    "latin": "Dentes praemolares et molares",
+    "grp": "頭頸部骨骼",
+    "desc": "上下左右各 6 枚（P2–P4、M1–M3，不含偶發狼齒 P1），為高冠齒（Hypsodont），終生持續萌出補償研磨耗損。",
+    "clinical": "因上頜寬於下頜，上頰齒頰側與下頰齒舌側易磨出銳利齒尖刮傷黏膜，需定期銼牙（Floating）。",
+    "faceCount": 72
+  },
+  "mandible_93": {
+    "groupId": "cheek_teeth",
+    "nameZh": "頰齒 (前臼齒與臼齒 24 枚)",
+    "nameEn": "Cheek Teeth (Premolars & Molars)",
+    "latin": "Dentes praemolares et molares",
+    "grp": "頭頸部骨骼",
+    "desc": "上下左右各 6 枚（P2–P4、M1–M3，不含偶發狼齒 P1），為高冠齒（Hypsodont），終生持續萌出補償研磨耗損。",
+    "clinical": "因上頜寬於下頜，上頰齒頰側與下頰齒舌側易磨出銳利齒尖刮傷黏膜，需定期銼牙（Floating）。",
+    "faceCount": 73
+  },
+  "mandible_94": {
+    "groupId": "cheek_teeth",
+    "nameZh": "頰齒 (前臼齒與臼齒 24 枚)",
+    "nameEn": "Cheek Teeth (Premolars & Molars)",
+    "latin": "Dentes praemolares et molares",
+    "grp": "頭頸部骨骼",
+    "desc": "上下左右各 6 枚（P2–P4、M1–M3，不含偶發狼齒 P1），為高冠齒（Hypsodont），終生持續萌出補償研磨耗損。",
+    "clinical": "因上頜寬於下頜，上頰齒頰側與下頰齒舌側易磨出銳利齒尖刮傷黏膜，需定期銼牙（Floating）。",
+    "faceCount": 73
+  },
+  "mandible_182": {
+    "groupId": "cheek_teeth",
+    "nameZh": "頰齒 (前臼齒與臼齒 24 枚)",
+    "nameEn": "Cheek Teeth (Premolars & Molars)",
+    "latin": "Dentes praemolares et molares",
+    "grp": "頭頸部骨骼",
+    "desc": "上下左右各 6 枚（P2–P4、M1–M3，不含偶發狼齒 P1），為高冠齒（Hypsodont），終生持續萌出補償研磨耗損。",
+    "clinical": "因上頜寬於下頜，上頰齒頰側與下頰齒舌側易磨出銳利齒尖刮傷黏膜，需定期銼牙（Floating）。",
+    "faceCount": 87
+  },
+  "mandible_183": {
+    "groupId": "cheek_teeth",
+    "nameZh": "頰齒 (前臼齒與臼齒 24 枚)",
+    "nameEn": "Cheek Teeth (Premolars & Molars)",
+    "latin": "Dentes praemolares et molares",
+    "grp": "頭頸部骨骼",
+    "desc": "上下左右各 6 枚（P2–P4、M1–M3，不含偶發狼齒 P1），為高冠齒（Hypsodont），終生持續萌出補償研磨耗損。",
+    "clinical": "因上頜寬於下頜，上頰齒頰側與下頰齒舌側易磨出銳利齒尖刮傷黏膜，需定期銼牙（Floating）。",
+    "faceCount": 86
+  },
+  "mandible_184": {
+    "groupId": "cheek_teeth",
+    "nameZh": "頰齒 (前臼齒與臼齒 24 枚)",
+    "nameEn": "Cheek Teeth (Premolars & Molars)",
+    "latin": "Dentes praemolares et molares",
+    "grp": "頭頸部骨骼",
+    "desc": "上下左右各 6 枚（P2–P4、M1–M3，不含偶發狼齒 P1），為高冠齒（Hypsodont），終生持續萌出補償研磨耗損。",
+    "clinical": "因上頜寬於下頜，上頰齒頰側與下頰齒舌側易磨出銳利齒尖刮傷黏膜，需定期銼牙（Floating）。",
+    "faceCount": 86
+  },
+  "mandible_185": {
+    "groupId": "cheek_teeth",
+    "nameZh": "頰齒 (前臼齒與臼齒 24 枚)",
+    "nameEn": "Cheek Teeth (Premolars & Molars)",
+    "latin": "Dentes praemolares et molares",
+    "grp": "頭頸部骨骼",
+    "desc": "上下左右各 6 枚（P2–P4、M1–M3，不含偶發狼齒 P1），為高冠齒（Hypsodont），終生持續萌出補償研磨耗損。",
+    "clinical": "因上頜寬於下頜，上頰齒頰側與下頰齒舌側易磨出銳利齒尖刮傷黏膜，需定期銼牙（Floating）。",
+    "faceCount": 85
+  },
+  "mandible_186": {
+    "groupId": "cheek_teeth",
+    "nameZh": "頰齒 (前臼齒與臼齒 24 枚)",
+    "nameEn": "Cheek Teeth (Premolars & Molars)",
+    "latin": "Dentes praemolares et molares",
+    "grp": "頭頸部骨骼",
+    "desc": "上下左右各 6 枚（P2–P4、M1–M3，不含偶發狼齒 P1），為高冠齒（Hypsodont），終生持續萌出補償研磨耗損。",
+    "clinical": "因上頜寬於下頜，上頰齒頰側與下頰齒舌側易磨出銳利齒尖刮傷黏膜，需定期銼牙（Floating）。",
+    "faceCount": 95
+  },
+  "mandible_187": {
+    "groupId": "cheek_teeth",
+    "nameZh": "頰齒 (前臼齒與臼齒 24 枚)",
+    "nameEn": "Cheek Teeth (Premolars & Molars)",
+    "latin": "Dentes praemolares et molares",
+    "grp": "頭頸部骨骼",
+    "desc": "上下左右各 6 枚（P2–P4、M1–M3，不含偶發狼齒 P1），為高冠齒（Hypsodont），終生持續萌出補償研磨耗損。",
+    "clinical": "因上頜寬於下頜，上頰齒頰側與下頰齒舌側易磨出銳利齒尖刮傷黏膜，需定期銼牙（Floating）。",
+    "faceCount": 94
+  },
+  "mandible_188": {
+    "groupId": "cheek_teeth",
+    "nameZh": "頰齒 (前臼齒與臼齒 24 枚)",
+    "nameEn": "Cheek Teeth (Premolars & Molars)",
+    "latin": "Dentes praemolares et molares",
+    "grp": "頭頸部骨骼",
+    "desc": "上下左右各 6 枚（P2–P4、M1–M3，不含偶發狼齒 P1），為高冠齒（Hypsodont），終生持續萌出補償研磨耗損。",
+    "clinical": "因上頜寬於下頜，上頰齒頰側與下頰齒舌側易磨出銳利齒尖刮傷黏膜，需定期銼牙（Floating）。",
+    "faceCount": 81
+  },
+  "mandible_189": {
+    "groupId": "cheek_teeth",
+    "nameZh": "頰齒 (前臼齒與臼齒 24 枚)",
+    "nameEn": "Cheek Teeth (Premolars & Molars)",
+    "latin": "Dentes praemolares et molares",
+    "grp": "頭頸部骨骼",
+    "desc": "上下左右各 6 枚（P2–P4、M1–M3，不含偶發狼齒 P1），為高冠齒（Hypsodont），終生持續萌出補償研磨耗損。",
+    "clinical": "因上頜寬於下頜，上頰齒頰側與下頰齒舌側易磨出銳利齒尖刮傷黏膜，需定期銼牙（Floating）。",
+    "faceCount": 82
+  },
+  "mandible_190": {
+    "groupId": "cheek_teeth",
+    "nameZh": "頰齒 (前臼齒與臼齒 24 枚)",
+    "nameEn": "Cheek Teeth (Premolars & Molars)",
+    "latin": "Dentes praemolares et molares",
+    "grp": "頭頸部骨骼",
+    "desc": "上下左右各 6 枚（P2–P4、M1–M3，不含偶發狼齒 P1），為高冠齒（Hypsodont），終生持續萌出補償研磨耗損。",
+    "clinical": "因上頜寬於下頜，上頰齒頰側與下頰齒舌側易磨出銳利齒尖刮傷黏膜，需定期銼牙（Floating）。",
+    "faceCount": 92
+  },
+  "mandible_191": {
+    "groupId": "cheek_teeth",
+    "nameZh": "頰齒 (前臼齒與臼齒 24 枚)",
+    "nameEn": "Cheek Teeth (Premolars & Molars)",
+    "latin": "Dentes praemolares et molares",
+    "grp": "頭頸部骨骼",
+    "desc": "上下左右各 6 枚（P2–P4、M1–M3，不含偶發狼齒 P1），為高冠齒（Hypsodont），終生持續萌出補償研磨耗損。",
+    "clinical": "因上頜寬於下頜，上頰齒頰側與下頰齒舌側易磨出銳利齒尖刮傷黏膜，需定期銼牙（Floating）。",
+    "faceCount": 93
+  },
+  "mandible_192": {
+    "groupId": "cheek_teeth",
+    "nameZh": "頰齒 (前臼齒與臼齒 24 枚)",
+    "nameEn": "Cheek Teeth (Premolars & Molars)",
+    "latin": "Dentes praemolares et molares",
+    "grp": "頭頸部骨骼",
+    "desc": "上下左右各 6 枚（P2–P4、M1–M3，不含偶發狼齒 P1），為高冠齒（Hypsodont），終生持續萌出補償研磨耗損。",
+    "clinical": "因上頜寬於下頜，上頰齒頰側與下頰齒舌側易磨出銳利齒尖刮傷黏膜，需定期銼牙（Floating）。",
+    "faceCount": 101
+  },
+  "mandible_193": {
+    "groupId": "cheek_teeth",
+    "nameZh": "頰齒 (前臼齒與臼齒 24 枚)",
+    "nameEn": "Cheek Teeth (Premolars & Molars)",
+    "latin": "Dentes praemolares et molares",
+    "grp": "頭頸部骨骼",
+    "desc": "上下左右各 6 枚（P2–P4、M1–M3，不含偶發狼齒 P1），為高冠齒（Hypsodont），終生持續萌出補償研磨耗損。",
+    "clinical": "因上頜寬於下頜，上頰齒頰側與下頰齒舌側易磨出銳利齒尖刮傷黏膜，需定期銼牙（Floating）。",
+    "faceCount": 98
+  },
+  "facial_bones_101": {
+    "groupId": "atlas",
+    "nameZh": "環椎／寰椎 (第一頸椎 C1)",
+    "nameEn": "Atlas (C1)",
+    "latin": "Atlas (Vertebra cervicalis I)",
+    "grp": "頭頸部骨骼",
+    "desc": "呈環狀、無椎體與棘突，兩側具寬大彎曲的寰椎翼（Ala atlantis）；前方與枕骨髁構成「點頭關節」（寰枕關節）。",
+    "clinical": "寰椎翼在耳後頸前端皮下清晰可觸，是頸部定位與寰枕池腦脊髓液（CSF）穿刺的關鍵標記。",
+    "faceCount": 371
+  },
+  "cervical_vert_102": {
+    "groupId": "axis",
+    "nameZh": "樞椎 (第二頸椎 C2)",
+    "nameEn": "Axis (C2)",
+    "latin": "Axis (Vertebra cervicalis II)",
+    "grp": "頭頸部骨骼",
+    "desc": "全身最長的頸椎，前端具匙狀齒突（Dens）伸入環椎腹弓，背側具高大縱長棘突，與環椎構成頭部左右轉動的寰樞關節。",
+    "clinical": "幼駒外傷或先天發育異常可引起寰樞關節半脫位，壓迫高段頸髓導致四肢共濟失調。",
+    "faceCount": 823
+  },
+  "cervical_vert_96": {
+    "groupId": "cervical_c3_c7",
+    "nameZh": "頸椎 (C3–C7)",
+    "nameEn": "Cervical Vertebrae (C3–C7)",
+    "latin": "Vertebrae cervicales III–VII",
+    "grp": "頭頸部骨骼",
+    "desc": "共 5 枚（C3–C7），椎體粗長呈後凹型，關節突發達；C6 具三裂狀橫突（含寬大腹側板），C7 較短、具後肋凹且無橫突孔。",
+    "clinical": "項韌帶（Nuchal ligament）協助懸吊沉重頭頸；C3–C6 椎管狹窄是頸椎脊髓壓迫（搖擺症 Wobbler syndrome）主因。",
+    "faceCount": 725
+  },
+  "cervical_vert_97": {
+    "groupId": "cervical_c3_c7",
+    "nameZh": "頸椎 (C3–C7)",
+    "nameEn": "Cervical Vertebrae (C3–C7)",
+    "latin": "Vertebrae cervicales III–VII",
+    "grp": "頭頸部骨骼",
+    "desc": "共 5 枚（C3–C7），椎體粗長呈後凹型，關節突發達；C6 具三裂狀橫突（含寬大腹側板），C7 較短、具後肋凹且無橫突孔。",
+    "clinical": "項韌帶（Nuchal ligament）協助懸吊沉重頭頸；C3–C6 椎管狹窄是頸椎脊髓壓迫（搖擺症 Wobbler syndrome）主因。",
+    "faceCount": 1091
+  },
+  "cervical_vert_98": {
+    "groupId": "cervical_c3_c7",
+    "nameZh": "頸椎 (C3–C7)",
+    "nameEn": "Cervical Vertebrae (C3–C7)",
+    "latin": "Vertebrae cervicales III–VII",
+    "grp": "頭頸部骨骼",
+    "desc": "共 5 枚（C3–C7），椎體粗長呈後凹型，關節突發達；C6 具三裂狀橫突（含寬大腹側板），C7 較短、具後肋凹且無橫突孔。",
+    "clinical": "項韌帶（Nuchal ligament）協助懸吊沉重頭頸；C3–C6 椎管狹窄是頸椎脊髓壓迫（搖擺症 Wobbler syndrome）主因。",
+    "faceCount": 1099
+  },
+  "cervical_vert_99": {
+    "groupId": "cervical_c3_c7",
+    "nameZh": "頸椎 (C3–C7)",
+    "nameEn": "Cervical Vertebrae (C3–C7)",
+    "latin": "Vertebrae cervicales III–VII",
+    "grp": "頭頸部骨骼",
+    "desc": "共 5 枚（C3–C7），椎體粗長呈後凹型，關節突發達；C6 具三裂狀橫突（含寬大腹側板），C7 較短、具後肋凹且無橫突孔。",
+    "clinical": "項韌帶（Nuchal ligament）協助懸吊沉重頭頸；C3–C6 椎管狹窄是頸椎脊髓壓迫（搖擺症 Wobbler syndrome）主因。",
+    "faceCount": 1235
+  },
+  "cervical_vert_100": {
+    "groupId": "cervical_c3_c7",
+    "nameZh": "頸椎 (C3–C7)",
+    "nameEn": "Cervical Vertebrae (C3–C7)",
+    "latin": "Vertebrae cervicales III–VII",
+    "grp": "頭頸部骨骼",
+    "desc": "共 5 枚（C3–C7），椎體粗長呈後凹型，關節突發達；C6 具三裂狀橫突（含寬大腹側板），C7 較短、具後肋凹且無橫突孔。",
+    "clinical": "項韌帶（Nuchal ligament）協助懸吊沉重頭頸；C3–C6 椎管狹窄是頸椎脊髓壓迫（搖擺症 Wobbler syndrome）主因。",
+    "faceCount": 1084
+  },
+  "thoracic_vert_124": {
+    "groupId": "thoracic_withers",
+    "nameZh": "前段胸椎與鬐甲 (T1–T8)",
+    "nameEn": "Cranial Thoracic Vertebrae & Withers (T1–T8)",
+    "latin": "Vertebrae thoracicae I–VIII",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "前段胸椎棘突極度高聳（以 T4–T6 最高），形成馬體表最高隆起「鬐甲（Withers）」，供項韌帶索狀部與背長肌附著。",
+    "clinical": "鬐甲上方有棘上囊，鞍具壓迫磨傷易引起鬐甲瘻管（Fistulous withers）；量馬體高即由地面量至鬐甲最高點。",
+    "faceCount": 672
+  },
+  "thoracic_vert_126": {
+    "groupId": "thoracic_withers",
+    "nameZh": "前段胸椎與鬐甲 (T1–T8)",
+    "nameEn": "Cranial Thoracic Vertebrae & Withers (T1–T8)",
+    "latin": "Vertebrae thoracicae I–VIII",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "前段胸椎棘突極度高聳（以 T4–T6 最高），形成馬體表最高隆起「鬐甲（Withers）」，供項韌帶索狀部與背長肌附著。",
+    "clinical": "鬐甲上方有棘上囊，鞍具壓迫磨傷易引起鬐甲瘻管（Fistulous withers）；量馬體高即由地面量至鬐甲最高點。",
+    "faceCount": 703
+  },
+  "thoracic_vert_125": {
+    "groupId": "thoracic_withers",
+    "nameZh": "前段胸椎與鬐甲 (T1–T8)",
+    "nameEn": "Cranial Thoracic Vertebrae & Withers (T1–T8)",
+    "latin": "Vertebrae thoracicae I–VIII",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "前段胸椎棘突極度高聳（以 T4–T6 最高），形成馬體表最高隆起「鬐甲（Withers）」，供項韌帶索狀部與背長肌附著。",
+    "clinical": "鬐甲上方有棘上囊，鞍具壓迫磨傷易引起鬐甲瘻管（Fistulous withers）；量馬體高即由地面量至鬐甲最高點。",
+    "faceCount": 718
+  },
+  "thoracic_vert_123": {
+    "groupId": "thoracic_withers",
+    "nameZh": "前段胸椎與鬐甲 (T1–T8)",
+    "nameEn": "Cranial Thoracic Vertebrae & Withers (T1–T8)",
+    "latin": "Vertebrae thoracicae I–VIII",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "前段胸椎棘突極度高聳（以 T4–T6 最高），形成馬體表最高隆起「鬐甲（Withers）」，供項韌帶索狀部與背長肌附著。",
+    "clinical": "鬐甲上方有棘上囊，鞍具壓迫磨傷易引起鬐甲瘻管（Fistulous withers）；量馬體高即由地面量至鬐甲最高點。",
+    "faceCount": 733
+  },
+  "thoracic_vert_112": {
+    "groupId": "thoracic_withers",
+    "nameZh": "前段胸椎與鬐甲 (T1–T8)",
+    "nameEn": "Cranial Thoracic Vertebrae & Withers (T1–T8)",
+    "latin": "Vertebrae thoracicae I–VIII",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "前段胸椎棘突極度高聳（以 T4–T6 最高），形成馬體表最高隆起「鬐甲（Withers）」，供項韌帶索狀部與背長肌附著。",
+    "clinical": "鬐甲上方有棘上囊，鞍具壓迫磨傷易引起鬐甲瘻管（Fistulous withers）；量馬體高即由地面量至鬐甲最高點。",
+    "faceCount": 714
+  },
+  "thoracic_vert_111": {
+    "groupId": "thoracic_withers",
+    "nameZh": "前段胸椎與鬐甲 (T1–T8)",
+    "nameEn": "Cranial Thoracic Vertebrae & Withers (T1–T8)",
+    "latin": "Vertebrae thoracicae I–VIII",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "前段胸椎棘突極度高聳（以 T4–T6 最高），形成馬體表最高隆起「鬐甲（Withers）」，供項韌帶索狀部與背長肌附著。",
+    "clinical": "鬐甲上方有棘上囊，鞍具壓迫磨傷易引起鬐甲瘻管（Fistulous withers）；量馬體高即由地面量至鬐甲最高點。",
+    "faceCount": 682
+  },
+  "thoracic_vert_110": {
+    "groupId": "thoracic_withers",
+    "nameZh": "前段胸椎與鬐甲 (T1–T8)",
+    "nameEn": "Cranial Thoracic Vertebrae & Withers (T1–T8)",
+    "latin": "Vertebrae thoracicae I–VIII",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "前段胸椎棘突極度高聳（以 T4–T6 最高），形成馬體表最高隆起「鬐甲（Withers）」，供項韌帶索狀部與背長肌附著。",
+    "clinical": "鬐甲上方有棘上囊，鞍具壓迫磨傷易引起鬐甲瘻管（Fistulous withers）；量馬體高即由地面量至鬐甲最高點。",
+    "faceCount": 666
+  },
+  "thoracic_vert_109": {
+    "groupId": "thoracic_withers",
+    "nameZh": "前段胸椎與鬐甲 (T1–T8)",
+    "nameEn": "Cranial Thoracic Vertebrae & Withers (T1–T8)",
+    "latin": "Vertebrae thoracicae I–VIII",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "前段胸椎棘突極度高聳（以 T4–T6 最高），形成馬體表最高隆起「鬐甲（Withers）」，供項韌帶索狀部與背長肌附著。",
+    "clinical": "鬐甲上方有棘上囊，鞍具壓迫磨傷易引起鬐甲瘻管（Fistulous withers）；量馬體高即由地面量至鬐甲最高點。",
+    "faceCount": 713
+  },
+  "thoracic_vert_113": {
+    "groupId": "thoracic_caudal",
+    "nameZh": "後段胸椎 (T9–T18)",
+    "nameEn": "Caudal Thoracic Vertebrae (T9–T18)",
+    "latin": "Vertebrae thoracicae IX–XVIII",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "馬共 18 枚胸椎；後段棘突逐漸變短並由後傾轉為垂直（T16 為抗斜椎 Anticlinal vertebra），承載馬鞍與騎手重量。",
+    "clinical": "T13–T18 棘突間距過窄互相撞擊磨損稱為「棘突重疊症（Kissing spines）」，為運動馬背痛常見病因。",
+    "faceCount": 677
+  },
+  "thoracic_vert_114": {
+    "groupId": "thoracic_caudal",
+    "nameZh": "後段胸椎 (T9–T18)",
+    "nameEn": "Caudal Thoracic Vertebrae (T9–T18)",
+    "latin": "Vertebrae thoracicae IX–XVIII",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "馬共 18 枚胸椎；後段棘突逐漸變短並由後傾轉為垂直（T16 為抗斜椎 Anticlinal vertebra），承載馬鞍與騎手重量。",
+    "clinical": "T13–T18 棘突間距過窄互相撞擊磨損稱為「棘突重疊症（Kissing spines）」，為運動馬背痛常見病因。",
+    "faceCount": 669
+  },
+  "thoracic_vert_115": {
+    "groupId": "thoracic_caudal",
+    "nameZh": "後段胸椎 (T9–T18)",
+    "nameEn": "Caudal Thoracic Vertebrae (T9–T18)",
+    "latin": "Vertebrae thoracicae IX–XVIII",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "馬共 18 枚胸椎；後段棘突逐漸變短並由後傾轉為垂直（T16 為抗斜椎 Anticlinal vertebra），承載馬鞍與騎手重量。",
+    "clinical": "T13–T18 棘突間距過窄互相撞擊磨損稱為「棘突重疊症（Kissing spines）」，為運動馬背痛常見病因。",
+    "faceCount": 661
+  },
+  "lumbar_vert_116": {
+    "groupId": "thoracic_caudal",
+    "nameZh": "後段胸椎 (T9–T18)",
+    "nameEn": "Caudal Thoracic Vertebrae (T9–T18)",
+    "latin": "Vertebrae thoracicae IX–XVIII",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "馬共 18 枚胸椎；後段棘突逐漸變短並由後傾轉為垂直（T16 為抗斜椎 Anticlinal vertebra），承載馬鞍與騎手重量。",
+    "clinical": "T13–T18 棘突間距過窄互相撞擊磨損稱為「棘突重疊症（Kissing spines）」，為運動馬背痛常見病因。",
+    "faceCount": 630
+  },
+  "lumbar_vert_117": {
+    "groupId": "thoracic_caudal",
+    "nameZh": "後段胸椎 (T9–T18)",
+    "nameEn": "Caudal Thoracic Vertebrae (T9–T18)",
+    "latin": "Vertebrae thoracicae IX–XVIII",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "馬共 18 枚胸椎；後段棘突逐漸變短並由後傾轉為垂直（T16 為抗斜椎 Anticlinal vertebra），承載馬鞍與騎手重量。",
+    "clinical": "T13–T18 棘突間距過窄互相撞擊磨損稱為「棘突重疊症（Kissing spines）」，為運動馬背痛常見病因。",
+    "faceCount": 594
+  },
+  "lumbar_vert_118": {
+    "groupId": "thoracic_caudal",
+    "nameZh": "後段胸椎 (T9–T18)",
+    "nameEn": "Caudal Thoracic Vertebrae (T9–T18)",
+    "latin": "Vertebrae thoracicae IX–XVIII",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "馬共 18 枚胸椎；後段棘突逐漸變短並由後傾轉為垂直（T16 為抗斜椎 Anticlinal vertebra），承載馬鞍與騎手重量。",
+    "clinical": "T13–T18 棘突間距過窄互相撞擊磨損稱為「棘突重疊症（Kissing spines）」，為運動馬背痛常見病因。",
+    "faceCount": 580
+  },
+  "lumbar_vert_119": {
+    "groupId": "thoracic_caudal",
+    "nameZh": "後段胸椎 (T9–T18)",
+    "nameEn": "Caudal Thoracic Vertebrae (T9–T18)",
+    "latin": "Vertebrae thoracicae IX–XVIII",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "馬共 18 枚胸椎；後段棘突逐漸變短並由後傾轉為垂直（T16 為抗斜椎 Anticlinal vertebra），承載馬鞍與騎手重量。",
+    "clinical": "T13–T18 棘突間距過窄互相撞擊磨損稱為「棘突重疊症（Kissing spines）」，為運動馬背痛常見病因。",
+    "faceCount": 597
+  },
+  "lumbar_vert_120": {
+    "groupId": "thoracic_caudal",
+    "nameZh": "後段胸椎 (T9–T18)",
+    "nameEn": "Caudal Thoracic Vertebrae (T9–T18)",
+    "latin": "Vertebrae thoracicae IX–XVIII",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "馬共 18 枚胸椎；後段棘突逐漸變短並由後傾轉為垂直（T16 為抗斜椎 Anticlinal vertebra），承載馬鞍與騎手重量。",
+    "clinical": "T13–T18 棘突間距過窄互相撞擊磨損稱為「棘突重疊症（Kissing spines）」，為運動馬背痛常見病因。",
+    "faceCount": 642
+  },
+  "lumbar_vert_121": {
+    "groupId": "thoracic_caudal",
+    "nameZh": "後段胸椎 (T9–T18)",
+    "nameEn": "Caudal Thoracic Vertebrae (T9–T18)",
+    "latin": "Vertebrae thoracicae IX–XVIII",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "馬共 18 枚胸椎；後段棘突逐漸變短並由後傾轉為垂直（T16 為抗斜椎 Anticlinal vertebra），承載馬鞍與騎手重量。",
+    "clinical": "T13–T18 棘突間距過窄互相撞擊磨損稱為「棘突重疊症（Kissing spines）」，為運動馬背痛常見病因。",
+    "faceCount": 624
+  },
+  "lumbar_vert_122": {
+    "groupId": "thoracic_caudal",
+    "nameZh": "後段胸椎 (T9–T18)",
+    "nameEn": "Caudal Thoracic Vertebrae (T9–T18)",
+    "latin": "Vertebrae thoracicae IX–XVIII",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "馬共 18 枚胸椎；後段棘突逐漸變短並由後傾轉為垂直（T16 為抗斜椎 Anticlinal vertebra），承載馬鞍與騎手重量。",
+    "clinical": "T13–T18 棘突間距過窄互相撞擊磨損稱為「棘突重疊症（Kissing spines）」，為運動馬背痛常見病因。",
+    "faceCount": 649
+  },
+  "lumbar_vert_103": {
+    "groupId": "lumbar",
+    "nameZh": "腰椎 (L1–L6)",
+    "nameEn": "Lumbar Vertebrae (L1–L6)",
+    "latin": "Vertebrae lumbales I–VI",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "通常 6 枚（部分阿拉伯馬為 5 枚），橫突極寬扁水平伸出；L4–L6 橫突間及 L6–薦骨翼之間具有獨特的橫突間關節。",
+    "clinical": "腰椎橫突間關節限制側彎並強化背腰剛性，使後肢推力無損傳導至前軀。",
+    "faceCount": 724
+  },
+  "lumbar_vert_104": {
+    "groupId": "lumbar",
+    "nameZh": "腰椎 (L1–L6)",
+    "nameEn": "Lumbar Vertebrae (L1–L6)",
+    "latin": "Vertebrae lumbales I–VI",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "通常 6 枚（部分阿拉伯馬為 5 枚），橫突極寬扁水平伸出；L4–L6 橫突間及 L6–薦骨翼之間具有獨特的橫突間關節。",
+    "clinical": "腰椎橫突間關節限制側彎並強化背腰剛性，使後肢推力無損傳導至前軀。",
+    "faceCount": 728
+  },
+  "lumbar_vert_105": {
+    "groupId": "lumbar",
+    "nameZh": "腰椎 (L1–L6)",
+    "nameEn": "Lumbar Vertebrae (L1–L6)",
+    "latin": "Vertebrae lumbales I–VI",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "通常 6 枚（部分阿拉伯馬為 5 枚），橫突極寬扁水平伸出；L4–L6 橫突間及 L6–薦骨翼之間具有獨特的橫突間關節。",
+    "clinical": "腰椎橫突間關節限制側彎並強化背腰剛性，使後肢推力無損傳導至前軀。",
+    "faceCount": 719
+  },
+  "lumbar_vert_106": {
+    "groupId": "lumbar",
+    "nameZh": "腰椎 (L1–L6)",
+    "nameEn": "Lumbar Vertebrae (L1–L6)",
+    "latin": "Vertebrae lumbales I–VI",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "通常 6 枚（部分阿拉伯馬為 5 枚），橫突極寬扁水平伸出；L4–L6 橫突間及 L6–薦骨翼之間具有獨特的橫突間關節。",
+    "clinical": "腰椎橫突間關節限制側彎並強化背腰剛性，使後肢推力無損傳導至前軀。",
+    "faceCount": 729
+  },
+  "lumbar_vert_107": {
+    "groupId": "lumbar",
+    "nameZh": "腰椎 (L1–L6)",
+    "nameEn": "Lumbar Vertebrae (L1–L6)",
+    "latin": "Vertebrae lumbales I–VI",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "通常 6 枚（部分阿拉伯馬為 5 枚），橫突極寬扁水平伸出；L4–L6 橫突間及 L6–薦骨翼之間具有獨特的橫突間關節。",
+    "clinical": "腰椎橫突間關節限制側彎並強化背腰剛性，使後肢推力無損傳導至前軀。",
+    "faceCount": 721
+  },
+  "lumbar_vert_108": {
+    "groupId": "lumbar",
+    "nameZh": "腰椎 (L1–L6)",
+    "nameEn": "Lumbar Vertebrae (L1–L6)",
+    "latin": "Vertebrae lumbales I–VI",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "通常 6 枚（部分阿拉伯馬為 5 枚），橫突極寬扁水平伸出；L4–L6 橫突間及 L6–薦骨翼之間具有獨特的橫突間關節。",
+    "clinical": "腰椎橫突間關節限制側彎並強化背腰剛性，使後肢推力無損傳導至前軀。",
+    "faceCount": 602
+  },
+  "sacrum_181": {
+    "groupId": "sacrum",
+    "nameZh": "薦骨 (S1–S5 癒合)",
+    "nameEn": "Sacrum (S1–S5 Fused)",
+    "latin": "Os sacrum",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "5 枚薦椎癒合而成的三角形骨板，前緣兩側薦骨翼與髂骨翼形成堅固的薦髂關節（Sacroiliac joint）。",
+    "clinical": "薦髂關節勞損或脫位常導致賽馬與障礙馬後肢推進無力與腰薦部疼痛。",
+    "faceCount": 1465
+  },
+  "caudal_vert_56": {
+    "groupId": "caudal",
+    "nameZh": "尾椎 (Co1–Co18)",
+    "nameEn": "Caudal Vertebrae",
+    "latin": "Vertebrae caudales",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "馬尾椎通常 15–21 枚（本模型具 18 枚），由前向後逐漸簡化，後段僅保留圓柱狀椎體。",
+    "clinical": "第 1–2 尾椎間（Co1–Co2）為馬尾硬膜外麻醉（Caudal epidural anesthesia）的標準進針點。",
+    "faceCount": 158
+  },
+  "caudal_vert_57": {
+    "groupId": "caudal",
+    "nameZh": "尾椎 (Co1–Co18)",
+    "nameEn": "Caudal Vertebrae",
+    "latin": "Vertebrae caudales",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "馬尾椎通常 15–21 枚（本模型具 18 枚），由前向後逐漸簡化，後段僅保留圓柱狀椎體。",
+    "clinical": "第 1–2 尾椎間（Co1–Co2）為馬尾硬膜外麻醉（Caudal epidural anesthesia）的標準進針點。",
+    "faceCount": 136
+  },
+  "caudal_vert_69": {
+    "groupId": "caudal",
+    "nameZh": "尾椎 (Co1–Co18)",
+    "nameEn": "Caudal Vertebrae",
+    "latin": "Vertebrae caudales",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "馬尾椎通常 15–21 枚（本模型具 18 枚），由前向後逐漸簡化，後段僅保留圓柱狀椎體。",
+    "clinical": "第 1–2 尾椎間（Co1–Co2）為馬尾硬膜外麻醉（Caudal epidural anesthesia）的標準進針點。",
+    "faceCount": 67
+  },
+  "caudal_vert_70": {
+    "groupId": "caudal",
+    "nameZh": "尾椎 (Co1–Co18)",
+    "nameEn": "Caudal Vertebrae",
+    "latin": "Vertebrae caudales",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "馬尾椎通常 15–21 枚（本模型具 18 枚），由前向後逐漸簡化，後段僅保留圓柱狀椎體。",
+    "clinical": "第 1–2 尾椎間（Co1–Co2）為馬尾硬膜外麻醉（Caudal epidural anesthesia）的標準進針點。",
+    "faceCount": 86
+  },
+  "caudal_vert_71": {
+    "groupId": "caudal",
+    "nameZh": "尾椎 (Co1–Co18)",
+    "nameEn": "Caudal Vertebrae",
+    "latin": "Vertebrae caudales",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "馬尾椎通常 15–21 枚（本模型具 18 枚），由前向後逐漸簡化，後段僅保留圓柱狀椎體。",
+    "clinical": "第 1–2 尾椎間（Co1–Co2）為馬尾硬膜外麻醉（Caudal epidural anesthesia）的標準進針點。",
+    "faceCount": 92
+  },
+  "caudal_vert_72": {
+    "groupId": "caudal",
+    "nameZh": "尾椎 (Co1–Co18)",
+    "nameEn": "Caudal Vertebrae",
+    "latin": "Vertebrae caudales",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "馬尾椎通常 15–21 枚（本模型具 18 枚），由前向後逐漸簡化，後段僅保留圓柱狀椎體。",
+    "clinical": "第 1–2 尾椎間（Co1–Co2）為馬尾硬膜外麻醉（Caudal epidural anesthesia）的標準進針點。",
+    "faceCount": 107
+  },
+  "caudal_vert_73": {
+    "groupId": "caudal",
+    "nameZh": "尾椎 (Co1–Co18)",
+    "nameEn": "Caudal Vertebrae",
+    "latin": "Vertebrae caudales",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "馬尾椎通常 15–21 枚（本模型具 18 枚），由前向後逐漸簡化，後段僅保留圓柱狀椎體。",
+    "clinical": "第 1–2 尾椎間（Co1–Co2）為馬尾硬膜外麻醉（Caudal epidural anesthesia）的標準進針點。",
+    "faceCount": 143
+  },
+  "vertebra_64": {
+    "groupId": "caudal",
+    "nameZh": "尾椎 (Co1–Co18)",
+    "nameEn": "Caudal Vertebrae",
+    "latin": "Vertebrae caudales",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "馬尾椎通常 15–21 枚（本模型具 18 枚），由前向後逐漸簡化，後段僅保留圓柱狀椎體。",
+    "clinical": "第 1–2 尾椎間（Co1–Co2）為馬尾硬膜外麻醉（Caudal epidural anesthesia）的標準進針點。",
+    "faceCount": 49
+  },
+  "vertebra_65": {
+    "groupId": "caudal",
+    "nameZh": "尾椎 (Co1–Co18)",
+    "nameEn": "Caudal Vertebrae",
+    "latin": "Vertebrae caudales",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "馬尾椎通常 15–21 枚（本模型具 18 枚），由前向後逐漸簡化，後段僅保留圓柱狀椎體。",
+    "clinical": "第 1–2 尾椎間（Co1–Co2）為馬尾硬膜外麻醉（Caudal epidural anesthesia）的標準進針點。",
+    "faceCount": 56
+  },
+  "vertebra_66": {
+    "groupId": "caudal",
+    "nameZh": "尾椎 (Co1–Co18)",
+    "nameEn": "Caudal Vertebrae",
+    "latin": "Vertebrae caudales",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "馬尾椎通常 15–21 枚（本模型具 18 枚），由前向後逐漸簡化，後段僅保留圓柱狀椎體。",
+    "clinical": "第 1–2 尾椎間（Co1–Co2）為馬尾硬膜外麻醉（Caudal epidural anesthesia）的標準進針點。",
+    "faceCount": 58
+  },
+  "vertebra_67": {
+    "groupId": "caudal",
+    "nameZh": "尾椎 (Co1–Co18)",
+    "nameEn": "Caudal Vertebrae",
+    "latin": "Vertebrae caudales",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "馬尾椎通常 15–21 枚（本模型具 18 枚），由前向後逐漸簡化，後段僅保留圓柱狀椎體。",
+    "clinical": "第 1–2 尾椎間（Co1–Co2）為馬尾硬膜外麻醉（Caudal epidural anesthesia）的標準進針點。",
+    "faceCount": 73
+  },
+  "vertebra_68": {
+    "groupId": "caudal",
+    "nameZh": "尾椎 (Co1–Co18)",
+    "nameEn": "Caudal Vertebrae",
+    "latin": "Vertebrae caudales",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "馬尾椎通常 15–21 枚（本模型具 18 枚），由前向後逐漸簡化，後段僅保留圓柱狀椎體。",
+    "clinical": "第 1–2 尾椎間（Co1–Co2）為馬尾硬膜外麻醉（Caudal epidural anesthesia）的標準進針點。",
+    "faceCount": 59
+  },
+  "limb_bone_mid_58": {
+    "groupId": "caudal",
+    "nameZh": "尾椎 (Co1–Co18)",
+    "nameEn": "Caudal Vertebrae",
+    "latin": "Vertebrae caudales",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "馬尾椎通常 15–21 枚（本模型具 18 枚），由前向後逐漸簡化，後段僅保留圓柱狀椎體。",
+    "clinical": "第 1–2 尾椎間（Co1–Co2）為馬尾硬膜外麻醉（Caudal epidural anesthesia）的標準進針點。",
+    "faceCount": 41
+  },
+  "limb_bone_mid_59": {
+    "groupId": "caudal",
+    "nameZh": "尾椎 (Co1–Co18)",
+    "nameEn": "Caudal Vertebrae",
+    "latin": "Vertebrae caudales",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "馬尾椎通常 15–21 枚（本模型具 18 枚），由前向後逐漸簡化，後段僅保留圓柱狀椎體。",
+    "clinical": "第 1–2 尾椎間（Co1–Co2）為馬尾硬膜外麻醉（Caudal epidural anesthesia）的標準進針點。",
+    "faceCount": 38
+  },
+  "limb_bone_mid_60": {
+    "groupId": "caudal",
+    "nameZh": "尾椎 (Co1–Co18)",
+    "nameEn": "Caudal Vertebrae",
+    "latin": "Vertebrae caudales",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "馬尾椎通常 15–21 枚（本模型具 18 枚），由前向後逐漸簡化，後段僅保留圓柱狀椎體。",
+    "clinical": "第 1–2 尾椎間（Co1–Co2）為馬尾硬膜外麻醉（Caudal epidural anesthesia）的標準進針點。",
+    "faceCount": 35
+  },
+  "limb_bone_mid_61": {
+    "groupId": "caudal",
+    "nameZh": "尾椎 (Co1–Co18)",
+    "nameEn": "Caudal Vertebrae",
+    "latin": "Vertebrae caudales",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "馬尾椎通常 15–21 枚（本模型具 18 枚），由前向後逐漸簡化，後段僅保留圓柱狀椎體。",
+    "clinical": "第 1–2 尾椎間（Co1–Co2）為馬尾硬膜外麻醉（Caudal epidural anesthesia）的標準進針點。",
+    "faceCount": 38
+  },
+  "limb_bone_mid_62": {
+    "groupId": "caudal",
+    "nameZh": "尾椎 (Co1–Co18)",
+    "nameEn": "Caudal Vertebrae",
+    "latin": "Vertebrae caudales",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "馬尾椎通常 15–21 枚（本模型具 18 枚），由前向後逐漸簡化，後段僅保留圓柱狀椎體。",
+    "clinical": "第 1–2 尾椎間（Co1–Co2）為馬尾硬膜外麻醉（Caudal epidural anesthesia）的標準進針點。",
+    "faceCount": 43
+  },
+  "limb_bone_mid_63": {
+    "groupId": "caudal",
+    "nameZh": "尾椎 (Co1–Co18)",
+    "nameEn": "Caudal Vertebrae",
+    "latin": "Vertebrae caudales",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "馬尾椎通常 15–21 枚（本模型具 18 枚），由前向後逐漸簡化，後段僅保留圓柱狀椎體。",
+    "clinical": "第 1–2 尾椎間（Co1–Co2）為馬尾硬膜外麻醉（Caudal epidural anesthesia）的標準進針點。",
+    "faceCount": 42
+  },
+  "scapula_l_145": {
+    "groupId": "true_ribs",
+    "nameZh": "左側真肋 (第 1–8 對肋骨)",
+    "nameEn": "Left True / Sternal Ribs (Pairs 1–8)",
+    "latin": "Costae verae (I–VIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "前 8 對肋骨較寬扁垂直，經各自的肋軟骨直接與胸骨相連，保護心臟與前胸廓。",
+    "clinical": "第 6–7 肋間腹側為心肺聽診及胸腔穿刺（Thoracocentesis）的關鍵解剖位置。",
+    "faceCount": 174
+  },
+  "scapula_l_146": {
+    "groupId": "true_ribs",
+    "nameZh": "左側真肋 (第 1–8 對肋骨)",
+    "nameEn": "Left True / Sternal Ribs (Pairs 1–8)",
+    "latin": "Costae verae (I–VIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "前 8 對肋骨較寬扁垂直，經各自的肋軟骨直接與胸骨相連，保護心臟與前胸廓。",
+    "clinical": "第 6–7 肋間腹側為心肺聽診及胸腔穿刺（Thoracocentesis）的關鍵解剖位置。",
+    "faceCount": 200
+  },
+  "scapula_l_147": {
+    "groupId": "true_ribs",
+    "nameZh": "左側真肋 (第 1–8 對肋骨)",
+    "nameEn": "Left True / Sternal Ribs (Pairs 1–8)",
+    "latin": "Costae verae (I–VIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "前 8 對肋骨較寬扁垂直，經各自的肋軟骨直接與胸骨相連，保護心臟與前胸廓。",
+    "clinical": "第 6–7 肋間腹側為心肺聽診及胸腔穿刺（Thoracocentesis）的關鍵解剖位置。",
+    "faceCount": 213
+  },
+  "scapula_l_148": {
+    "groupId": "true_ribs",
+    "nameZh": "左側真肋 (第 1–8 對肋骨)",
+    "nameEn": "Left True / Sternal Ribs (Pairs 1–8)",
+    "latin": "Costae verae (I–VIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "前 8 對肋骨較寬扁垂直，經各自的肋軟骨直接與胸骨相連，保護心臟與前胸廓。",
+    "clinical": "第 6–7 肋間腹側為心肺聽診及胸腔穿刺（Thoracocentesis）的關鍵解剖位置。",
+    "faceCount": 231
+  },
+  "scapula_l_149": {
+    "groupId": "true_ribs",
+    "nameZh": "左側真肋 (第 1–8 對肋骨)",
+    "nameEn": "Left True / Sternal Ribs (Pairs 1–8)",
+    "latin": "Costae verae (I–VIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "前 8 對肋骨較寬扁垂直，經各自的肋軟骨直接與胸骨相連，保護心臟與前胸廓。",
+    "clinical": "第 6–7 肋間腹側為心肺聽診及胸腔穿刺（Thoracocentesis）的關鍵解剖位置。",
+    "faceCount": 236
+  },
+  "scapula_l_150": {
+    "groupId": "true_ribs",
+    "nameZh": "左側真肋 (第 1–8 對肋骨)",
+    "nameEn": "Left True / Sternal Ribs (Pairs 1–8)",
+    "latin": "Costae verae (I–VIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "前 8 對肋骨較寬扁垂直，經各自的肋軟骨直接與胸骨相連，保護心臟與前胸廓。",
+    "clinical": "第 6–7 肋間腹側為心肺聽診及胸腔穿刺（Thoracocentesis）的關鍵解剖位置。",
+    "faceCount": 245
+  },
+  "ribs_l_151": {
+    "groupId": "true_ribs",
+    "nameZh": "左側真肋 (第 1–8 對肋骨)",
+    "nameEn": "Left True / Sternal Ribs (Pairs 1–8)",
+    "latin": "Costae verae (I–VIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "前 8 對肋骨較寬扁垂直，經各自的肋軟骨直接與胸骨相連，保護心臟與前胸廓。",
+    "clinical": "第 6–7 肋間腹側為心肺聽診及胸腔穿刺（Thoracocentesis）的關鍵解剖位置。",
+    "faceCount": 250
+  },
+  "ribs_l_152": {
+    "groupId": "true_ribs",
+    "nameZh": "左側真肋 (第 1–8 對肋骨)",
+    "nameEn": "Left True / Sternal Ribs (Pairs 1–8)",
+    "latin": "Costae verae (I–VIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "前 8 對肋骨較寬扁垂直，經各自的肋軟骨直接與胸骨相連，保護心臟與前胸廓。",
+    "clinical": "第 6–7 肋間腹側為心肺聽診及胸腔穿刺（Thoracocentesis）的關鍵解剖位置。",
+    "faceCount": 251
+  },
+  "scapula_r_163": {
+    "groupId": "true_ribs",
+    "nameZh": "右側真肋 (第 1–8 對肋骨)",
+    "nameEn": "Right True / Sternal Ribs (Pairs 1–8)",
+    "latin": "Costae verae (I–VIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "前 8 對肋骨較寬扁垂直，經各自的肋軟骨直接與胸骨相連，保護心臟與前胸廓。",
+    "clinical": "第 6–7 肋間腹側為心肺聽診及胸腔穿刺（Thoracocentesis）的關鍵解剖位置。",
+    "faceCount": 175
+  },
+  "scapula_r_164": {
+    "groupId": "true_ribs",
+    "nameZh": "右側真肋 (第 1–8 對肋骨)",
+    "nameEn": "Right True / Sternal Ribs (Pairs 1–8)",
+    "latin": "Costae verae (I–VIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "前 8 對肋骨較寬扁垂直，經各自的肋軟骨直接與胸骨相連，保護心臟與前胸廓。",
+    "clinical": "第 6–7 肋間腹側為心肺聽診及胸腔穿刺（Thoracocentesis）的關鍵解剖位置。",
+    "faceCount": 202
+  },
+  "scapula_r_165": {
+    "groupId": "true_ribs",
+    "nameZh": "右側真肋 (第 1–8 對肋骨)",
+    "nameEn": "Right True / Sternal Ribs (Pairs 1–8)",
+    "latin": "Costae verae (I–VIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "前 8 對肋骨較寬扁垂直，經各自的肋軟骨直接與胸骨相連，保護心臟與前胸廓。",
+    "clinical": "第 6–7 肋間腹側為心肺聽診及胸腔穿刺（Thoracocentesis）的關鍵解剖位置。",
+    "faceCount": 206
+  },
+  "scapula_r_166": {
+    "groupId": "true_ribs",
+    "nameZh": "右側真肋 (第 1–8 對肋骨)",
+    "nameEn": "Right True / Sternal Ribs (Pairs 1–8)",
+    "latin": "Costae verae (I–VIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "前 8 對肋骨較寬扁垂直，經各自的肋軟骨直接與胸骨相連，保護心臟與前胸廓。",
+    "clinical": "第 6–7 肋間腹側為心肺聽診及胸腔穿刺（Thoracocentesis）的關鍵解剖位置。",
+    "faceCount": 237
+  },
+  "scapula_r_167": {
+    "groupId": "true_ribs",
+    "nameZh": "右側真肋 (第 1–8 對肋骨)",
+    "nameEn": "Right True / Sternal Ribs (Pairs 1–8)",
+    "latin": "Costae verae (I–VIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "前 8 對肋骨較寬扁垂直，經各自的肋軟骨直接與胸骨相連，保護心臟與前胸廓。",
+    "clinical": "第 6–7 肋間腹側為心肺聽診及胸腔穿刺（Thoracocentesis）的關鍵解剖位置。",
+    "faceCount": 233
+  },
+  "scapula_r_168": {
+    "groupId": "true_ribs",
+    "nameZh": "右側真肋 (第 1–8 對肋骨)",
+    "nameEn": "Right True / Sternal Ribs (Pairs 1–8)",
+    "latin": "Costae verae (I–VIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "前 8 對肋骨較寬扁垂直，經各自的肋軟骨直接與胸骨相連，保護心臟與前胸廓。",
+    "clinical": "第 6–7 肋間腹側為心肺聽診及胸腔穿刺（Thoracocentesis）的關鍵解剖位置。",
+    "faceCount": 249
+  },
+  "ribs_r_169": {
+    "groupId": "true_ribs",
+    "nameZh": "右側真肋 (第 1–8 對肋骨)",
+    "nameEn": "Right True / Sternal Ribs (Pairs 1–8)",
+    "latin": "Costae verae (I–VIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "前 8 對肋骨較寬扁垂直，經各自的肋軟骨直接與胸骨相連，保護心臟與前胸廓。",
+    "clinical": "第 6–7 肋間腹側為心肺聽診及胸腔穿刺（Thoracocentesis）的關鍵解剖位置。",
+    "faceCount": 248
+  },
+  "ribs_r_170": {
+    "groupId": "true_ribs",
+    "nameZh": "右側真肋 (第 1–8 對肋骨)",
+    "nameEn": "Right True / Sternal Ribs (Pairs 1–8)",
+    "latin": "Costae verae (I–VIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "前 8 對肋骨較寬扁垂直，經各自的肋軟骨直接與胸骨相連，保護心臟與前胸廓。",
+    "clinical": "第 6–7 肋間腹側為心肺聽診及胸腔穿刺（Thoracocentesis）的關鍵解剖位置。",
+    "faceCount": 259
+  },
+  "ribs_l_153": {
+    "groupId": "false_ribs",
+    "nameZh": "左側假肋 (第 9–18 對肋骨)",
+    "nameEn": "Left False / Asternal Ribs (Pairs 9–18)",
+    "latin": "Costae spuriae (IX–XVIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "後 10 對肋骨弧度大而細長，不直接接胸骨，其遠端肋軟骨依序疊接形成肋弓。",
+    "clinical": "胸廓深長延伸至第 18 肋，使肝臟、胃與部分腸管受後段肋廓包覆保護。",
+    "faceCount": 231
+  },
+  "ribs_l_155": {
+    "groupId": "false_ribs",
+    "nameZh": "左側假肋 (第 9–18 對肋骨)",
+    "nameEn": "Left False / Asternal Ribs (Pairs 9–18)",
+    "latin": "Costae spuriae (IX–XVIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "後 10 對肋骨弧度大而細長，不直接接胸骨，其遠端肋軟骨依序疊接形成肋弓。",
+    "clinical": "胸廓深長延伸至第 18 肋，使肝臟、胃與部分腸管受後段肋廓包覆保護。",
+    "faceCount": 207
+  },
+  "ribs_l_156": {
+    "groupId": "false_ribs",
+    "nameZh": "左側假肋 (第 9–18 對肋骨)",
+    "nameEn": "Left False / Asternal Ribs (Pairs 9–18)",
+    "latin": "Costae spuriae (IX–XVIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "後 10 對肋骨弧度大而細長，不直接接胸骨，其遠端肋軟骨依序疊接形成肋弓。",
+    "clinical": "胸廓深長延伸至第 18 肋，使肝臟、胃與部分腸管受後段肋廓包覆保護。",
+    "faceCount": 212
+  },
+  "ribs_l_154": {
+    "groupId": "false_ribs",
+    "nameZh": "左側假肋 (第 9–18 對肋骨)",
+    "nameEn": "Left False / Asternal Ribs (Pairs 9–18)",
+    "latin": "Costae spuriae (IX–XVIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "後 10 對肋骨弧度大而細長，不直接接胸骨，其遠端肋軟骨依序疊接形成肋弓。",
+    "clinical": "胸廓深長延伸至第 18 肋，使肝臟、胃與部分腸管受後段肋廓包覆保護。",
+    "faceCount": 185
+  },
+  "ribs_l_157": {
+    "groupId": "false_ribs",
+    "nameZh": "左側假肋 (第 9–18 對肋骨)",
+    "nameEn": "Left False / Asternal Ribs (Pairs 9–18)",
+    "latin": "Costae spuriae (IX–XVIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "後 10 對肋骨弧度大而細長，不直接接胸骨，其遠端肋軟骨依序疊接形成肋弓。",
+    "clinical": "胸廓深長延伸至第 18 肋，使肝臟、胃與部分腸管受後段肋廓包覆保護。",
+    "faceCount": 184
+  },
+  "ribs_l_158": {
+    "groupId": "false_ribs",
+    "nameZh": "左側假肋 (第 9–18 對肋骨)",
+    "nameEn": "Left False / Asternal Ribs (Pairs 9–18)",
+    "latin": "Costae spuriae (IX–XVIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "後 10 對肋骨弧度大而細長，不直接接胸骨，其遠端肋軟骨依序疊接形成肋弓。",
+    "clinical": "胸廓深長延伸至第 18 肋，使肝臟、胃與部分腸管受後段肋廓包覆保護。",
+    "faceCount": 180
+  },
+  "ribs_l_161": {
+    "groupId": "false_ribs",
+    "nameZh": "左側假肋 (第 9–18 對肋骨)",
+    "nameEn": "Left False / Asternal Ribs (Pairs 9–18)",
+    "latin": "Costae spuriae (IX–XVIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "後 10 對肋骨弧度大而細長，不直接接胸骨，其遠端肋軟骨依序疊接形成肋弓。",
+    "clinical": "胸廓深長延伸至第 18 肋，使肝臟、胃與部分腸管受後段肋廓包覆保護。",
+    "faceCount": 180
+  },
+  "ribs_l_160": {
+    "groupId": "false_ribs",
+    "nameZh": "左側假肋 (第 9–18 對肋骨)",
+    "nameEn": "Left False / Asternal Ribs (Pairs 9–18)",
+    "latin": "Costae spuriae (IX–XVIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "後 10 對肋骨弧度大而細長，不直接接胸骨，其遠端肋軟骨依序疊接形成肋弓。",
+    "clinical": "胸廓深長延伸至第 18 肋，使肝臟、胃與部分腸管受後段肋廓包覆保護。",
+    "faceCount": 181
+  },
+  "coffin_hind_l_159": {
+    "groupId": "false_ribs",
+    "nameZh": "左側假肋 (第 9–18 對肋骨)",
+    "nameEn": "Left False / Asternal Ribs (Pairs 9–18)",
+    "latin": "Costae spuriae (IX–XVIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "後 10 對肋骨弧度大而細長，不直接接胸骨，其遠端肋軟骨依序疊接形成肋弓。",
+    "clinical": "胸廓深長延伸至第 18 肋，使肝臟、胃與部分腸管受後段肋廓包覆保護。",
+    "faceCount": 166
+  },
+  "coffin_hind_l_162": {
+    "groupId": "false_ribs",
+    "nameZh": "左側假肋 (第 9–18 對肋骨)",
+    "nameEn": "Left False / Asternal Ribs (Pairs 9–18)",
+    "latin": "Costae spuriae (IX–XVIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "後 10 對肋骨弧度大而細長，不直接接胸骨，其遠端肋軟骨依序疊接形成肋弓。",
+    "clinical": "胸廓深長延伸至第 18 肋，使肝臟、胃與部分腸管受後段肋廓包覆保護。",
+    "faceCount": 157
+  },
+  "ribs_r_171": {
+    "groupId": "false_ribs",
+    "nameZh": "右側假肋 (第 9–18 對肋骨)",
+    "nameEn": "Right False / Asternal Ribs (Pairs 9–18)",
+    "latin": "Costae spuriae (IX–XVIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "後 10 對肋骨弧度大而細長，不直接接胸骨，其遠端肋軟骨依序疊接形成肋弓。",
+    "clinical": "胸廓深長延伸至第 18 肋，使肝臟、胃與部分腸管受後段肋廓包覆保護。",
+    "faceCount": 220
+  },
+  "ribs_r_174": {
+    "groupId": "false_ribs",
+    "nameZh": "右側假肋 (第 9–18 對肋骨)",
+    "nameEn": "Right False / Asternal Ribs (Pairs 9–18)",
+    "latin": "Costae spuriae (IX–XVIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "後 10 對肋骨弧度大而細長，不直接接胸骨，其遠端肋軟骨依序疊接形成肋弓。",
+    "clinical": "胸廓深長延伸至第 18 肋，使肝臟、胃與部分腸管受後段肋廓包覆保護。",
+    "faceCount": 204
+  },
+  "ribs_r_172": {
+    "groupId": "false_ribs",
+    "nameZh": "右側假肋 (第 9–18 對肋骨)",
+    "nameEn": "Right False / Asternal Ribs (Pairs 9–18)",
+    "latin": "Costae spuriae (IX–XVIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "後 10 對肋骨弧度大而細長，不直接接胸骨，其遠端肋軟骨依序疊接形成肋弓。",
+    "clinical": "胸廓深長延伸至第 18 肋，使肝臟、胃與部分腸管受後段肋廓包覆保護。",
+    "faceCount": 199
+  },
+  "ribs_r_175": {
+    "groupId": "false_ribs",
+    "nameZh": "右側假肋 (第 9–18 對肋骨)",
+    "nameEn": "Right False / Asternal Ribs (Pairs 9–18)",
+    "latin": "Costae spuriae (IX–XVIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "後 10 對肋骨弧度大而細長，不直接接胸骨，其遠端肋軟骨依序疊接形成肋弓。",
+    "clinical": "胸廓深長延伸至第 18 肋，使肝臟、胃與部分腸管受後段肋廓包覆保護。",
+    "faceCount": 188
+  },
+  "ribs_r_173": {
+    "groupId": "false_ribs",
+    "nameZh": "右側假肋 (第 9–18 對肋骨)",
+    "nameEn": "Right False / Asternal Ribs (Pairs 9–18)",
+    "latin": "Costae spuriae (IX–XVIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "後 10 對肋骨弧度大而細長，不直接接胸骨，其遠端肋軟骨依序疊接形成肋弓。",
+    "clinical": "胸廓深長延伸至第 18 肋，使肝臟、胃與部分腸管受後段肋廓包覆保護。",
+    "faceCount": 183
+  },
+  "ribs_r_176": {
+    "groupId": "false_ribs",
+    "nameZh": "右側假肋 (第 9–18 對肋骨)",
+    "nameEn": "Right False / Asternal Ribs (Pairs 9–18)",
+    "latin": "Costae spuriae (IX–XVIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "後 10 對肋骨弧度大而細長，不直接接胸骨，其遠端肋軟骨依序疊接形成肋弓。",
+    "clinical": "胸廓深長延伸至第 18 肋，使肝臟、胃與部分腸管受後段肋廓包覆保護。",
+    "faceCount": 188
+  },
+  "ribs_r_178": {
+    "groupId": "false_ribs",
+    "nameZh": "右側假肋 (第 9–18 對肋骨)",
+    "nameEn": "Right False / Asternal Ribs (Pairs 9–18)",
+    "latin": "Costae spuriae (IX–XVIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "後 10 對肋骨弧度大而細長，不直接接胸骨，其遠端肋軟骨依序疊接形成肋弓。",
+    "clinical": "胸廓深長延伸至第 18 肋，使肝臟、胃與部分腸管受後段肋廓包覆保護。",
+    "faceCount": 178
+  },
+  "ribs_r_177": {
+    "groupId": "false_ribs",
+    "nameZh": "右側假肋 (第 9–18 對肋骨)",
+    "nameEn": "Right False / Asternal Ribs (Pairs 9–18)",
+    "latin": "Costae spuriae (IX–XVIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "後 10 對肋骨弧度大而細長，不直接接胸骨，其遠端肋軟骨依序疊接形成肋弓。",
+    "clinical": "胸廓深長延伸至第 18 肋，使肝臟、胃與部分腸管受後段肋廓包覆保護。",
+    "faceCount": 186
+  },
+  "coffin_hind_r_180": {
+    "groupId": "false_ribs",
+    "nameZh": "右側假肋 (第 9–18 對肋骨)",
+    "nameEn": "Right False / Asternal Ribs (Pairs 9–18)",
+    "latin": "Costae spuriae (IX–XVIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "後 10 對肋骨弧度大而細長，不直接接胸骨，其遠端肋軟骨依序疊接形成肋弓。",
+    "clinical": "胸廓深長延伸至第 18 肋，使肝臟、胃與部分腸管受後段肋廓包覆保護。",
+    "faceCount": 163
+  },
+  "coffin_hind_r_179": {
+    "groupId": "false_ribs",
+    "nameZh": "右側假肋 (第 9–18 對肋骨)",
+    "nameEn": "Right False / Asternal Ribs (Pairs 9–18)",
+    "latin": "Costae spuriae (IX–XVIII)",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "後 10 對肋骨弧度大而細長，不直接接胸骨，其遠端肋軟骨依序疊接形成肋弓。",
+    "clinical": "胸廓深長延伸至第 18 肋，使肝臟、胃與部分腸管受後段肋廓包覆保護。",
+    "faceCount": 159
+  },
+  "limb_bone_r_128": {
+    "groupId": "costal_cartilage",
+    "nameZh": "右側肋軟骨與肋弓",
+    "nameEn": "Right Costal Cartilages & Costal Arch",
+    "latin": "Cartilagines costales et arcus costalis",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "透明軟骨構成，前 8 對接胸骨；後 10 對相互連結成彈性「肋弓（Costal arch）」，隨呼吸擴張胸廓。",
+    "clinical": "肋弓為腹部超音波檢查與腹腔器官定位的重要體表邊界。",
+    "faceCount": 78
+  },
+  "limb_bone_l_129": {
+    "groupId": "costal_cartilage",
+    "nameZh": "左側肋軟骨與肋弓",
+    "nameEn": "Left Costal Cartilages & Costal Arch",
+    "latin": "Cartilagines costales et arcus costalis",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "透明軟骨構成，前 8 對接胸骨；後 10 對相互連結成彈性「肋弓（Costal arch）」，隨呼吸擴張胸廓。",
+    "clinical": "肋弓為腹部超音波檢查與腹腔器官定位的重要體表邊界。",
+    "faceCount": 76
+  },
+  "humerus_l_130": {
+    "groupId": "costal_cartilage",
+    "nameZh": "左側肋軟骨與肋弓",
+    "nameEn": "Left Costal Cartilages & Costal Arch",
+    "latin": "Cartilagines costales et arcus costalis",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "透明軟骨構成，前 8 對接胸骨；後 10 對相互連結成彈性「肋弓（Costal arch）」，隨呼吸擴張胸廓。",
+    "clinical": "肋弓為腹部超音波檢查與腹腔器官定位的重要體表邊界。",
+    "faceCount": 85
+  },
+  "humerus_r_131": {
+    "groupId": "costal_cartilage",
+    "nameZh": "右側肋軟骨與肋弓",
+    "nameEn": "Right Costal Cartilages & Costal Arch",
+    "latin": "Cartilagines costales et arcus costalis",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "透明軟骨構成，前 8 對接胸骨；後 10 對相互連結成彈性「肋弓（Costal arch）」，隨呼吸擴張胸廓。",
+    "clinical": "肋弓為腹部超音波檢查與腹腔器官定位的重要體表邊界。",
+    "faceCount": 84
+  },
+  "humerus_l_132": {
+    "groupId": "costal_cartilage",
+    "nameZh": "左側肋軟骨與肋弓",
+    "nameEn": "Left Costal Cartilages & Costal Arch",
+    "latin": "Cartilagines costales et arcus costalis",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "透明軟骨構成，前 8 對接胸骨；後 10 對相互連結成彈性「肋弓（Costal arch）」，隨呼吸擴張胸廓。",
+    "clinical": "肋弓為腹部超音波檢查與腹腔器官定位的重要體表邊界。",
+    "faceCount": 91
+  },
+  "humerus_r_133": {
+    "groupId": "costal_cartilage",
+    "nameZh": "右側肋軟骨與肋弓",
+    "nameEn": "Right Costal Cartilages & Costal Arch",
+    "latin": "Cartilagines costales et arcus costalis",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "透明軟骨構成，前 8 對接胸骨；後 10 對相互連結成彈性「肋弓（Costal arch）」，隨呼吸擴張胸廓。",
+    "clinical": "肋弓為腹部超音波檢查與腹腔器官定位的重要體表邊界。",
+    "faceCount": 90
+  },
+  "humerus_l_134": {
+    "groupId": "costal_cartilage",
+    "nameZh": "左側肋軟骨與肋弓",
+    "nameEn": "Left Costal Cartilages & Costal Arch",
+    "latin": "Cartilagines costales et arcus costalis",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "透明軟骨構成，前 8 對接胸骨；後 10 對相互連結成彈性「肋弓（Costal arch）」，隨呼吸擴張胸廓。",
+    "clinical": "肋弓為腹部超音波檢查與腹腔器官定位的重要體表邊界。",
+    "faceCount": 95
+  },
+  "humerus_r_135": {
+    "groupId": "costal_cartilage",
+    "nameZh": "右側肋軟骨與肋弓",
+    "nameEn": "Right Costal Cartilages & Costal Arch",
+    "latin": "Cartilagines costales et arcus costalis",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "透明軟骨構成，前 8 對接胸骨；後 10 對相互連結成彈性「肋弓（Costal arch）」，隨呼吸擴張胸廓。",
+    "clinical": "肋弓為腹部超音波檢查與腹腔器官定位的重要體表邊界。",
+    "faceCount": 97
+  },
+  "humerus_l_136": {
+    "groupId": "costal_cartilage",
+    "nameZh": "左側肋軟骨與肋弓",
+    "nameEn": "Left Costal Cartilages & Costal Arch",
+    "latin": "Cartilagines costales et arcus costalis",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "透明軟骨構成，前 8 對接胸骨；後 10 對相互連結成彈性「肋弓（Costal arch）」，隨呼吸擴張胸廓。",
+    "clinical": "肋弓為腹部超音波檢查與腹腔器官定位的重要體表邊界。",
+    "faceCount": 109
+  },
+  "humerus_r_137": {
+    "groupId": "costal_cartilage",
+    "nameZh": "右側肋軟骨與肋弓",
+    "nameEn": "Right Costal Cartilages & Costal Arch",
+    "latin": "Cartilagines costales et arcus costalis",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "透明軟骨構成，前 8 對接胸骨；後 10 對相互連結成彈性「肋弓（Costal arch）」，隨呼吸擴張胸廓。",
+    "clinical": "肋弓為腹部超音波檢查與腹腔器官定位的重要體表邊界。",
+    "faceCount": 111
+  },
+  "sternum_138": {
+    "groupId": "costal_cartilage",
+    "nameZh": "肋軟骨與肋弓",
+    "nameEn": "Costal Cartilages & Costal Arch",
+    "latin": "Cartilagines costales et arcus costalis",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "透明軟骨構成，前 8 對接胸骨；後 10 對相互連結成彈性「肋弓（Costal arch）」，隨呼吸擴張胸廓。",
+    "clinical": "肋弓為腹部超音波檢查與腹腔器官定位的重要體表邊界。",
+    "faceCount": 239
+  },
+  "ribs_r_139": {
+    "groupId": "costal_cartilage",
+    "nameZh": "右側肋軟骨與肋弓",
+    "nameEn": "Right Costal Cartilages & Costal Arch",
+    "latin": "Cartilagines costales et arcus costalis",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "透明軟骨構成，前 8 對接胸骨；後 10 對相互連結成彈性「肋弓（Costal arch）」，隨呼吸擴張胸廓。",
+    "clinical": "肋弓為腹部超音波檢查與腹腔器官定位的重要體表邊界。",
+    "faceCount": 237
+  },
+  "ribs_l_140": {
+    "groupId": "costal_cartilage",
+    "nameZh": "左側肋軟骨與肋弓",
+    "nameEn": "Left Costal Cartilages & Costal Arch",
+    "latin": "Cartilagines costales et arcus costalis",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "透明軟骨構成，前 8 對接胸骨；後 10 對相互連結成彈性「肋弓（Costal arch）」，隨呼吸擴張胸廓。",
+    "clinical": "肋弓為腹部超音波檢查與腹腔器官定位的重要體表邊界。",
+    "faceCount": 231
+  },
+  "ribs_r_141": {
+    "groupId": "costal_cartilage",
+    "nameZh": "右側肋軟骨與肋弓",
+    "nameEn": "Right Costal Cartilages & Costal Arch",
+    "latin": "Cartilagines costales et arcus costalis",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "透明軟骨構成，前 8 對接胸骨；後 10 對相互連結成彈性「肋弓（Costal arch）」，隨呼吸擴張胸廓。",
+    "clinical": "肋弓為腹部超音波檢查與腹腔器官定位的重要體表邊界。",
+    "faceCount": 839
+  },
+  "ribs_l_142": {
+    "groupId": "costal_cartilage",
+    "nameZh": "左側肋軟骨與肋弓",
+    "nameEn": "Left Costal Cartilages & Costal Arch",
+    "latin": "Cartilagines costales et arcus costalis",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "透明軟骨構成，前 8 對接胸骨；後 10 對相互連結成彈性「肋弓（Costal arch）」，隨呼吸擴張胸廓。",
+    "clinical": "肋弓為腹部超音波檢查與腹腔器官定位的重要體表邊界。",
+    "faceCount": 125
+  },
+  "ribs_r_143": {
+    "groupId": "costal_cartilage",
+    "nameZh": "右側肋軟骨與肋弓",
+    "nameEn": "Right Costal Cartilages & Costal Arch",
+    "latin": "Cartilagines costales et arcus costalis",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "透明軟骨構成，前 8 對接胸骨；後 10 對相互連結成彈性「肋弓（Costal arch）」，隨呼吸擴張胸廓。",
+    "clinical": "肋弓為腹部超音波檢查與腹腔器官定位的重要體表邊界。",
+    "faceCount": 115
+  },
+  "ribs_l_144": {
+    "groupId": "costal_cartilage",
+    "nameZh": "左側肋軟骨與肋弓",
+    "nameEn": "Left Costal Cartilages & Costal Arch",
+    "latin": "Cartilagines costales et arcus costalis",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "透明軟骨構成，前 8 對接胸骨；後 10 對相互連結成彈性「肋弓（Costal arch）」，隨呼吸擴張胸廓。",
+    "clinical": "肋弓為腹部超音波檢查與腹腔器官定位的重要體表邊界。",
+    "faceCount": 829
+  },
+  "limb_bone_mid_127": {
+    "groupId": "sternum",
+    "nameZh": "胸骨",
+    "nameEn": "Sternum",
+    "latin": "Sternum",
+    "grp": "軀幹脊柱與胸廓",
+    "desc": "呈獨木舟形，由胸骨柄（前端具胸骨柄軟骨）、7 節胸骨體及扁平劍突軟骨構成，腹側具顯著胸骨嵴。",
+    "clinical": "胸骨體骨髓腔豐富，是成馬骨髓穿刺（Bone marrow aspirate）的首選部位。",
+    "faceCount": 1291
+  },
+  "scapula_l_74": {
+    "groupId": "scapula",
+    "nameZh": "左側肩胛骨",
+    "nameEn": "Left Scapula",
+    "latin": "Scapula",
+    "grp": "前肢承重系統",
+    "desc": "大型三角形扁平骨，外側肩胛岡中段具粗隆但「無肩峰」，背緣接寬大肩胛軟骨；馬無鎖骨。",
+    "clinical": "前肢僅靠肌肉懸吊於胸廓（Synsarcosis）；肩胛上神經繞行肩胛頸易因撞傷導致「肩萎縮（Sweeney）」。",
+    "faceCount": 1118
+  },
+  "scapula_r_75": {
+    "groupId": "scapula",
+    "nameZh": "右側肩胛骨",
+    "nameEn": "Right Scapula",
+    "latin": "Scapula",
+    "grp": "前肢承重系統",
+    "desc": "大型三角形扁平骨，外側肩胛岡中段具粗隆但「無肩峰」，背緣接寬大肩胛軟骨；馬無鎖骨。",
+    "clinical": "前肢僅靠肌肉懸吊於胸廓（Synsarcosis）；肩胛上神經繞行肩胛頸易因撞傷導致「肩萎縮（Sweeney）」。",
+    "faceCount": 1119
+  },
+  "humerus_l_0": {
+    "groupId": "humerus",
+    "nameZh": "左側肱骨",
+    "nameEn": "Left Humerus",
+    "latin": "Humerus",
+    "grp": "前肢承重系統",
+    "desc": "粗壯略呈螺旋狀的長骨，近端具大、小結節及馬特有的「中間結節」，將結節間溝分為雙溝供肱二頭肌腱滑動。",
+    "clinical": "肱二頭肌腱發達且含纖維腱索，是前肢站立靜止裝置的關鍵；結節間溝處易發二頭肌腱滑液囊炎。",
+    "faceCount": 1639
+  },
+  "humerus_r_1": {
+    "groupId": "humerus",
+    "nameZh": "右側肱骨",
+    "nameEn": "Right Humerus",
+    "latin": "Humerus",
+    "grp": "前肢承重系統",
+    "desc": "粗壯略呈螺旋狀的長骨，近端具大、小結節及馬特有的「中間結節」，將結節間溝分為雙溝供肱二頭肌腱滑動。",
+    "clinical": "肱二頭肌腱發達且含纖維腱索，是前肢站立靜止裝置的關鍵；結節間溝處易發二頭肌腱滑液囊炎。",
+    "faceCount": 1636
+  },
+  "radius_ulna_l_54": {
+    "groupId": "radius_ulna",
+    "nameZh": "左側橈骨與尺骨 (含鷹嘴)",
+    "nameEn": "Left Radius & Ulna (with Olecranon)",
+    "latin": "Radius et ulna",
+    "grp": "前肢承重系統",
+    "desc": "橈骨粗大垂直承重；尺骨近端形成高大鷹嘴（肘頭），骨幹向下急劇變細並與橈骨中段癒合，前臂無法旋前／旋後。",
+    "clinical": "鷹嘴為肱三頭肌附著處，馬踢傷引起鷹嘴骨折會呈現典型「掉肘（Dropped elbow）」步態。",
+    "faceCount": 1133
+  },
+  "radius_ulna_r_55": {
+    "groupId": "radius_ulna",
+    "nameZh": "右側橈骨與尺骨 (含鷹嘴)",
+    "nameEn": "Right Radius & Ulna (with Olecranon)",
+    "latin": "Radius et ulna",
+    "grp": "前肢承重系統",
+    "desc": "橈骨粗大垂直承重；尺骨近端形成高大鷹嘴（肘頭），骨幹向下急劇變細並與橈骨中段癒合，前臂無法旋前／旋後。",
+    "clinical": "鷹嘴為肱三頭肌附著處，馬踢傷引起鷹嘴骨折會呈現典型「掉肘（Dropped elbow）」步態。",
+    "faceCount": 1119
+  },
+  "radius_ulna_l_36": {
+    "groupId": "carpus_proximal",
+    "nameZh": "左側近列腕骨 (橈・中間・尺腕骨)",
+    "nameEn": "Left Proximal Row of Carpal Bones (Radial, Intermediate, Ulnar)",
+    "latin": "Ossa carpi (Ordo proximalis)",
+    "grp": "前肢承重系統",
+    "desc": "由內而外為橈腕骨、中間腕骨與尺腕骨，上接橈骨遠端形成橈腕關節（活動度最大），下接遠列腕骨形成中腕關節。",
+    "clinical": "高速奔跑過度伸展時，橈腕骨與中間腕骨背緣最容易發生骨軟骨碎片骨折（Carpal chip fracture）。",
+    "faceCount": 68
+  },
+  "radius_ulna_l_37": {
+    "groupId": "carpus_proximal",
+    "nameZh": "左側近列腕骨 (橈・中間・尺腕骨)",
+    "nameEn": "Left Proximal Row of Carpal Bones (Radial, Intermediate, Ulnar)",
+    "latin": "Ossa carpi (Ordo proximalis)",
+    "grp": "前肢承重系統",
+    "desc": "由內而外為橈腕骨、中間腕骨與尺腕骨，上接橈骨遠端形成橈腕關節（活動度最大），下接遠列腕骨形成中腕關節。",
+    "clinical": "高速奔跑過度伸展時，橈腕骨與中間腕骨背緣最容易發生骨軟骨碎片骨折（Carpal chip fracture）。",
+    "faceCount": 74
+  },
+  "radius_ulna_l_40": {
+    "groupId": "carpus_proximal",
+    "nameZh": "左側近列腕骨 (橈・中間・尺腕骨)",
+    "nameEn": "Left Proximal Row of Carpal Bones (Radial, Intermediate, Ulnar)",
+    "latin": "Ossa carpi (Ordo proximalis)",
+    "grp": "前肢承重系統",
+    "desc": "由內而外為橈腕骨、中間腕骨與尺腕骨，上接橈骨遠端形成橈腕關節（活動度最大），下接遠列腕骨形成中腕關節。",
+    "clinical": "高速奔跑過度伸展時，橈腕骨與中間腕骨背緣最容易發生骨軟骨碎片骨折（Carpal chip fracture）。",
+    "faceCount": 61
+  },
+  "radius_ulna_l_41": {
+    "groupId": "carpus_proximal",
+    "nameZh": "左側近列腕骨 (橈・中間・尺腕骨)",
+    "nameEn": "Left Proximal Row of Carpal Bones (Radial, Intermediate, Ulnar)",
+    "latin": "Ossa carpi (Ordo proximalis)",
+    "grp": "前肢承重系統",
+    "desc": "由內而外為橈腕骨、中間腕骨與尺腕骨，上接橈骨遠端形成橈腕關節（活動度最大），下接遠列腕骨形成中腕關節。",
+    "clinical": "高速奔跑過度伸展時，橈腕骨與中間腕骨背緣最容易發生骨軟骨碎片骨折（Carpal chip fracture）。",
+    "faceCount": 59
+  },
+  "radius_ulna_r_45": {
+    "groupId": "carpus_proximal",
+    "nameZh": "右側近列腕骨 (橈・中間・尺腕骨)",
+    "nameEn": "Right Proximal Row of Carpal Bones (Radial, Intermediate, Ulnar)",
+    "latin": "Ossa carpi (Ordo proximalis)",
+    "grp": "前肢承重系統",
+    "desc": "由內而外為橈腕骨、中間腕骨與尺腕骨，上接橈骨遠端形成橈腕關節（活動度最大），下接遠列腕骨形成中腕關節。",
+    "clinical": "高速奔跑過度伸展時，橈腕骨與中間腕骨背緣最容易發生骨軟骨碎片骨折（Carpal chip fracture）。",
+    "faceCount": 66
+  },
+  "radius_ulna_r_46": {
+    "groupId": "carpus_proximal",
+    "nameZh": "右側近列腕骨 (橈・中間・尺腕骨)",
+    "nameEn": "Right Proximal Row of Carpal Bones (Radial, Intermediate, Ulnar)",
+    "latin": "Ossa carpi (Ordo proximalis)",
+    "grp": "前肢承重系統",
+    "desc": "由內而外為橈腕骨、中間腕骨與尺腕骨，上接橈骨遠端形成橈腕關節（活動度最大），下接遠列腕骨形成中腕關節。",
+    "clinical": "高速奔跑過度伸展時，橈腕骨與中間腕骨背緣最容易發生骨軟骨碎片骨折（Carpal chip fracture）。",
+    "faceCount": 73
+  },
+  "radius_ulna_r_49": {
+    "groupId": "carpus_proximal",
+    "nameZh": "右側近列腕骨 (橈・中間・尺腕骨)",
+    "nameEn": "Right Proximal Row of Carpal Bones (Radial, Intermediate, Ulnar)",
+    "latin": "Ossa carpi (Ordo proximalis)",
+    "grp": "前肢承重系統",
+    "desc": "由內而外為橈腕骨、中間腕骨與尺腕骨，上接橈骨遠端形成橈腕關節（活動度最大），下接遠列腕骨形成中腕關節。",
+    "clinical": "高速奔跑過度伸展時，橈腕骨與中間腕骨背緣最容易發生骨軟骨碎片骨折（Carpal chip fracture）。",
+    "faceCount": 61
+  },
+  "radius_ulna_r_50": {
+    "groupId": "carpus_proximal",
+    "nameZh": "右側近列腕骨 (橈・中間・尺腕骨)",
+    "nameEn": "Right Proximal Row of Carpal Bones (Radial, Intermediate, Ulnar)",
+    "latin": "Ossa carpi (Ordo proximalis)",
+    "grp": "前肢承重系統",
+    "desc": "由內而外為橈腕骨、中間腕骨與尺腕骨，上接橈骨遠端形成橈腕關節（活動度最大），下接遠列腕骨形成中腕關節。",
+    "clinical": "高速奔跑過度伸展時，橈腕骨與中間腕骨背緣最容易發生骨軟骨碎片骨折（Carpal chip fracture）。",
+    "faceCount": 62
+  },
+  "radius_ulna_l_44": {
+    "groupId": "carpus_accessory",
+    "nameZh": "左側副腕骨 (腕後種子骨)",
+    "nameEn": "Left Accessory Carpal Bone",
+    "latin": "Os carpi accessorium",
+    "grp": "前肢承重系統",
+    "desc": "位於近列腕骨掌側（後方）的圓盤狀短骨（相當於人類豌豆骨），不直接負重，與屈肌支持帶共同圍成腕管。",
+    "clinical": "提供腕屈肌肌腱槓桿支點，保護通過腕管的指淺／深屈肌腱；跌倒撞擊可能導致垂直面骨折。",
+    "faceCount": 88
+  },
+  "radius_ulna_r_53": {
+    "groupId": "carpus_accessory",
+    "nameZh": "右側副腕骨 (腕後種子骨)",
+    "nameEn": "Right Accessory Carpal Bone",
+    "latin": "Os carpi accessorium",
+    "grp": "前肢承重系統",
+    "desc": "位於近列腕骨掌側（後方）的圓盤狀短骨（相當於人類豌豆骨），不直接負重，與屈肌支持帶共同圍成腕管。",
+    "clinical": "提供腕屈肌肌腱槓桿支點，保護通過腕管的指淺／深屈肌腱；跌倒撞擊可能導致垂直面骨折。",
+    "faceCount": 81
+  },
+  "carpal_l_38": {
+    "groupId": "carpus_distal",
+    "nameZh": "左側遠列腕骨 (第 2・3・4 腕骨)",
+    "nameEn": "Left Distal Row of Carpal Bones (C2, C3, C4)",
+    "latin": "Ossa carpi (Ordo distalis)",
+    "grp": "前肢承重系統",
+    "desc": "由內而外為第 2、第 3（最大，占遠列 2/3）與第 4 腕骨（第 1 腕骨僅約 50% 馬匹存在且極小），下接掌骨形成腕掌關節。",
+    "clinical": "第 3 腕骨承受極大垂直壓應力，賽馬常見第 3 腕骨板狀骨折（Slab fracture）與軟骨下骨硬化。",
+    "faceCount": 59
+  },
+  "carpal_l_39": {
+    "groupId": "carpus_distal",
+    "nameZh": "左側遠列腕骨 (第 2・3・4 腕骨)",
+    "nameEn": "Left Distal Row of Carpal Bones (C2, C3, C4)",
+    "latin": "Ossa carpi (Ordo distalis)",
+    "grp": "前肢承重系統",
+    "desc": "由內而外為第 2、第 3（最大，占遠列 2/3）與第 4 腕骨（第 1 腕骨僅約 50% 馬匹存在且極小），下接掌骨形成腕掌關節。",
+    "clinical": "第 3 腕骨承受極大垂直壓應力，賽馬常見第 3 腕骨板狀骨折（Slab fracture）與軟骨下骨硬化。",
+    "faceCount": 60
+  },
+  "carpal_l_42": {
+    "groupId": "carpus_distal",
+    "nameZh": "左側遠列腕骨 (第 2・3・4 腕骨)",
+    "nameEn": "Left Distal Row of Carpal Bones (C2, C3, C4)",
+    "latin": "Ossa carpi (Ordo distalis)",
+    "grp": "前肢承重系統",
+    "desc": "由內而外為第 2、第 3（最大，占遠列 2/3）與第 4 腕骨（第 1 腕骨僅約 50% 馬匹存在且極小），下接掌骨形成腕掌關節。",
+    "clinical": "第 3 腕骨承受極大垂直壓應力，賽馬常見第 3 腕骨板狀骨折（Slab fracture）與軟骨下骨硬化。",
+    "faceCount": 60
+  },
+  "radius_ulna_l_43": {
+    "groupId": "carpus_distal",
+    "nameZh": "左側遠列腕骨 (第 2・3・4 腕骨)",
+    "nameEn": "Left Distal Row of Carpal Bones (C2, C3, C4)",
+    "latin": "Ossa carpi (Ordo distalis)",
+    "grp": "前肢承重系統",
+    "desc": "由內而外為第 2、第 3（最大，占遠列 2/3）與第 4 腕骨（第 1 腕骨僅約 50% 馬匹存在且極小），下接掌骨形成腕掌關節。",
+    "clinical": "第 3 腕骨承受極大垂直壓應力，賽馬常見第 3 腕骨板狀骨折（Slab fracture）與軟骨下骨硬化。",
+    "faceCount": 59
+  },
+  "carpal_r_47": {
+    "groupId": "carpus_distal",
+    "nameZh": "右側遠列腕骨 (第 2・3・4 腕骨)",
+    "nameEn": "Right Distal Row of Carpal Bones (C2, C3, C4)",
+    "latin": "Ossa carpi (Ordo distalis)",
+    "grp": "前肢承重系統",
+    "desc": "由內而外為第 2、第 3（最大，占遠列 2/3）與第 4 腕骨（第 1 腕骨僅約 50% 馬匹存在且極小），下接掌骨形成腕掌關節。",
+    "clinical": "第 3 腕骨承受極大垂直壓應力，賽馬常見第 3 腕骨板狀骨折（Slab fracture）與軟骨下骨硬化。",
+    "faceCount": 59
+  },
+  "carpal_r_48": {
+    "groupId": "carpus_distal",
+    "nameZh": "右側遠列腕骨 (第 2・3・4 腕骨)",
+    "nameEn": "Right Distal Row of Carpal Bones (C2, C3, C4)",
+    "latin": "Ossa carpi (Ordo distalis)",
+    "grp": "前肢承重系統",
+    "desc": "由內而外為第 2、第 3（最大，占遠列 2/3）與第 4 腕骨（第 1 腕骨僅約 50% 馬匹存在且極小），下接掌骨形成腕掌關節。",
+    "clinical": "第 3 腕骨承受極大垂直壓應力，賽馬常見第 3 腕骨板狀骨折（Slab fracture）與軟骨下骨硬化。",
+    "faceCount": 62
+  },
+  "radius_ulna_r_51": {
+    "groupId": "carpus_distal",
+    "nameZh": "右側遠列腕骨 (第 2・3・4 腕骨)",
+    "nameEn": "Right Distal Row of Carpal Bones (C2, C3, C4)",
+    "latin": "Ossa carpi (Ordo distalis)",
+    "grp": "前肢承重系統",
+    "desc": "由內而外為第 2、第 3（最大，占遠列 2/3）與第 4 腕骨（第 1 腕骨僅約 50% 馬匹存在且極小），下接掌骨形成腕掌關節。",
+    "clinical": "第 3 腕骨承受極大垂直壓應力，賽馬常見第 3 腕骨板狀骨折（Slab fracture）與軟骨下骨硬化。",
+    "faceCount": 58
+  },
+  "radius_ulna_r_52": {
+    "groupId": "carpus_distal",
+    "nameZh": "右側遠列腕骨 (第 2・3・4 腕骨)",
+    "nameEn": "Right Distal Row of Carpal Bones (C2, C3, C4)",
+    "latin": "Ossa carpi (Ordo distalis)",
+    "grp": "前肢承重系統",
+    "desc": "由內而外為第 2、第 3（最大，占遠列 2/3）與第 4 腕骨（第 1 腕骨僅約 50% 馬匹存在且極小），下接掌骨形成腕掌關節。",
+    "clinical": "第 3 腕骨承受極大垂直壓應力，賽馬常見第 3 腕骨板狀骨折（Slab fracture）與軟骨下骨硬化。",
+    "faceCount": 62
+  },
+  "cannon_fore_l_16": {
+    "groupId": "cannon_fore",
+    "nameZh": "左側前大砲骨 (第三掌骨) 與夾骨",
+    "nameEn": "Left Fore Cannon (MC III) & Splint Bones (MC II/IV)",
+    "latin": "Os metacarpale III et II/IV",
+    "grp": "前肢承重系統",
+    "desc": "第三掌骨為極為堅固的圓柱狀承重骨；第二、第四掌骨退化為附於掌側兩旁的細長「夾骨（Splint bones）」。",
+    "clinical": "幼馬運動震盪易使砲骨前皮質發炎稱「管骨膜炎（Bucked shins）」；夾骨間韌帶骨化稱「夾骨瘤（Splints）」。",
+    "faceCount": 1031
+  },
+  "cannon_fore_r_17": {
+    "groupId": "cannon_fore",
+    "nameZh": "右側前大砲骨 (第三掌骨) 與夾骨",
+    "nameEn": "Right Fore Cannon (MC III) & Splint Bones (MC II/IV)",
+    "latin": "Os metacarpale III et II/IV",
+    "grp": "前肢承重系統",
+    "desc": "第三掌骨為極為堅固的圓柱狀承重骨；第二、第四掌骨退化為附於掌側兩旁的細長「夾骨（Splint bones）」。",
+    "clinical": "幼馬運動震盪易使砲骨前皮質發炎稱「管骨膜炎（Bucked shins）」；夾骨間韌帶骨化稱「夾骨瘤（Splints）」。",
+    "faceCount": 1049
+  },
+  "pastern_fore_l_23": {
+    "groupId": "pastern_fore",
+    "nameZh": "左側前肢第一指骨／繫骨 (P1)",
+    "nameEn": "Left Fore Proximal Phalanx (Long Pastern Bone, P1)",
+    "latin": "Phalanx proximalis (manus)",
+    "grp": "前肢承重系統",
+    "desc": "斜向前下方延伸，近端與第三掌骨及近端種子骨構成球節（Fetlock joint），遠端與冠骨構成繫關節。",
+    "clinical": "奔馳急停扭轉時，第一指骨近端矢狀溝易發生縱向劈裂骨折（Sagittal fracture）。",
+    "faceCount": 282
+  },
+  "pastern_fore_r_25": {
+    "groupId": "pastern_fore",
+    "nameZh": "右側前肢第一指骨／繫骨 (P1)",
+    "nameEn": "Right Fore Proximal Phalanx (Long Pastern Bone, P1)",
+    "latin": "Phalanx proximalis (manus)",
+    "grp": "前肢承重系統",
+    "desc": "斜向前下方延伸，近端與第三掌骨及近端種子骨構成球節（Fetlock joint），遠端與冠骨構成繫關節。",
+    "clinical": "奔馳急停扭轉時，第一指骨近端矢狀溝易發生縱向劈裂骨折（Sagittal fracture）。",
+    "faceCount": 278
+  },
+  "coronet_fore_l_22": {
+    "groupId": "coronet_fore",
+    "nameZh": "左側前肢第二指骨／冠骨 (P2)",
+    "nameEn": "Left Fore Middle Phalanx (Short Pastern Bone, P2)",
+    "latin": "Phalanx media (manus)",
+    "grp": "前肢承重系統",
+    "desc": "短粗方形骨，近端與繫骨形成繫關節（近指間關節），遠端部分包埋於蹄冠內與蹄骨、舟骨形成蹄關節。",
+    "clinical": "繫關節退化性骨關節炎伴隨骨贅增生，臨床俗稱「高位環骨（High ringbone）」。",
+    "faceCount": 216
+  },
+  "coronet_fore_r_24": {
+    "groupId": "coronet_fore",
+    "nameZh": "右側前肢第二指骨／冠骨 (P2)",
+    "nameEn": "Right Fore Middle Phalanx (Short Pastern Bone, P2)",
+    "latin": "Phalanx media (manus)",
+    "grp": "前肢承重系統",
+    "desc": "短粗方形骨，近端與繫骨形成繫關節（近指間關節），遠端部分包埋於蹄冠內與蹄骨、舟骨形成蹄關節。",
+    "clinical": "繫關節退化性骨關節炎伴隨骨贅增生，臨床俗稱「高位環骨（High ringbone）」。",
+    "faceCount": 214
+  },
+  "coffin_fore_l_26": {
+    "groupId": "coffin_fore",
+    "nameZh": "左側前肢第三指骨／蹄骨 (P3)",
+    "nameEn": "Left Fore Distal Phalanx (Coffin Bone, P3)",
+    "latin": "Phalanx distalis / Os ungulare (manus)",
+    "grp": "前肢承重系統",
+    "desc": "呈半月圓錐形，完全包覆於蹄匣內，靠真皮葉層與蹄壁角質葉層緊密互鎖懸吊全身重量；掌側緊鄰遠端種子骨（舟骨）。",
+    "clinical": "蹄葉炎（Laminitis）時葉層分離，指深屈肌腱拉扯蹄骨向下旋轉，嚴重時可穿破蹄底；舟骨症亦好發於前蹄。",
+    "faceCount": 202
+  },
+  "coronet_fore_r_27": {
+    "groupId": "coffin_fore",
+    "nameZh": "右側前肢第三指骨／蹄骨 (P3)",
+    "nameEn": "Right Fore Distal Phalanx (Coffin Bone, P3)",
+    "latin": "Phalanx distalis / Os ungulare (manus)",
+    "grp": "前肢承重系統",
+    "desc": "呈半月圓錐形，完全包覆於蹄匣內，靠真皮葉層與蹄壁角質葉層緊密互鎖懸吊全身重量；掌側緊鄰遠端種子骨（舟骨）。",
+    "clinical": "蹄葉炎（Laminitis）時葉層分離，指深屈肌腱拉扯蹄骨向下旋轉，嚴重時可穿破蹄底；舟骨症亦好發於前蹄。",
+    "faceCount": 205
+  },
+  "sacrum_95": {
+    "groupId": "pelvis",
+    "nameZh": "骨盆 (髂骨・坐骨・恥骨)",
+    "nameEn": "Pelvis (Ilium, Ischium & Pubis)",
+    "latin": "Os coxae / Pelvis",
+    "grp": "後肢推進系統",
+    "desc": "由左右髖骨於骨盆聯合癒合而成：髂骨翼外側為髖結節（腰角）、內側為薦結節；坐骨結節成臀角；髖臼容納股骨頭。",
+    "clinical": "通過狹窄門框撞擊常致髖結節骨折，外觀單側腰角塌陷稱「掉胯（Knocked-down hip）」。",
+    "faceCount": 3816
+  },
+  "pelvis_l_2": {
+    "groupId": "femur",
+    "nameZh": "左側股骨 (具第三轉子)",
+    "nameEn": "Left Femur (with Third Trochanter)",
+    "latin": "Os femoris",
+    "grp": "後肢推進系統",
+    "desc": "全身最粗壯長骨，外側骨幹具馬科特徵性「第三轉子（Third trochanter）」供臀淺肌附著；遠端內側滑車嵴特別巨大。",
+    "clinical": "股骨內側滑車嵴與上方的滑車結節，是後肢站立鎖定（Stay apparatus）勾掛髕骨的核心結構。",
+    "faceCount": 1631
+  },
+  "pelvis_r_3": {
+    "groupId": "femur",
+    "nameZh": "右側股骨 (具第三轉子)",
+    "nameEn": "Right Femur (with Third Trochanter)",
+    "latin": "Os femoris",
+    "grp": "後肢推進系統",
+    "desc": "全身最粗壯長骨，外側骨幹具馬科特徵性「第三轉子（Third trochanter）」供臀淺肌附著；遠端內側滑車嵴特別巨大。",
+    "clinical": "股骨內側滑車嵴與上方的滑車結節，是後肢站立鎖定（Stay apparatus）勾掛髕骨的核心結構。",
+    "faceCount": 1634
+  },
+  "femur_l_4": {
+    "groupId": "patella",
+    "nameZh": "左側髕骨 (膝蓋骨)",
+    "nameEn": "Left Patella",
+    "latin": "Patella",
+    "grp": "後肢推進系統",
+    "desc": "大型種子骨，內側附著髕骨副軟骨，下方以內、中、外三條髕直韌帶連接脛骨粗隆。",
+    "clinical": "馬站立休息時可將內側髕直韌帶與副軟骨勾鎖於股骨內側滑車嵴上；若無法自動解鎖則稱「髕骨上方固定」。",
+    "faceCount": 138
+  },
+  "femur_r_5": {
+    "groupId": "patella",
+    "nameZh": "右側髕骨 (膝蓋骨)",
+    "nameEn": "Right Patella",
+    "latin": "Patella",
+    "grp": "後肢推進系統",
+    "desc": "大型種子骨，內側附著髕骨副軟骨，下方以內、中、外三條髕直韌帶連接脛骨粗隆。",
+    "clinical": "馬站立休息時可將內側髕直韌帶與副軟骨勾鎖於股骨內側滑車嵴上；若無法自動解鎖則稱「髕骨上方固定」。",
+    "faceCount": 138
+  },
+  "tibia_fibula_l_8": {
+    "groupId": "tibia",
+    "nameZh": "左側脛骨",
+    "nameEn": "Left Tibia",
+    "latin": "Tibia",
+    "grp": "後肢推進系統",
+    "desc": "後肢小腿部主要承重長骨，近端前方具粗大脛骨粗隆，遠端滑車凹斜向排列與距骨形成強力絞鏈關節。",
+    "clinical": "脛骨內側面僅覆薄層皮膚、無肌肉保護，遭踢傷極易發生骨膜炎或粉碎性開放骨折。",
+    "faceCount": 1547
+  },
+  "tibia_fibula_r_9": {
+    "groupId": "tibia",
+    "nameZh": "右側脛骨",
+    "nameEn": "Right Tibia",
+    "latin": "Tibia",
+    "grp": "後肢推進系統",
+    "desc": "後肢小腿部主要承重長骨，近端前方具粗大脛骨粗隆，遠端滑車凹斜向排列與距骨形成強力絞鏈關節。",
+    "clinical": "脛骨內側面僅覆薄層皮膚、無肌肉保護，遭踢傷極易發生骨膜炎或粉碎性開放骨折。",
+    "faceCount": 1537
+  },
+  "tibia_fibula_l_12": {
+    "groupId": "fibula",
+    "nameZh": "左側腓骨 (退化細骨)",
+    "nameEn": "Left Fibula",
+    "latin": "Fibula",
+    "grp": "後肢推進系統",
+    "desc": "馬的腓骨高度退化，僅存近端腓骨頭（接脛骨外側髁）與向下漸尖的細長骨針，遠端則癒合於脛骨成為外踝。",
+    "clinical": "臨床 X 光判讀時須區分腓骨正常骨化中心分節與真正腓骨骨折。",
+    "faceCount": 129
+  },
+  "tibia_fibula_r_13": {
+    "groupId": "fibula",
+    "nameZh": "右側腓骨 (退化細骨)",
+    "nameEn": "Right Fibula",
+    "latin": "Fibula",
+    "grp": "後肢推進系統",
+    "desc": "馬的腓骨高度退化，僅存近端腓骨頭（接脛骨外側髁）與向下漸尖的細長骨針，遠端則癒合於脛骨成為外踝。",
+    "clinical": "臨床 X 光判讀時須區分腓骨正常骨化中心分節與真正腓骨骨折。",
+    "faceCount": 131
+  },
+  "tibia_fibula_l_6": {
+    "groupId": "calcaneus",
+    "nameZh": "左側跟骨 (飛節尖)",
+    "nameEn": "Left Calcaneus (Point of Hock)",
+    "latin": "Calcaneus",
+    "grp": "後肢推進系統",
+    "desc": "跗骨中最大且最靠後上方的長形骨，其向後上方突出的跟骨結節（Tuber calcanei）形成飛節尖，為跟腱（腓腸肌腱與趾淺屈肌腱）附著點。",
+    "clinical": "飛節尖皮下囊摩擦腫大俗稱「飛節頂腫（Capped hock）」；跟骨結節為後肢強大伸展槓桿臂。",
+    "faceCount": 503
+  },
+  "tibia_fibula_r_7": {
+    "groupId": "calcaneus",
+    "nameZh": "右側跟骨 (飛節尖)",
+    "nameEn": "Right Calcaneus (Point of Hock)",
+    "latin": "Calcaneus",
+    "grp": "後肢推進系統",
+    "desc": "跗骨中最大且最靠後上方的長形骨，其向後上方突出的跟骨結節（Tuber calcanei）形成飛節尖，為跟腱（腓腸肌腱與趾淺屈肌腱）附著點。",
+    "clinical": "飛節尖皮下囊摩擦腫大俗稱「飛節頂腫（Capped hock）」；跟骨結節為後肢強大伸展槓桿臂。",
+    "faceCount": 505
+  },
+  "tibia_fibula_l_10": {
+    "groupId": "talus",
+    "nameZh": "左側距骨 (跗滑車)",
+    "nameEn": "Left Talus",
+    "latin": "Talus",
+    "grp": "後肢推進系統",
+    "desc": "位於飛節前內側，近端具兩條深而斜向的滑車嵴，與脛骨遠端緊密嵌合，承受飛節幾乎全部的屈伸活動。",
+    "clinical": "幼馬距骨外側滑車嵴遠端是分離性骨軟骨炎（OCD）最常見的好發部位，常導致飛節積液（Bog spavin）。",
+    "faceCount": 250
+  },
+  "tibia_fibula_r_11": {
+    "groupId": "talus",
+    "nameZh": "右側距骨 (跗滑車)",
+    "nameEn": "Right Talus",
+    "latin": "Talus",
+    "grp": "後肢推進系統",
+    "desc": "位於飛節前內側，近端具兩條深而斜向的滑車嵴，與脛骨遠端緊密嵌合，承受飛節幾乎全部的屈伸活動。",
+    "clinical": "幼馬距骨外側滑車嵴遠端是分離性骨軟骨炎（OCD）最常見的好發部位，常導致飛節積液（Bog spavin）。",
+    "faceCount": 253
+  },
+  "tarsus_calcaneus_l_30": {
+    "groupId": "tarsus_distal",
+    "nameZh": "左側中央跗骨與遠列跗骨 (T1+2・T3・T4)",
+    "nameEn": "Left Central & Distal Tarsal Bones",
+    "latin": "Os tarsi centrale et ossa tarsalia I–IV",
+    "grp": "後肢推進系統",
+    "desc": "扁平緊密排列的中央跗骨、第 3 跗骨、第 4 跗骨及癒合的第 1+2 跗骨，幾乎無活動度，專責吸收壓力並傳導至後砲骨。",
+    "clinical": "遠端跗間關節與跗蹠關節之慢性退化性骨關節炎，稱為「飛節內腫（Bone spavin）」，是後肢跛行最常見病因。",
+    "faceCount": 103
+  },
+  "tarsus_calcaneus_l_31": {
+    "groupId": "tarsus_distal",
+    "nameZh": "左側中央跗骨與遠列跗骨 (T1+2・T3・T4)",
+    "nameEn": "Left Central & Distal Tarsal Bones",
+    "latin": "Os tarsi centrale et ossa tarsalia I–IV",
+    "grp": "後肢推進系統",
+    "desc": "扁平緊密排列的中央跗骨、第 3 跗骨、第 4 跗骨及癒合的第 1+2 跗骨，幾乎無活動度，專責吸收壓力並傳導至後砲骨。",
+    "clinical": "遠端跗間關節與跗蹠關節之慢性退化性骨關節炎，稱為「飛節內腫（Bone spavin）」，是後肢跛行最常見病因。",
+    "faceCount": 83
+  },
+  "tarsus_calcaneus_l_32": {
+    "groupId": "tarsus_distal",
+    "nameZh": "左側中央跗骨與遠列跗骨 (T1+2・T3・T4)",
+    "nameEn": "Left Central & Distal Tarsal Bones",
+    "latin": "Os tarsi centrale et ossa tarsalia I–IV",
+    "grp": "後肢推進系統",
+    "desc": "扁平緊密排列的中央跗骨、第 3 跗骨、第 4 跗骨及癒合的第 1+2 跗骨，幾乎無活動度，專責吸收壓力並傳導至後砲骨。",
+    "clinical": "遠端跗間關節與跗蹠關節之慢性退化性骨關節炎，稱為「飛節內腫（Bone spavin）」，是後肢跛行最常見病因。",
+    "faceCount": 88
+  },
+  "tarsus_calcaneus_r_33": {
+    "groupId": "tarsus_distal",
+    "nameZh": "右側中央跗骨與遠列跗骨 (T1+2・T3・T4)",
+    "nameEn": "Right Central & Distal Tarsal Bones",
+    "latin": "Os tarsi centrale et ossa tarsalia I–IV",
+    "grp": "後肢推進系統",
+    "desc": "扁平緊密排列的中央跗骨、第 3 跗骨、第 4 跗骨及癒合的第 1+2 跗骨，幾乎無活動度，專責吸收壓力並傳導至後砲骨。",
+    "clinical": "遠端跗間關節與跗蹠關節之慢性退化性骨關節炎，稱為「飛節內腫（Bone spavin）」，是後肢跛行最常見病因。",
+    "faceCount": 104
+  },
+  "tarsus_calcaneus_r_34": {
+    "groupId": "tarsus_distal",
+    "nameZh": "右側中央跗骨與遠列跗骨 (T1+2・T3・T4)",
+    "nameEn": "Right Central & Distal Tarsal Bones",
+    "latin": "Os tarsi centrale et ossa tarsalia I–IV",
+    "grp": "後肢推進系統",
+    "desc": "扁平緊密排列的中央跗骨、第 3 跗骨、第 4 跗骨及癒合的第 1+2 跗骨，幾乎無活動度，專責吸收壓力並傳導至後砲骨。",
+    "clinical": "遠端跗間關節與跗蹠關節之慢性退化性骨關節炎，稱為「飛節內腫（Bone spavin）」，是後肢跛行最常見病因。",
+    "faceCount": 83
+  },
+  "tarsus_calcaneus_r_35": {
+    "groupId": "tarsus_distal",
+    "nameZh": "右側中央跗骨與遠列跗骨 (T1+2・T3・T4)",
+    "nameEn": "Right Central & Distal Tarsal Bones",
+    "latin": "Os tarsi centrale et ossa tarsalia I–IV",
+    "grp": "後肢推進系統",
+    "desc": "扁平緊密排列的中央跗骨、第 3 跗骨、第 4 跗骨及癒合的第 1+2 跗骨，幾乎無活動度，專責吸收壓力並傳導至後砲骨。",
+    "clinical": "遠端跗間關節與跗蹠關節之慢性退化性骨關節炎，稱為「飛節內腫（Bone spavin）」，是後肢跛行最常見病因。",
+    "faceCount": 88
+  },
+  "cannon_hind_l_14": {
+    "groupId": "cannon_hind",
+    "nameZh": "左側後大砲骨 (第三蹠骨) 與副蹠骨",
+    "nameEn": "Left Hind Cannon (MT III) & Splint Bones (MT II/IV)",
+    "latin": "Os metatarsale III et II/IV",
+    "grp": "後肢推進系統",
+    "desc": "較前大砲骨長約 1/6、斷面較圓以抵抗後肢推進彎矩，蹠側兩旁同樣附有退化的第二、第四蹠骨。",
+    "clinical": "外側第四蹠骨較粗大，外傷遭他馬踢擊容易發生開放性副蹠骨骨折。",
+    "faceCount": 1046
+  },
+  "cannon_hind_r_15": {
+    "groupId": "cannon_hind",
+    "nameZh": "右側後大砲骨 (第三蹠骨) 與副蹠骨",
+    "nameEn": "Right Hind Cannon (MT III) & Splint Bones (MT II/IV)",
+    "latin": "Os metatarsale III et II/IV",
+    "grp": "後肢推進系統",
+    "desc": "較前大砲骨長約 1/6、斷面較圓以抵抗後肢推進彎矩，蹠側兩旁同樣附有退化的第二、第四蹠骨。",
+    "clinical": "外側第四蹠骨較粗大，外傷遭他馬踢擊容易發生開放性副蹠骨骨折。",
+    "faceCount": 1039
+  },
+  "pastern_hind_l_18": {
+    "groupId": "pastern_hind",
+    "nameZh": "左側後肢第一趾骨／繫骨 (P1)",
+    "nameEn": "Left Hind Proximal Phalanx (Long Pastern Bone, P1)",
+    "latin": "Phalanx proximalis (pedis)",
+    "grp": "後肢推進系統",
+    "desc": "後肢球節下方之第一趾骨，較前肢繫骨略窄長且角度稍直立，承受後肢蹬地推進力。",
+    "clinical": "球節背近端偶見骨軟骨碎片，亦可能於急轉加速時發生矢狀骨折。",
+    "faceCount": 188
+  },
+  "pastern_hind_r_19": {
+    "groupId": "pastern_hind",
+    "nameZh": "右側後肢第一趾骨／繫骨 (P1)",
+    "nameEn": "Right Hind Proximal Phalanx (Long Pastern Bone, P1)",
+    "latin": "Phalanx proximalis (pedis)",
+    "grp": "後肢推進系統",
+    "desc": "後肢球節下方之第一趾骨，較前肢繫骨略窄長且角度稍直立，承受後肢蹬地推進力。",
+    "clinical": "球節背近端偶見骨軟骨碎片，亦可能於急轉加速時發生矢狀骨折。",
+    "faceCount": 190
+  },
+  "coronet_hind_l_20": {
+    "groupId": "coronet_hind",
+    "nameZh": "左側後肢第二趾骨／冠骨 (P2)",
+    "nameEn": "Left Hind Middle Phalanx (Short Pastern Bone, P2)",
+    "latin": "Phalanx media (pedis)",
+    "grp": "後肢推進系統",
+    "desc": "介於後肢繫骨與後蹄骨之間的短柱狀骨，構成近趾間關節與遠趾間關節。",
+    "clinical": "急停轉向頻繁的西部競技馬較易在後肢繫關節出現骨關節炎。",
+    "faceCount": 209
+  },
+  "coronet_hind_r_21": {
+    "groupId": "coronet_hind",
+    "nameZh": "右側後肢第二趾骨／冠骨 (P2)",
+    "nameEn": "Right Hind Middle Phalanx (Short Pastern Bone, P2)",
+    "latin": "Phalanx media (pedis)",
+    "grp": "後肢推進系統",
+    "desc": "介於後肢繫骨與後蹄骨之間的短柱狀骨，構成近趾間關節與遠趾間關節。",
+    "clinical": "急停轉向頻繁的西部競技馬較易在後肢繫關節出現骨關節炎。",
+    "faceCount": 210
+  },
+  "coronet_hind_l_28": {
+    "groupId": "coffin_hind",
+    "nameZh": "左側後肢第三趾骨／蹄骨 (P3)",
+    "nameEn": "Left Hind Distal Phalanx (Coffin Bone, P3)",
+    "latin": "Phalanx distalis / Os ungulare (pedis)",
+    "grp": "後肢推進系統",
+    "desc": "包覆於後蹄匣內，外形較前蹄骨尖窄、蹄底凹度較深且背壁較陡峭，利於抓地蹬推加速。",
+    "clinical": "因後肢僅承重約 40%，後蹄發生蹄葉炎與舟骨症的機率明顯低於前蹄。",
+    "faceCount": 203
+  },
+  "coronet_hind_r_29": {
+    "groupId": "coffin_hind",
+    "nameZh": "右側後肢第三趾骨／蹄骨 (P3)",
+    "nameEn": "Right Hind Distal Phalanx (Coffin Bone, P3)",
+    "latin": "Phalanx distalis / Os ungulare (pedis)",
+    "grp": "後肢推進系統",
+    "desc": "包覆於後蹄匣內，外形較前蹄骨尖窄、蹄底凹度較深且背壁較陡峭，利於抓地蹬推加速。",
+    "clinical": "因後肢僅承重約 40%，後蹄發生蹄葉炎與舟骨症的機率明顯低於前蹄。",
+    "faceCount": 200
   }
 }

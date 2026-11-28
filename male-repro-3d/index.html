@@ -43,17 +43,56 @@ html,body{margin:0;height:100%;overflow:hidden;background:#0d1b2a;color:#e8eef5;
 .lab small{display:block;color:#8fd0ff;font-size:9.5px;line-height:1.1}
 .lab.sel{border-color:#ffd479;background:rgba(90,60,5,.92)}
 #tip{position:absolute;pointer-events:none;background:#000c;color:#fff;border-radius:4px;padding:2px 7px;font-size:12px;z-index:30;display:none}
-#cv{position:absolute;left:290px;right:320px;top:46px;bottom:0}
+#cv{position:absolute;left:290px;right:320px;top:46px;bottom:0;background:radial-gradient(ellipse at 50% 38%,#3a4656 0%,#222c39 45%,#0e151e 100%)}
 #cv canvas{display:block}
 #err{position:absolute;left:300px;top:60px;color:#f88;z-index:50}
+
+/* === Responsive Layout, Topbar & Label Polish === */
+#top{gap:8px;padding:0 12px}
+#top h1{margin:0 4px 0 0;flex:none}
+#tabs{flex:1;min-width:0;scrollbar-width:thin;padding-bottom:1px}
+.top-link{display:inline-flex;align-items:center;background:#1a334c;border:1px solid #2f5577;color:#cfe3f5;text-decoration:none;padding:5px 9px;border-radius:6px;font-size:12.5px;white-space:nowrap;flex:none}
+.top-link:hover{background:#274b6e;border-color:#6bb2ff;color:#fff}
+#wbtn{margin-left:auto;background:#1f3a55;border:1px solid #2f5577;color:#cfe3f5;padding:6px 10px;border-radius:6px;cursor:pointer;white-space:nowrap;font-size:13px;flex:none}
+body.wide #left,body.wide #right{display:none}
+body.wide #cv{left:0;right:0}
+.mob-btn{display:none;background:#1f3a55;border:1px solid #2f5577;color:#cfe3f5;padding:5px 9px;border-radius:6px;cursor:pointer;white-space:nowrap;font-size:12.5px;flex:none}
+.mob-btn.on{background:#2f7fd0;border-color:#6bb2ff;color:#fff}
+#ctrl{max-height:48%;overflow-y:auto}
+.lab{max-width:190px;overflow:hidden;text-overflow:ellipsis}
+.lab.compact{padding:1px 5px;font-size:11px;line-height:1.25;max-width:160px}
+.lab.compact small{display:none}
+.lab.compact.sel small,.lab.compact:hover small{display:block}
+#drawer-backdrop{display:none;position:fixed;inset:46px 0 0 0;background:rgba(4,10,18,.55);z-index:15}
+@media (max-width:1280px){
+  #left{width:248px}#right{width:272px}#cv{left:248px;right:272px}
+  .lab{max-width:155px;font-size:11px}
+}
+@media (max-width:960px){
+  #wbtn{display:none}
+  .mob-btn{display:inline-flex;align-items:center}
+  #cv{left:0!important;right:0!important}
+  #left,#right{position:fixed;top:46px;bottom:0;width:min(86vw,320px);z-index:25;transform:translateX(-105%);transition:transform .24s ease;box-shadow:0 12px 32px rgba(0,0,0,.65)}
+  #right{left:auto;right:0;transform:translateX(105%)}
+  body.open-left #left{transform:translateX(0)}
+  body.open-right #right{transform:translateX(0)}
+  body.open-left #drawer-backdrop,body.open-right #drawer-backdrop{display:block}
+}
+@media (max-width:560px){
+  #top{padding:0 6px;gap:4px}
+  #top h1{display:none}
+  .tab{padding:5px 8px;font-size:12px}
+}
 </style>
 </head>
 <body>
-<div id="top"><h1>🐂🐓 雄性生殖系統 3D 解剖模型</h1><div id="tabs"></div></div>
+<div id="top"><a class="top-link" href="../" title="返回 3D 生物學總覽首頁">← 首頁</a><h1>🐂🐓 雄性生殖系統 3D 解剖模型</h1><div id="tabs"></div><button class="mob-btn" id="mleft" type="button">☰ 清單</button><button class="mob-btn" id="mright" type="button">ℹ️ 說明</button><div id="wbtn" title="隱藏／顯示左右面板">⛶ 面板</div></div>
+<div id="drawer-backdrop"></div>
 <div id="left"><div id="desc"></div><h2>構造清單（勾選＝顯示，點名稱＝選取）</h2><div id="plist"></div></div>
 <div id="cv"><div id="leaders"><svg width="100%" height="100%" id="svg"></svg></div><div id="labels"></div></div>
 <div id="right"><div id="ctrl">
   <label>標籤：<select id="lm"><option value="all">全部顯示</option><option value="sel">僅選取項目</option><option value="none">隱藏</option></select></label>
+  <label title="勾選＝外層壁半透明，便於檢視深層管道"><input type="checkbox" id="xray"> 透視模式（看內部構造）</label>
   <label><input type="checkbox" id="iso"> 孤立選取（其餘淡化）</label>
   <label><input type="checkbox" id="rot"> 自動旋轉</label>
   <div id="extra"></div>

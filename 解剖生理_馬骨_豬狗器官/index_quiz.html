@@ -9,8 +9,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <!-- Three.js & OrbitControls -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="three.min.js"></script>
+  <script src="OrbitControls.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/OBJLoader.js"></script>
   <!-- 下載之真實 3D 馬全身骨骼、狗器官、豬器官解剖數據 (無 CORS 限制、100% 純本機離線載入) -->
@@ -120,11 +120,13 @@
 
     /* Top Navigation Bar */
     header.top-nav {
-      height: 56px;
-      padding: 0 18px;
+      min-height: 56px;
+      padding: 6px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
       background: rgba(15, 23, 42, 0.9);
       backdrop-filter: blur(8px);
       border-bottom: 1px solid var(--border-color);
@@ -841,7 +843,7 @@
     
     <!-- Top Navigation -->
     <header class="top-nav interactive">
-      <div class="brand-title">
+      <div class="brand-title"><a href="./" style="color:#93c5fd;text-decoration:none;font-size:0.82rem;border:1px solid #334155;padding:4px 9px;border-radius:8px;background:#1e293b;">← 導覽版</a>
         <span>🐾 獸醫 3D 解剖探索系統</span>
         <span class="badge-3d">WebGL 3D</span>
       </div>
@@ -1851,9 +1853,9 @@
                 child.userData.nameZh = info.nameZh;
                 child.userData.nameEn = info.nameEn;
                 child.userData.latin = info.latin;
-                child.userData.region = "馬全身骨骼系統";
+                child.userData.region = info.grp || "馬全身骨骼系統";
                 child.userData.desc = info.desc;
-                child.userData.clinicalPoint = info.desc;
+                child.userData.clinicalPoint = info.clinical || info.desc;
                 child.userData.aliases = [info.nameZh.split(" ")[0], info.nameZh];
               } else {
                 child.userData.id = child.name || `horse_bone_${meshCount}`;
@@ -2593,6 +2595,7 @@
             pig_gallbladder: this.organMaterials.gallbladder,
             pig_spleen: this.organMaterials.spleen,
             pig_pancreas: this.organMaterials.pancreas,
+            pig_small_intestine: this.organMaterials.intestine || this.organMaterials.stomach,
             pig_spiral_colon: this.organMaterials.spiral_colon,
             pig_cecum: this.organMaterials.colon,
             pig_kidneys: this.organMaterials.kidney,

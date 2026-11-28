@@ -1,79 +1,85 @@
 # Porcine organ materials
 newmtl pig_os_rostri
-Kd 0.830 0.790 0.560
+Kd 0.860 0.820 0.640
 Ka 0.060 0.060 0.060
-Ks 0.20 0.20 0.20
+Ks 0.18 0.18 0.18
 Ns 24
 
 newmtl pig_trachea_and_bronchus
-Kd 0.700 0.840 0.880
+Kd 0.680 0.850 0.920
 Ka 0.060 0.060 0.060
-Ks 0.20 0.20 0.20
+Ks 0.18 0.18 0.18
 Ns 24
 
 newmtl pig_heart
-Kd 0.720 0.160 0.200
+Kd 0.740 0.160 0.220
 Ka 0.060 0.060 0.060
-Ks 0.20 0.20 0.20
+Ks 0.18 0.18 0.18
 Ns 24
 
 newmtl pig_lungs
-Kd 0.910 0.580 0.620
+Kd 0.920 0.560 0.620
 Ka 0.060 0.060 0.060
-Ks 0.20 0.20 0.20
-Ns 24
-
-newmtl pig_stomach_diverticulum
-Kd 0.870 0.660 0.580
-Ka 0.060 0.060 0.060
-Ks 0.20 0.20 0.20
+Ks 0.18 0.18 0.18
 Ns 24
 
 newmtl pig_liver_lobules
-Kd 0.480 0.160 0.130
+Kd 0.500 0.150 0.140
 Ka 0.060 0.060 0.060
-Ks 0.20 0.20 0.20
+Ks 0.18 0.18 0.18
 Ns 24
 
 newmtl pig_gallbladder
-Kd 0.180 0.480 0.240
+Kd 0.160 0.520 0.260
 Ka 0.060 0.060 0.060
-Ks 0.20 0.20 0.20
+Ks 0.18 0.18 0.18
+Ns 24
+
+newmtl pig_stomach_diverticulum
+Kd 0.900 0.620 0.580
+Ka 0.060 0.060 0.060
+Ks 0.18 0.18 0.18
 Ns 24
 
 newmtl pig_spleen
-Kd 0.470 0.130 0.210
+Kd 0.440 0.120 0.220
 Ka 0.060 0.060 0.060
-Ks 0.20 0.20 0.20
+Ks 0.18 0.18 0.18
 Ns 24
 
 newmtl pig_pancreas
-Kd 0.910 0.800 0.570
+Kd 0.930 0.820 0.520
 Ka 0.060 0.060 0.060
-Ks 0.20 0.20 0.20
+Ks 0.18 0.18 0.18
 Ns 24
 
-newmtl pig_spiral_colon
-Kd 0.760 0.470 0.490
+newmtl pig_small_intestine
+Kd 0.950 0.720 0.680
 Ka 0.060 0.060 0.060
-Ks 0.20 0.20 0.20
+Ks 0.18 0.18 0.18
 Ns 24
 
 newmtl pig_cecum
-Kd 0.800 0.430 0.450
+Kd 0.840 0.520 0.240
 Ka 0.060 0.060 0.060
-Ks 0.20 0.20 0.20
+Ks 0.18 0.18 0.18
+Ns 24
+
+newmtl pig_spiral_colon
+Kd 0.760 0.440 0.220
+Ka 0.060 0.060 0.060
+Ks 0.18 0.18 0.18
 Ns 24
 
 newmtl pig_kidneys
-Kd 0.530 0.180 0.180
+Kd 0.560 0.180 0.220
 Ka 0.060 0.060 0.060
-Ks 0.20 0.20 0.20
+Ks 0.18 0.18 0.18
 Ns 24
 
 newmtl pig_urinary_bladder
-Kd 0.910 0.720 0.390
+Kd 0.920 0.740 0.360
 Ka 0.060 0.060 0.060
-Ks 0.20 0.20 0.20
+Ks 0.18 0.18 0.18
 Ns 24
 
