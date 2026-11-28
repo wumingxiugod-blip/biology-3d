@@ -626,6 +626,7 @@ body.wide #cv { left: 0; right: 0; }
 <div id="right">
   <div id="ctrl">
     <label>標籤：<select id="lm">
+      <option value="key" selected>重點標註（含選取項）</option>
       <option value="all">全部顯示</option>
       <option value="sel">僅選取項目</option>
       <option value="none">隱藏</option>
@@ -801,6 +802,8 @@ function regPart(data) {
     anchorMeshes: data.anchorMeshes || null,
     anchorAt: data.anchorAt || null,
     visible: data.visible !== undefined ? data.visible : true,
+    isKey: data.isKey !== undefined ? data.isKey : true,
+    region: data.region || 'all',
     wall: !!data.wall,
     wallO: data.wallO || 0.95
   };
@@ -820,183 +823,233 @@ function regPart(data) {
    SCENE 定義
    ========================================================= */
 
-// SCENE 1: 馬全身骨骼
+const HORSE_GROUP_DEF = [
+  { id: "cranium", names: ["cranium_200"], region: "head_fore", isKey: true, zh: "頭顱骨 (腦顱與面骨)", en: "Skull (Cranium & Facial Bones)", latin: "Ossa cranii et faciei", grp: "頭顱與牙齒", desc: "包含額骨、頂骨、枕骨、顳骨、鼻骨、上頜骨與切齒骨，具顯著面脊及相通的額竇與上頜竇。", clinical: "面脊為重要體表標記；上頜竇蓄膿常於面脊上方行環鑽引流。" },
+  { id: "mandible", names: ["mandible_82"], region: "head_fore", isKey: true, zh: "下頜骨", en: "Mandible", latin: "Mandibula", grp: "頭顱與牙齒", desc: "左右下頜骨於前端癒合，下頜體承載下齒列，寬大下頜支供咬肌附著。", clinical: "下頜體腹緣的血管切跡是臨床觸摸面動脈脈搏的標準部位。" },
+  { id: "incisors_upper", names: ["mandible_194", "mandible_195", "mandible_196", "mandible_197", "mandible_198", "mandible_199"], region: "head_fore", isKey: false, zh: "上切齒 (6 枚)", en: "Upper Incisors", latin: "Dentes incisivi superiores", grp: "頭顱與牙齒", desc: "上頜切齒骨上的 6 枚切齒（I1 中央齒、I2 中間齒、I3 隅齒），用於咬斷牧草。", clinical: "配合下切齒齒坎磨損與齒星形態可鑑別馬匹年齡。" },
+  { id: "incisors_lower", names: ["mandible_76", "mandible_77", "mandible_78", "mandible_79", "mandible_80", "mandible_81"], region: "head_fore", isKey: false, zh: "下切齒 (6 枚)", en: "Lower Incisors", latin: "Dentes incisivi inferiores", grp: "頭顱與牙齒", desc: "下頜骨前端的 6 枚切齒，與上切齒對咬切草。", clinical: "下切齒齒坎（黑窩）分別於 6、7、8 歲磨平，是最經典的年齡鑑別依據。" },
+  { id: "cheek_teeth_upper", names: ["mandible_182", "mandible_183", "mandible_184", "mandible_185", "mandible_186", "mandible_187", "mandible_188", "mandible_189", "mandible_190", "mandible_191", "mandible_192", "mandible_193"], region: "head_fore", isKey: false, zh: "上頰齒 (前臼齒與臼齒 12 枚)", en: "Upper Cheek Teeth", latin: "Dentes praemolares et molares sup.", grp: "頭顱與牙齒", desc: "左右各 6 枚高冠齒（P2–P4、M1–M3），終生持續萌出補償研磨磨損。", clinical: "上頰齒頰側緣易磨出銳利齒尖刮傷頰黏膜，需定期銼牙（Floating）。" },
+  { id: "cheek_teeth_lower", names: ["mandible_83", "mandible_84", "mandible_85", "mandible_86", "mandible_87", "mandible_88", "mandible_89", "mandible_90", "mandible_91", "mandible_92", "mandible_93", "mandible_94"], region: "head_fore", isKey: false, zh: "下頰齒 (前臼齒與臼齒 12 枚)", en: "Lower Cheek Teeth", latin: "Dentes praemolares et molares inf.", grp: "頭顱與牙齒", desc: "左右各 6 枚下頷高冠頰齒，與上頰齒呈斜向咬合研磨草料。", clinical: "下頰齒舌側緣易形成銳齒尖刮傷舌側，影響咀嚼與銜鐵配合。" },
+  { id: "cervical_c1", names: ["facial_bones_101"], region: "head_fore", isKey: true, zh: "第 1 頸椎／環椎 (C1)", en: "Atlas (C1)", latin: "Atlas", grp: "頸椎 (C1–C7)", desc: "呈環狀、無椎體與棘突，兩側具寬大寰椎翼，與枕骨髁構成點頭關節（寰枕關節）。", clinical: "寰椎翼於耳後皮下可觸摸，是寰枕池腦脊髓液（CSF）穿刺的重要定位點。" },
+  { id: "cervical_c2", names: ["cervical_vert_102"], region: "head_fore", isKey: true, zh: "第 2 頸椎／樞椎 (C2)", en: "Axis (C2)", latin: "Axis", grp: "頸椎 (C1–C7)", desc: "全身最長的頸椎，前端具匙狀齒突伸入環椎腹弓，背側具高大縱長棘突，構成頭部轉動的寰樞關節。", clinical: "外傷或發育異常可引起寰樞關節半脫位，壓迫高段頸髓。" },
+  { id: "cervical_c3", names: ["cervical_vert_100"], region: "head_fore", isKey: false, zh: "第 3 頸椎 (C3)", en: "3rd Cervical Vertebra (C3)", latin: "Vertebra cervicalis III", grp: "頸椎 (C1–C7)", desc: "標準後凹型長椎體，具雙叉狀橫突與橫突孔（供椎動脈通過），棘突呈低嵴狀。", clinical: "C3–C4 關節突退化或椎管狹窄是馬頸椎壓迫症（Wobbler syndrome）好發部位之一。" },
+  { id: "cervical_c4", names: ["cervical_vert_99"], region: "head_fore", isKey: false, zh: "第 4 頸椎 (C4)", en: "4th Cervical Vertebra (C4)", latin: "Vertebra cervicalis IV", grp: "頸椎 (C1–C7)", desc: "位於頸部中段，椎體粗長、關節突寬大，提供頭頸大幅度上下與側向活動。", clinical: "C3–C5 椎間關節為動態性頸髓壓迫常見節段。" },
+  { id: "cervical_c5", names: ["cervical_vert_98"], region: "head_fore", isKey: false, zh: "第 5 頸椎 (C5)", en: "5th Cervical Vertebra (C5)", latin: "Vertebra cervicalis V", grp: "頸椎 (C1–C7)", desc: "頸部中下段頸椎，橫突腹側支開始擴大，為頸長肌與斜角肌附著處。", clinical: "頸部肌肉注射安全三角區位於 C3–C5 棘突下方、項韌帶腹側與頸椎背側之間。" },
+  { id: "cervical_c6", names: ["cervical_vert_97"], region: "head_fore", isKey: true, zh: "第 6 頸椎 (C6)", en: "6th Cervical Vertebra (C6)", latin: "Vertebra cervicalis VI", grp: "頸椎 (C1–C7)", desc: "具獨特三裂狀橫突與寬大板狀腹側板（Lamina ventralis），為頸下段重要解剖標記。", clinical: "C6–C7 關節突骨關節炎可壓迫臂神經叢分支，引起前肢不明原因跛行。" },
+  { id: "cervical_c7", names: ["cervical_vert_96"], region: "head_fore", isKey: false, zh: "第 7 頸椎 (C7)", en: "7th Cervical Vertebra (C7)", latin: "Vertebra cervicalis VII", grp: "頸椎 (C1–C7)", desc: "頸椎中最短、棘突較高，無橫突孔，椎體後端兩側具後肋凹與第 1 肋頭相關節。", clinical: "C7–T1 交界承受頸胸段剪力，關節病變易導致頸根部疼痛或僵硬。" },
+  { id: "thoracic_t1", names: ["thoracic_vert_124"], region: "head_fore", isKey: false, anchorAt: "top", zh: "第 1 胸椎 (T1)", en: "Thoracic Vertebra T1", latin: "Vertebra thoracica 1", grp: "胸椎 (T1–T18)", desc: "前段胸椎，棘突開始迅速增高並向後傾斜。", clinical: "與前段真肋共同保護胸腔入口、氣管與心基大血管。" },
+  { id: "thoracic_t2", names: ["thoracic_vert_126"], region: "head_fore", isKey: false, anchorAt: "top", zh: "第 2 胸椎 (T2)", en: "Thoracic Vertebra T2", latin: "Vertebra thoracica 2", grp: "胸椎 (T1–T18)", desc: "前段胸椎，棘突開始迅速增高並向後傾斜。", clinical: "與前段真肋共同保護胸腔入口、氣管與心基大血管。" },
+  { id: "thoracic_t3", names: ["thoracic_vert_125"], region: "head_fore", isKey: false, anchorAt: "top", zh: "第 3 胸椎 (T3)", en: "Thoracic Vertebra T3", latin: "Vertebra thoracica 3", grp: "胸椎 (T1–T18)", desc: "棘突極度高聳（構成馬體表最高點「鬐甲 Withers」核心段），供項韌帶索狀部與背肌附著。", clinical: "鬐甲部鞍具壓迫摩擦易致棘上囊炎與鬐甲瘻管（Fistulous withers）。" },
+  { id: "thoracic_t4", names: ["thoracic_vert_123"], region: "head_fore", isKey: true, anchorAt: "top", zh: "第 4 胸椎 (T4)（鬐甲峰）", en: "Thoracic Vertebra T4", latin: "Vertebra thoracica 4", grp: "胸椎 (T1–T18)", desc: "棘突極度高聳（構成馬體表最高點「鬐甲 Withers」核心段），供項韌帶索狀部與背肌附著。", clinical: "鬐甲部鞍具壓迫摩擦易致棘上囊炎與鬐甲瘻管（Fistulous withers）。" },
+  { id: "thoracic_t5", names: ["thoracic_vert_112"], region: "head_fore", isKey: false, anchorAt: "top", zh: "第 5 胸椎 (T5)", en: "Thoracic Vertebra T5", latin: "Vertebra thoracica 5", grp: "胸椎 (T1–T18)", desc: "棘突極度高聳（構成馬體表最高點「鬐甲 Withers」核心段），供項韌帶索狀部與背肌附著。", clinical: "鬐甲部鞍具壓迫摩擦易致棘上囊炎與鬐甲瘻管（Fistulous withers）。" },
+  { id: "thoracic_t6", names: ["thoracic_vert_111"], region: "head_fore", isKey: false, anchorAt: "top", zh: "第 6 胸椎 (T6)", en: "Thoracic Vertebra T6", latin: "Vertebra thoracica 6", grp: "胸椎 (T1–T18)", desc: "棘突極度高聳（構成馬體表最高點「鬐甲 Withers」核心段），供項韌帶索狀部與背肌附著。", clinical: "鬐甲部鞍具壓迫摩擦易致棘上囊炎與鬐甲瘻管（Fistulous withers）。" },
+  { id: "thoracic_t7", names: ["thoracic_vert_110"], region: "head_fore", isKey: false, anchorAt: "top", zh: "第 7 胸椎 (T7)", en: "Thoracic Vertebra T7", latin: "Vertebra thoracica 7", grp: "胸椎 (T1–T18)", desc: "胸椎中段，棘突高度逐漸遞減並後傾，承載馬鞍前中段重量。", clinical: "棘突間距隨年齡與負重變化，需注意合適鞍具配重。" },
+  { id: "thoracic_t8", names: ["thoracic_vert_109"], region: "head_fore", isKey: false, anchorAt: "top", zh: "第 8 胸椎 (T8)", en: "Thoracic Vertebra T8", latin: "Vertebra thoracica 8", grp: "胸椎 (T1–T18)", desc: "胸椎中段，棘突高度逐漸遞減並後傾，承載馬鞍前中段重量。", clinical: "棘突間距隨年齡與負重變化，需注意合適鞍具配重。" },
+  { id: "thoracic_t9", names: ["thoracic_vert_113"], region: "head_fore", isKey: false, anchorAt: "top", zh: "第 9 胸椎 (T9)", en: "Thoracic Vertebra T9", latin: "Vertebra thoracica 9", grp: "胸椎 (T1–T18)", desc: "胸椎中段，棘突高度逐漸遞減並後傾，承載馬鞍前中段重量。", clinical: "棘突間距隨年齡與負重變化，需注意合適鞍具配重。" },
+  { id: "thoracic_t10", names: ["thoracic_vert_114"], region: "hind_pelvis", isKey: false, anchorAt: "top", zh: "第 10 胸椎 (T10)", en: "Thoracic Vertebra T10", latin: "Vertebra thoracica 10", grp: "胸椎 (T1–T18)", desc: "胸椎中段，棘突高度逐漸遞減並後傾，承載馬鞍前中段重量。", clinical: "棘突間距隨年齡與負重變化，需注意合適鞍具配重。" },
+  { id: "thoracic_t11", names: ["thoracic_vert_115"], region: "hind_pelvis", isKey: false, anchorAt: "top", zh: "第 11 胸椎 (T11)", en: "Thoracic Vertebra T11", latin: "Vertebra thoracica 11", grp: "胸椎 (T1–T18)", desc: "胸椎中段，棘突高度逐漸遞減並後傾，承載馬鞍前中段重量。", clinical: "棘突間距隨年齡與負重變化，需注意合適鞍具配重。" },
+  { id: "thoracic_t12", names: ["lumbar_vert_116"], region: "hind_pelvis", isKey: false, anchorAt: "top", zh: "第 12 胸椎 (T12)", en: "Thoracic Vertebra T12", latin: "Vertebra thoracica 12", grp: "胸椎 (T1–T18)", desc: "胸椎中段，棘突高度逐漸遞減並後傾，承載馬鞍前中段重量。", clinical: "棘突間距隨年齡與負重變化，需注意合適鞍具配重。" },
+  { id: "thoracic_t13", names: ["lumbar_vert_117"], region: "hind_pelvis", isKey: false, anchorAt: "top", zh: "第 13 胸椎 (T13)", en: "Thoracic Vertebra T13", latin: "Vertebra thoracica 13", grp: "胸椎 (T1–T18)", desc: "後段胸椎，棘突較短而厚實，關節突轉為類似腰椎之嵌合形態以增強剛性。", clinical: "T13–T18 棘突相撞磨損稱棘突重疊症（Kissing spines）。" },
+  { id: "thoracic_t14", names: ["lumbar_vert_118"], region: "hind_pelvis", isKey: false, anchorAt: "top", zh: "第 14 胸椎 (T14)", en: "Thoracic Vertebra T14", latin: "Vertebra thoracica 14", grp: "胸椎 (T1–T18)", desc: "後段胸椎，棘突較短而厚實，關節突轉為類似腰椎之嵌合形態以增強剛性。", clinical: "T13–T18 棘突相撞磨損稱棘突重疊症（Kissing spines）。" },
+  { id: "thoracic_t15", names: ["lumbar_vert_119"], region: "hind_pelvis", isKey: false, anchorAt: "top", zh: "第 15 胸椎 (T15)", en: "Thoracic Vertebra T15", latin: "Vertebra thoracica 15", grp: "胸椎 (T1–T18)", desc: "後段胸椎，棘突較短而厚實，關節突轉為類似腰椎之嵌合形態以增強剛性。", clinical: "T13–T18 棘突相撞磨損稱棘突重疊症（Kissing spines）。" },
+  { id: "thoracic_t16", names: ["lumbar_vert_120"], region: "hind_pelvis", isKey: true, anchorAt: "top", zh: "第 16 胸椎 (T16)（抗斜椎）", en: "Thoracic Vertebra T16", latin: "Vertebra thoracica 16", grp: "胸椎 (T1–T18)", desc: "第 16 胸椎為馬的「抗斜椎（Anticlinal vertebra）」，棘突直立垂直（其前棘突後傾、其後前傾）。", clinical: "T13–T18 為棘突重疊症（Kissing spines）最高發區段，常造成背痛拒鞍。" },
+  { id: "thoracic_t17", names: ["lumbar_vert_121"], region: "hind_pelvis", isKey: false, anchorAt: "top", zh: "第 17 胸椎 (T17)", en: "Thoracic Vertebra T17", latin: "Vertebra thoracica 17", grp: "胸椎 (T1–T18)", desc: "後段胸椎，棘突較短而厚實，關節突轉為類似腰椎之嵌合形態以增強剛性。", clinical: "T13–T18 棘突相撞磨損稱棘突重疊症（Kissing spines）。" },
+  { id: "thoracic_t18", names: ["lumbar_vert_122"], region: "hind_pelvis", isKey: false, anchorAt: "top", zh: "第 18 胸椎 (T18)", en: "Thoracic Vertebra T18", latin: "Vertebra thoracica 18", grp: "胸椎 (T1–T18)", desc: "後段胸椎，棘突較短而厚實，關節突轉為類似腰椎之嵌合形態以增強剛性。", clinical: "T13–T18 棘突相撞磨損稱棘突重疊症（Kissing spines）。" },
+  { id: "lumbar_l1", names: ["lumbar_vert_106"], region: "hind_pelvis", isKey: false, anchorAt: "top", zh: "第 1 腰椎 (L1)", en: "Lumbar Vertebra L1", latin: "Vertebra lumbalis 1", grp: "腰椎 (L1–L6)", desc: "馬通常具 6 枚腰椎；具寬扁水平伸出之長橫突，供腰大肌與背長肌附著。", clinical: "腰椎橫突間關節與棘上韌帶共同將後肢推進力高效傳導至前軀。" },
+  { id: "lumbar_l2", names: ["lumbar_vert_107"], region: "hind_pelvis", isKey: false, anchorAt: "top", zh: "第 2 腰椎 (L2)", en: "Lumbar Vertebra L2", latin: "Vertebra lumbalis 2", grp: "腰椎 (L1–L6)", desc: "馬通常具 6 枚腰椎；具寬扁水平伸出之長橫突，供腰大肌與背長肌附著。", clinical: "腰椎橫突間關節與棘上韌帶共同將後肢推進力高效傳導至前軀。" },
+  { id: "lumbar_l3", names: ["lumbar_vert_108"], region: "hind_pelvis", isKey: true, anchorAt: "top", zh: "第 3 腰椎 (L3)", en: "Lumbar Vertebra L3", latin: "Vertebra lumbalis 3", grp: "腰椎 (L1–L6)", desc: "馬通常具 6 枚腰椎；具寬扁水平伸出之長橫突，供腰大肌與背長肌附著。", clinical: "腰椎橫突間關節與棘上韌帶共同將後肢推進力高效傳導至前軀。" },
+  { id: "lumbar_l4", names: ["lumbar_vert_105"], region: "hind_pelvis", isKey: false, anchorAt: "top", zh: "第 4 腰椎 (L4)", en: "Lumbar Vertebra L4", latin: "Vertebra lumbalis 4", grp: "腰椎 (L1–L6)", desc: "馬通常具 6 枚腰椎；其橫突與相鄰腰椎／薦骨翼間具馬科特有「橫突間關節」，極大強化腰背剛性。", clinical: "腰椎橫突間關節與棘上韌帶共同將後肢推進力高效傳導至前軀。" },
+  { id: "lumbar_l5", names: ["lumbar_vert_104"], region: "hind_pelvis", isKey: false, anchorAt: "top", zh: "第 5 腰椎 (L5)", en: "Lumbar Vertebra L5", latin: "Vertebra lumbalis 5", grp: "腰椎 (L1–L6)", desc: "馬通常具 6 枚腰椎；其橫突與相鄰腰椎／薦骨翼間具馬科特有「橫突間關節」，極大強化腰背剛性。", clinical: "腰椎橫突間關節與棘上韌帶共同將後肢推進力高效傳導至前軀。" },
+  { id: "lumbar_l6", names: ["lumbar_vert_103"], region: "hind_pelvis", isKey: false, anchorAt: "top", zh: "第 6 腰椎 (L6)", en: "Lumbar Vertebra L6", latin: "Vertebra lumbalis 6", grp: "腰椎 (L1–L6)", desc: "馬通常具 6 枚腰椎；其橫突與相鄰腰椎／薦骨翼間具馬科特有「橫突間關節」，極大強化腰背剛性。", clinical: "腰椎橫突間關節與棘上韌帶共同將後肢推進力高效傳導至前軀。" },
+  { id: "sacrum", names: ["sacrum_181"], region: "hind_pelvis", isKey: true, anchorAt: "top", zh: "薦骨 (S1–S5 癒合)", en: "Sacrum (S1–S5 Fused)", latin: "Os sacrum", grp: "薦骨與尾椎", desc: "5 枚薦椎癒合成三角形骨板，兩側薦骨翼與髂骨形成堅固的薦髂關節。", clinical: "薦髂關節扭傷為賽馬與障礙馬後肢推進障礙的常見病因。" },
+  { id: "caudal_co1", names: ["caudal_vert_56"], region: "hind_pelvis", isKey: true, zh: "第 1 尾椎 (Co1)", en: "Caudal Vertebra Co1", latin: "Vertebra caudalis 1", grp: "薦骨與尾椎", desc: "尾根前段尾椎（第 1 尾椎），具完整椎弓、棘突與橫突，保護尾神經根。", clinical: "第 1–2 尾椎間隙（Co1–Co2）為馬尾硬膜外麻醉（Caudal epidural anesthesia）的標準進針點。" },
+  { id: "caudal_co2", names: ["caudal_vert_57"], region: "hind_pelvis", isKey: false, zh: "第 2 尾椎 (Co2)", en: "Caudal Vertebra Co2", latin: "Vertebra caudalis 2", grp: "薦骨與尾椎", desc: "尾根前段尾椎（第 2 尾椎），具完整椎弓、棘突與橫突，保護尾神經根。", clinical: "第 1–2 尾椎間隙（Co1–Co2）為馬尾硬膜外麻醉（Caudal epidural anesthesia）的標準進針點。" },
+  { id: "caudal_co3", names: ["caudal_vert_73"], region: "hind_pelvis", isKey: false, zh: "第 3 尾椎 (Co3)", en: "Caudal Vertebra Co3", latin: "Vertebra caudalis 3", grp: "薦骨與尾椎", desc: "尾椎前中段（第 3 尾椎），椎弓逐漸退化開放，椎體呈沙漏狀。", clinical: "尾根腹側的尾中動脈可用於臨床觸摸脈搏或採血。" },
+  { id: "caudal_co4", names: ["caudal_vert_72"], region: "hind_pelvis", isKey: false, zh: "第 4 尾椎 (Co4)", en: "Caudal Vertebra Co4", latin: "Vertebra caudalis 4", grp: "薦骨與尾椎", desc: "尾椎前中段（第 4 尾椎），椎弓逐漸退化開放，椎體呈沙漏狀。", clinical: "尾根腹側的尾中動脈可用於臨床觸摸脈搏或採血。" },
+  { id: "caudal_co5", names: ["caudal_vert_71"], region: "hind_pelvis", isKey: false, zh: "第 5 尾椎 (Co5)", en: "Caudal Vertebra Co5", latin: "Vertebra caudalis 5", grp: "薦骨與尾椎", desc: "尾椎前中段（第 5 尾椎），椎弓逐漸退化開放，椎體呈沙漏狀。", clinical: "尾根腹側的尾中動脈可用於臨床觸摸脈搏或採血。" },
+  { id: "caudal_co6", names: ["caudal_vert_70"], region: "hind_pelvis", isKey: false, zh: "第 6 尾椎 (Co6)", en: "Caudal Vertebra Co6", latin: "Vertebra caudalis 6", grp: "薦骨與尾椎", desc: "尾椎中後段（第 6 尾椎），向後漸細，僅餘圓柱狀椎體構成馬尾骨軸。", clinical: "馬尾椎總數約 15–21 枚（本模型具 18 枚），提供驅趕蚊蟲與平衡功能。" },
+  { id: "caudal_co7", names: ["caudal_vert_69"], region: "hind_pelvis", isKey: false, zh: "第 7 尾椎 (Co7)", en: "Caudal Vertebra Co7", latin: "Vertebra caudalis 7", grp: "薦骨與尾椎", desc: "尾椎中後段（第 7 尾椎），向後漸細，僅餘圓柱狀椎體構成馬尾骨軸。", clinical: "馬尾椎總數約 15–21 枚（本模型具 18 枚），提供驅趕蚊蟲與平衡功能。" },
+  { id: "caudal_co8", names: ["vertebra_68"], region: "hind_pelvis", isKey: false, zh: "第 8 尾椎 (Co8)", en: "Caudal Vertebra Co8", latin: "Vertebra caudalis 8", grp: "薦骨與尾椎", desc: "尾椎中後段（第 8 尾椎），向後漸細，僅餘圓柱狀椎體構成馬尾骨軸。", clinical: "馬尾椎總數約 15–21 枚（本模型具 18 枚），提供驅趕蚊蟲與平衡功能。" },
+  { id: "caudal_co9", names: ["vertebra_67"], region: "hind_pelvis", isKey: false, zh: "第 9 尾椎 (Co9)", en: "Caudal Vertebra Co9", latin: "Vertebra caudalis 9", grp: "薦骨與尾椎", desc: "尾椎中後段（第 9 尾椎），向後漸細，僅餘圓柱狀椎體構成馬尾骨軸。", clinical: "馬尾椎總數約 15–21 枚（本模型具 18 枚），提供驅趕蚊蟲與平衡功能。" },
+  { id: "caudal_co10", names: ["vertebra_66"], region: "hind_pelvis", isKey: false, zh: "第 10 尾椎 (Co10)", en: "Caudal Vertebra Co10", latin: "Vertebra caudalis 10", grp: "薦骨與尾椎", desc: "尾椎中後段（第 10 尾椎），向後漸細，僅餘圓柱狀椎體構成馬尾骨軸。", clinical: "馬尾椎總數約 15–21 枚（本模型具 18 枚），提供驅趕蚊蟲與平衡功能。" },
+  { id: "caudal_co11", names: ["vertebra_65"], region: "hind_pelvis", isKey: false, zh: "第 11 尾椎 (Co11)", en: "Caudal Vertebra Co11", latin: "Vertebra caudalis 11", grp: "薦骨與尾椎", desc: "尾椎中後段（第 11 尾椎），向後漸細，僅餘圓柱狀椎體構成馬尾骨軸。", clinical: "馬尾椎總數約 15–21 枚（本模型具 18 枚），提供驅趕蚊蟲與平衡功能。" },
+  { id: "caudal_co12", names: ["vertebra_64"], region: "hind_pelvis", isKey: false, zh: "第 12 尾椎 (Co12)", en: "Caudal Vertebra Co12", latin: "Vertebra caudalis 12", grp: "薦骨與尾椎", desc: "尾椎中後段（第 12 尾椎），向後漸細，僅餘圓柱狀椎體構成馬尾骨軸。", clinical: "馬尾椎總數約 15–21 枚（本模型具 18 枚），提供驅趕蚊蟲與平衡功能。" },
+  { id: "caudal_co13", names: ["limb_bone_mid_63"], region: "hind_pelvis", isKey: false, zh: "第 13 尾椎 (Co13)", en: "Caudal Vertebra Co13", latin: "Vertebra caudalis 13", grp: "薦骨與尾椎", desc: "尾椎中後段（第 13 尾椎），向後漸細，僅餘圓柱狀椎體構成馬尾骨軸。", clinical: "馬尾椎總數約 15–21 枚（本模型具 18 枚），提供驅趕蚊蟲與平衡功能。" },
+  { id: "caudal_co14", names: ["limb_bone_mid_62"], region: "hind_pelvis", isKey: false, zh: "第 14 尾椎 (Co14)", en: "Caudal Vertebra Co14", latin: "Vertebra caudalis 14", grp: "薦骨與尾椎", desc: "尾椎中後段（第 14 尾椎），向後漸細，僅餘圓柱狀椎體構成馬尾骨軸。", clinical: "馬尾椎總數約 15–21 枚（本模型具 18 枚），提供驅趕蚊蟲與平衡功能。" },
+  { id: "caudal_co15", names: ["limb_bone_mid_61"], region: "hind_pelvis", isKey: false, zh: "第 15 尾椎 (Co15)", en: "Caudal Vertebra Co15", latin: "Vertebra caudalis 15", grp: "薦骨與尾椎", desc: "尾椎中後段（第 15 尾椎），向後漸細，僅餘圓柱狀椎體構成馬尾骨軸。", clinical: "馬尾椎總數約 15–21 枚（本模型具 18 枚），提供驅趕蚊蟲與平衡功能。" },
+  { id: "caudal_co16", names: ["limb_bone_mid_60"], region: "hind_pelvis", isKey: false, zh: "第 16 尾椎 (Co16)", en: "Caudal Vertebra Co16", latin: "Vertebra caudalis 16", grp: "薦骨與尾椎", desc: "尾椎中後段（第 16 尾椎），向後漸細，僅餘圓柱狀椎體構成馬尾骨軸。", clinical: "馬尾椎總數約 15–21 枚（本模型具 18 枚），提供驅趕蚊蟲與平衡功能。" },
+  { id: "caudal_co17", names: ["limb_bone_mid_59"], region: "hind_pelvis", isKey: false, zh: "第 17 尾椎 (Co17)", en: "Caudal Vertebra Co17", latin: "Vertebra caudalis 17", grp: "薦骨與尾椎", desc: "尾椎中後段（第 17 尾椎），向後漸細，僅餘圓柱狀椎體構成馬尾骨軸。", clinical: "馬尾椎總數約 15–21 枚（本模型具 18 枚），提供驅趕蚊蟲與平衡功能。" },
+  { id: "caudal_co18", names: ["limb_bone_mid_58"], region: "hind_pelvis", isKey: false, zh: "第 18 尾椎 (Co18)", en: "Caudal Vertebra Co18", latin: "Vertebra caudalis 18", grp: "薦骨與尾椎", desc: "尾椎中後段（第 18 尾椎），向後漸細，僅餘圓柱狀椎體構成馬尾骨軸。", clinical: "馬尾椎總數約 15–21 枚（本模型具 18 枚），提供驅趕蚊蟲與平衡功能。" },
+  { id: "rib_1", names: ["scapula_l_145", "scapula_r_163"], region: "head_fore", isKey: true, anchor: ["scapula_l_145"], zh: "第 1 肋骨 (真肋)", en: "Rib 1 (True)", latin: "Costa 1", grp: "胸廓與肋骨 (18 對)", desc: "第 1 對肋骨（真肋／胸骨肋）：經獨立肋軟骨直接連接胸骨，保護心肺與前胸廓。", clinical: "第 1 肋最短粗垂直，構成胸廓前口側壁。" },
+  { id: "rib_2", names: ["scapula_l_146", "scapula_r_164"], region: "head_fore", isKey: false, anchor: ["scapula_l_146"], zh: "第 2 肋骨 (真肋)", en: "Rib 2 (True)", latin: "Costa 2", grp: "胸廓與肋骨 (18 對)", desc: "第 2 對肋骨（真肋／胸骨肋）：經獨立肋軟骨直接連接胸骨，保護心肺與前胸廓。", clinical: "新生駒難產擠壓偶見前段肋骨骨折，可能刺傷心肺。" },
+  { id: "rib_3", names: ["scapula_l_147", "scapula_r_165"], region: "head_fore", isKey: false, anchor: ["scapula_l_147"], zh: "第 3 肋骨 (真肋)", en: "Rib 3 (True)", latin: "Costa 3", grp: "胸廓與肋骨 (18 對)", desc: "第 3 對肋骨（真肋／胸骨肋）：經獨立肋軟骨直接連接胸骨，保護心肺與前胸廓。", clinical: "新生駒難產擠壓偶見前段肋骨骨折，可能刺傷心肺。" },
+  { id: "rib_4", names: ["scapula_l_148", "scapula_r_166"], region: "head_fore", isKey: false, anchor: ["scapula_l_148"], zh: "第 4 肋骨 (真肋)", en: "Rib 4 (True)", latin: "Costa 4", grp: "胸廓與肋骨 (18 對)", desc: "第 4 對肋骨（真肋／胸骨肋）：經獨立肋軟骨直接連接胸骨，保護心肺與前胸廓。", clinical: "新生駒難產擠壓偶見前段肋骨骨折，可能刺傷心肺。" },
+  { id: "rib_5", names: ["scapula_l_149", "scapula_r_167"], region: "head_fore", isKey: false, anchor: ["scapula_l_149"], zh: "第 5 肋骨 (真肋)", en: "Rib 5 (True)", latin: "Costa 5", grp: "胸廓與肋骨 (18 對)", desc: "第 5 對肋骨（真肋／胸骨肋）：經獨立肋軟骨直接連接胸骨，保護心肺與前胸廓。", clinical: "新生駒難產擠壓偶見前段肋骨骨折，可能刺傷心肺。" },
+  { id: "rib_6", names: ["scapula_l_150", "scapula_r_168"], region: "head_fore", isKey: false, anchor: ["scapula_l_150"], zh: "第 6 肋骨 (真肋)", en: "Rib 6 (True)", latin: "Costa 6", grp: "胸廓與肋骨 (18 對)", desc: "第 6 對肋骨（真肋／胸骨肋）：經獨立肋軟骨直接連接胸骨，保護心肺與前胸廓。", clinical: "第 6–7 肋間為心肺聽診及胸腔穿刺（Thoracocentesis）的關鍵位置。" },
+  { id: "rib_7", names: ["ribs_l_151", "ribs_r_169"], region: "head_fore", isKey: false, anchor: ["ribs_l_151"], zh: "第 7 肋骨 (真肋)", en: "Rib 7 (True)", latin: "Costa 7", grp: "胸廓與肋骨 (18 對)", desc: "第 7 對肋骨（真肋／胸骨肋）：經獨立肋軟骨直接連接胸骨，保護心肺與前胸廓。", clinical: "第 6–7 肋間為心肺聽診及胸腔穿刺（Thoracocentesis）的關鍵位置。" },
+  { id: "rib_8", names: ["ribs_l_152", "ribs_r_170"], region: "head_fore", isKey: false, anchor: ["ribs_l_152"], zh: "第 8 肋骨 (真肋)", en: "Rib 8 (True)", latin: "Costa 8", grp: "胸廓與肋骨 (18 對)", desc: "第 8 對肋骨（真肋／胸骨肋）：經獨立肋軟骨直接連接胸骨，保護心肺與前胸廓。", clinical: "新生駒難產擠壓偶見前段肋骨骨折，可能刺傷心肺。" },
+  { id: "rib_9", names: ["ribs_l_153", "ribs_r_171"], region: "head_fore", isKey: false, anchor: ["ribs_l_153"], zh: "第 9 肋骨 (假肋)", en: "Rib 9 (False)", latin: "Costa 9", grp: "胸廓與肋骨 (18 對)", desc: "第 9 對肋骨（假肋／非胸骨肋）：弧度大而細長，遠端肋軟骨依序疊接構成肋弓。", clinical: "後段肋骨延伸至腹腔前部，保護肝臟、胃與脾臟。" },
+  { id: "rib_10", names: ["ribs_l_155", "ribs_r_174"], region: "head_fore", isKey: false, anchor: ["ribs_l_155"], zh: "第 10 肋骨 (假肋)", en: "Rib 10 (False)", latin: "Costa 10", grp: "胸廓與肋骨 (18 對)", desc: "第 10 對肋骨（假肋／非胸骨肋）：弧度大而細長，遠端肋軟骨依序疊接構成肋弓。", clinical: "後段肋骨延伸至腹腔前部，保護肝臟、胃與脾臟。" },
+  { id: "rib_11", names: ["ribs_l_156", "ribs_r_172"], region: "hind_pelvis", isKey: false, anchor: ["ribs_l_156"], zh: "第 11 肋骨 (假肋)", en: "Rib 11 (False)", latin: "Costa 11", grp: "胸廓與肋骨 (18 對)", desc: "第 11 對肋骨（假肋／非胸骨肋）：弧度大而細長，遠端肋軟骨依序疊接構成肋弓。", clinical: "後段肋骨延伸至腹腔前部，保護肝臟、胃與脾臟。" },
+  { id: "rib_12", names: ["ribs_l_154", "ribs_r_175"], region: "hind_pelvis", isKey: true, anchor: ["ribs_l_154"], zh: "第 12 肋骨 (假肋)", en: "Rib 12 (False)", latin: "Costa 12", grp: "胸廓與肋骨 (18 對)", desc: "第 12 對肋骨（假肋／非胸骨肋）：弧度大而細長，遠端肋軟骨依序疊接構成肋弓。", clinical: "後段肋骨延伸至腹腔前部，保護肝臟、胃與脾臟。" },
+  { id: "rib_13", names: ["ribs_l_157", "ribs_r_173"], region: "hind_pelvis", isKey: false, anchor: ["ribs_l_157"], zh: "第 13 肋骨 (假肋)", en: "Rib 13 (False)", latin: "Costa 13", grp: "胸廓與肋骨 (18 對)", desc: "第 13 對肋骨（假肋／非胸骨肋）：弧度大而細長，遠端肋軟骨依序疊接構成肋弓。", clinical: "後段肋骨延伸至腹腔前部，保護肝臟、胃與脾臟。" },
+  { id: "rib_14", names: ["ribs_l_158", "ribs_r_176"], region: "hind_pelvis", isKey: false, anchor: ["ribs_l_158"], zh: "第 14 肋骨 (假肋)", en: "Rib 14 (False)", latin: "Costa 14", grp: "胸廓與肋骨 (18 對)", desc: "第 14 對肋骨（假肋／非胸骨肋）：弧度大而細長，遠端肋軟骨依序疊接構成肋弓。", clinical: "後段肋骨延伸至腹腔前部，保護肝臟、胃與脾臟。" },
+  { id: "rib_15", names: ["ribs_l_161", "ribs_r_178"], region: "hind_pelvis", isKey: false, anchor: ["ribs_l_161"], zh: "第 15 肋骨 (假肋)", en: "Rib 15 (False)", latin: "Costa 15", grp: "胸廓與肋骨 (18 對)", desc: "第 15 對肋骨（假肋／非胸骨肋）：弧度大而細長，遠端肋軟骨依序疊接構成肋弓。", clinical: "後段肋骨延伸至腹腔前部，保護肝臟、胃與脾臟。" },
+  { id: "rib_16", names: ["ribs_l_160", "ribs_r_177"], region: "hind_pelvis", isKey: false, anchor: ["ribs_l_160"], zh: "第 16 肋骨 (假肋)", en: "Rib 16 (False)", latin: "Costa 16", grp: "胸廓與肋骨 (18 對)", desc: "第 16 對肋骨（假肋／非胸骨肋）：弧度大而細長，遠端肋軟骨依序疊接構成肋弓。", clinical: "後段肋骨延伸至腹腔前部，保護肝臟、胃與脾臟。" },
+  { id: "rib_17", names: ["coffin_hind_l_159", "coffin_hind_r_180"], region: "hind_pelvis", isKey: false, anchor: ["coffin_hind_l_159"], zh: "第 17 肋骨 (假肋)", en: "Rib 17 (False)", latin: "Costa 17", grp: "胸廓與肋骨 (18 對)", desc: "第 17 對肋骨（假肋／非胸骨肋）：弧度大而細長，遠端肋軟骨依序疊接構成肋弓。", clinical: "後段肋骨延伸至腹腔前部，保護肝臟、胃與脾臟。" },
+  { id: "rib_18", names: ["coffin_hind_l_162", "coffin_hind_r_179"], region: "hind_pelvis", isKey: false, anchor: ["coffin_hind_l_162"], zh: "第 18 肋骨 (假肋)", en: "Rib 18 (False)", latin: "Costa 18", grp: "胸廓與肋骨 (18 對)", desc: "第 18 對肋骨（假肋／非胸骨肋）：弧度大而細長，遠端肋軟骨依序疊接構成肋弓。", clinical: "後段肋骨延伸至腹腔前部，保護肝臟、胃與脾臟。" },
+  { id: "costal_cartilage", names: ["limb_bone_r_128", "limb_bone_l_129", "humerus_l_130", "humerus_r_131", "humerus_l_132", "humerus_r_133", "humerus_l_134", "humerus_r_135", "humerus_l_136", "humerus_r_137", "sternum_138", "ribs_r_139", "ribs_l_140", "ribs_r_141", "ribs_l_142", "ribs_r_143", "ribs_l_144"], region: "head_fore", isKey: true, anchor: ["ribs_l_144"], anchorAt: "bottom", zh: "肋軟骨與肋弓", en: "Costal Cartilages & Costal Arch", latin: "Cartilagines costales et arcus costalis", grp: "胸廓與肋骨 (18 對)", desc: "前 8 對接胸骨；後 10 對肋軟骨相互疊接形成彈性「肋弓（Costal arch）」。", clinical: "肋弓為腹部超音波與肝脾定位的體表邊界。" },
+  { id: "sternum", names: ["limb_bone_mid_127"], region: "head_fore", isKey: true, anchorAt: "bottom", zh: "胸骨", en: "Sternum", latin: "Sternum", grp: "胸廓與肋骨 (18 對)", desc: "呈船形，由胸骨柄、7 節胸骨體與劍突軟骨構成，腹側具顯著胸骨嵴。", clinical: "胸骨體是成馬骨髓穿刺採樣的首選部位。" },
+  { id: "scapula", names: ["scapula_l_74", "scapula_r_75"], region: "head_fore", isKey: true, anchor: ["scapula_l_74"], zh: "肩胛骨", en: "Scapula", latin: "Scapula", grp: "前肢承重系統", desc: "三角形扁平骨，肩胛岡無肩峰，背緣接寬大肩胛軟骨；馬無鎖骨，前肢由肌肉懸吊於胸壁。", clinical: "肩胛上神經繞行肩胛頸易因撞傷導致「肩萎縮（Sweeney）」。" },
+  { id: "humerus", names: ["humerus_l_0", "humerus_r_1"], region: "head_fore", isKey: true, anchor: ["humerus_l_0"], zh: "肱骨", en: "Humerus", latin: "Humerus", grp: "前肢承重系統", desc: "粗短扭轉長骨，近端具馬特有之中間結節，將結節間溝分為雙溝容納肱二頭肌腱。", clinical: "肱二頭肌腱與結節間溝為前肢站立裝置關鍵，摩擦易致滑液囊炎。" },
+  { id: "radius_ulna", names: ["radius_ulna_l_54", "radius_ulna_r_55"], region: "head_fore", isKey: true, anchor: ["radius_ulna_l_54"], zh: "橈骨與尺骨 (含鷹嘴)", en: "Radius & Ulna", latin: "Radius et ulna", grp: "前肢承重系統", desc: "橈骨粗大承重；尺骨近端形成高大鷹嘴（肘頭），骨幹遠端退化並與橈骨癒合，無法旋前旋後。", clinical: "鷹嘴骨折會使肱三頭肌失去支點，呈典型「掉肘（Dropped elbow）」步態。" },
+  { id: "carpus_radial", names: ["radius_ulna_l_37", "radius_ulna_l_41", "radius_ulna_r_46", "radius_ulna_r_50"], region: "head_fore", isKey: false, anchor: ["radius_ulna_l_37"], zh: "橈腕骨 (近列內側)", en: "Radial Carpal Bone", latin: "Os carpi radiale", grp: "前肢承重系統", desc: "近列腕骨內側最大者，上接橈骨遠端內側關節面，下接第 2、3 腕骨。", clinical: "賽馬腕部過度伸展時，橈腕骨背遠緣是碎片骨折（Chip fracture）最常發生部位。" },
+  { id: "carpus_inter_ulnar", names: ["radius_ulna_l_36", "radius_ulna_l_40", "radius_ulna_r_45", "radius_ulna_r_49"], region: "head_fore", isKey: false, anchor: ["radius_ulna_l_36"], zh: "中間腕骨與尺腕骨 (近列外側)", en: "Intermediate & Ulnar Carpal Bones", latin: "Os carpi intermedium et ulnare", grp: "前肢承重系統", desc: "位於近列腕骨中央與外側，上接橈骨、下接第 3 與第 4 腕骨，後方接副腕骨。", clinical: "中間腕骨背側緣亦為賽馬腕關節碎片骨折高發點。" },
+  { id: "carpus_accessory", names: ["radius_ulna_l_44", "radius_ulna_r_53"], region: "head_fore", isKey: true, anchor: ["radius_ulna_l_44"], zh: "副腕骨 (腕後種子骨)", en: "Accessory Carpal Bone", latin: "Os carpi accessorium", grp: "前肢承重系統", desc: "位於近列腕骨掌側後方的圓盤狀骨（對應人類豌豆骨），不直接負重，圍成腕管供屈肌腱通過。", clinical: "提供腕屈肌槓桿支點；跌倒撞擊可能引起垂直面骨折。" },
+  { id: "carpus_c2", names: ["carpal_l_39", "radius_ulna_l_43", "carpal_r_48", "radius_ulna_r_52"], region: "head_fore", isKey: false, anchor: ["carpal_l_39"], zh: "第二腕骨 (遠列內側)", en: "Second Carpal Bone (C2)", latin: "Os carpale secundum", grp: "前肢承重系統", desc: "遠列腕骨內側最小恆定骨（第 1 腕骨僅約半數馬匹存在），下接第二掌骨（內側夾骨）與第三掌骨。", clinical: "參與構成低活動度腕掌關節，分散內側壓力。" },
+  { id: "carpus_c3_c4", names: ["carpal_l_38", "carpal_l_42", "carpal_r_47", "radius_ulna_r_51"], region: "head_fore", isKey: false, anchor: ["carpal_l_38"], zh: "第三與第四腕骨 (遠列中外側)", en: "Third & Fourth Carpal Bones (C3, C4)", latin: "Os carpale tertium et quartum", grp: "前肢承重系統", desc: "第 3 腕骨占遠列 2/3 為遠列最大骨，直接承接大砲骨；第 4 腕骨位於外側承接第三、四掌骨。", clinical: "第 3 腕骨承受極大垂直壓應力，賽馬常見板狀骨折（Slab fracture）與骨硬化。" },
+  { id: "cannon_fore", names: ["cannon_fore_l_16", "cannon_fore_r_17"], region: "head_fore", isKey: true, anchor: ["cannon_fore_l_16"], zh: "前大砲骨 (第三掌骨) 與夾骨", en: "Fore Cannon (MC III) & Splint Bones", latin: "Os metacarpale III et II/IV", grp: "前肢承重系統", desc: "第三掌骨為前肢主要承重長骨；第二、第四掌骨退化為附於兩旁的「夾骨」。", clinical: "幼馬常見管骨膜炎（Bucked shins）；夾骨間韌帶骨化稱夾骨瘤（Splints）。" },
+  { id: "pastern_fore", names: ["pastern_fore_l_23", "pastern_fore_r_25"], region: "head_fore", isKey: false, anchor: ["pastern_fore_l_23"], zh: "前肢第一指骨／繫骨 (P1)", en: "Fore Proximal Phalanx (Long Pastern, P1)", latin: "Phalanx proximalis (manus)", grp: "前肢承重系統", desc: "上接第三掌骨與近端種子骨成球節，下接冠骨成繫關節，斜向吸收著地衝擊。", clinical: "急停扭轉時近端矢狀溝易發生縱向劈裂骨折（Sagittal fracture）。" },
+  { id: "coronet_fore", names: ["coronet_fore_l_22", "coronet_fore_r_24"], region: "head_fore", isKey: false, anchor: ["coronet_fore_l_22"], zh: "前肢第二指骨／冠骨 (P2)", en: "Fore Middle Phalanx (Short Pastern, P2)", latin: "Phalanx media (manus)", grp: "前肢承重系統", desc: "短柱狀第二指骨，遠端包埋於蹄冠內與蹄骨、舟骨構成蹄關節。", clinical: "繫關節退化性骨關節炎稱「高位環骨（High ringbone）」。" },
+  { id: "coffin_fore", names: ["coffin_fore_l_26", "coronet_fore_r_27"], region: "head_fore", isKey: true, anchor: ["coffin_fore_l_26"], zh: "前肢第三指骨／蹄骨 (P3)", en: "Fore Distal Phalanx (Coffin Bone, P3)", latin: "Phalanx distalis / Os ungulare", grp: "前肢承重系統", desc: "半月圓錐形骨完全包覆於蹄匣內，由葉層懸吊承重，後方緊鄰遠端種子骨（舟骨）。", clinical: "蹄葉炎（Laminitis）與舟骨症為前蹄兩大致跛重症。" },
+  { id: "pelvis", names: ["sacrum_95"], region: "hind_pelvis", isKey: true, zh: "骨盆 (髂骨・坐骨・恥骨)", en: "Pelvis (Os coxae)", latin: "Os coxae / Pelvis", grp: "後肢推進系統", desc: "由左右髖骨癒合而成，具髖結節（腰角）、薦結節、坐骨結節（臀角）與髖臼。", clinical: "髖結節撞擊骨折導致單側腰角塌陷，俗稱「掉胯（Knocked-down hip）」。" },
+  { id: "femur", names: ["pelvis_l_2", "pelvis_r_3"], region: "hind_pelvis", isKey: true, anchor: ["pelvis_l_2"], zh: "股骨 (具第三轉子)", en: "Femur (with Third Trochanter)", latin: "Os femoris", grp: "後肢推進系統", desc: "全身最粗壯長骨，外側具馬科特徵性「第三轉子」，遠端內側滑車嵴特別粗大。", clinical: "內側滑車嵴供髕骨勾鎖，構成馬站立睡覺的靜止裝置核心。" },
+  { id: "patella", names: ["femur_l_4", "femur_r_5"], region: "hind_pelvis", isKey: true, anchor: ["femur_l_4"], zh: "髕骨 (膝蓋骨)", en: "Patella", latin: "Patella", grp: "後肢推進系統", desc: "大型種子骨，經內、中、外三條髕直韌帶連接脛骨粗隆。", clinical: "內側髕直韌帶勾住股骨內側滑車嵴可鎖定膝關節；無法解鎖稱「髕骨上方固定」。" },
+  { id: "tibia", names: ["tibia_fibula_l_8", "tibia_fibula_r_9"], region: "hind_pelvis", isKey: true, anchor: ["tibia_fibula_l_8"], zh: "脛骨", en: "Tibia", latin: "Tibia", grp: "後肢推進系統", desc: "小腿主要承重長骨，近端前方具脛骨粗隆，遠端斜向滑車與距骨嵌合。", clinical: "內側面無肌肉覆蓋，遭踢傷極易引發骨膜炎或開放性骨折。" },
+  { id: "fibula", names: ["tibia_fibula_l_12", "tibia_fibula_r_13"], region: "hind_pelvis", isKey: true, anchor: ["tibia_fibula_l_12"], zh: "腓骨 (退化細骨)", en: "Fibula", latin: "Fibula", grp: "後肢推進系統", desc: "高度退化為外側細長骨針，遠端與脛骨癒合形成外踝。", clinical: "X 光判讀時須區分正常骨化分節與腓骨骨折。" },
+  { id: "calcaneus", names: ["tibia_fibula_l_6", "tibia_fibula_r_7"], region: "hind_pelvis", isKey: true, anchor: ["tibia_fibula_l_6"], zh: "跟骨 (飛節尖)", en: "Calcaneus (Point of Hock)", latin: "Calcaneus", grp: "後肢推進系統", desc: "跗骨中最大且靠後上方者，跟骨結節形成飛節尖，為跟腱附著點與強大伸展槓桿。", clinical: "飛節尖皮下囊腫大稱「飛節頂腫（Capped hock）」。" },
+  { id: "talus", names: ["tibia_fibula_l_10", "tibia_fibula_r_11"], region: "hind_pelvis", isKey: true, anchor: ["tibia_fibula_l_10"], zh: "距骨 (跗滑車)", en: "Talus", latin: "Talus", grp: "後肢推進系統", desc: "位於飛節前內側，近端具兩條深斜滑車嵴與脛骨遠端嵌合，負擔飛節主要屈伸活動。", clinical: "距骨滑車嵴遠端是幼馬分離性骨軟骨炎（OCD）與飛節積液（Bog spavin）最常好發處。" },
+  { id: "tarsal_central", names: ["tarsus_calcaneus_l_31", "tarsus_calcaneus_r_34"], region: "hind_pelvis", isKey: false, anchor: ["tarsus_calcaneus_l_31"], zh: "中央跗骨", en: "Central Tarsal Bone", latin: "Os tarsi centrale", grp: "後肢推進系統", desc: "扁平盤狀骨，介於距骨與第三跗骨之間，為遠端跗關節減震核心。", clinical: "中央跗骨與第三跗骨間之骨關節炎稱「飛節內腫（Bone spavin）」。" },
+  { id: "tarsal_third", names: ["tarsus_calcaneus_l_32", "tarsus_calcaneus_r_35"], region: "hind_pelvis", isKey: false, anchor: ["tarsus_calcaneus_l_32"], zh: "第三跗骨 (遠列前部)", en: "Third Tarsal Bone (T3)", latin: "Os tarsale tertium", grp: "後肢推進系統", desc: "三角形扁平骨，上接中央跗骨、下接第三蹠骨（後大砲骨）。", clinical: "賽馬與速步馬常見第三跗骨板狀骨折及飛節內腫病變。" },
+  { id: "tarsal_fourth", names: ["tarsus_calcaneus_l_30", "tarsus_calcaneus_r_33"], region: "hind_pelvis", isKey: false, anchor: ["tarsus_calcaneus_l_30"], zh: "第四跗骨與融合第一/二跗骨", en: "Fourth & Fused T1+2 Tarsal Bones", latin: "Os tarsale quartum et I+II", grp: "後肢推進系統", desc: "第四跗骨位於飛節外側跨越兩列高度，上接跟骨與距骨、下接第三與第四蹠骨。", clinical: "與中央跗骨、第三跗骨共同構成低活動度承壓結構。" },
+  { id: "cannon_hind", names: ["cannon_hind_l_14", "cannon_hind_r_15"], region: "hind_pelvis", isKey: true, anchor: ["cannon_hind_l_14"], zh: "後大砲骨 (第三蹠骨) 與副蹠骨", en: "Hind Cannon (MT III) & Splint Bones", latin: "Os metatarsale III et II/IV", grp: "後肢推進系統", desc: "比前砲骨長約 1/6、斷面較圓以承受推進力，兩側附有退化的第二、第四蹠骨。", clinical: "外側第四蹠骨較粗，易因踢傷造成開放性副蹠骨骨折。" },
+  { id: "pastern_hind", names: ["pastern_hind_l_18", "pastern_hind_r_19"], region: "hind_pelvis", isKey: false, anchor: ["pastern_hind_l_18"], zh: "後肢第一趾骨／繫骨 (P1)", en: "Hind Proximal Phalanx (P1)", latin: "Phalanx proximalis (pedis)", grp: "後肢推進系統", desc: "後肢球節下方第一趾骨，較前肢略窄長且角度稍直立。", clinical: "急轉加速時偶見近端矢狀骨折。" },
+  { id: "coronet_hind", names: ["coronet_hind_l_20", "coronet_hind_r_21"], region: "hind_pelvis", isKey: false, anchor: ["coronet_hind_l_20"], zh: "後肢第二趾骨／冠骨 (P2)", en: "Hind Middle Phalanx (P2)", latin: "Phalanx media (pedis)", grp: "後肢推進系統", desc: "介於後肢繫骨與後蹄骨之間的短柱狀骨。", clinical: "競技馬急停轉向較易在後肢繫關節出現退化性關節炎。" },
+  { id: "coffin_hind", names: ["coronet_hind_l_28", "coronet_hind_r_29"], region: "hind_pelvis", isKey: true, anchor: ["coronet_hind_l_28"], zh: "後肢第三趾骨／蹄骨 (P3)", en: "Hind Distal Phalanx (Coffin Bone, P3)", latin: "Phalanx distalis / Os ungulare (pedis)", grp: "後肢推進系統", desc: "包覆於後蹄匣內，外形較前蹄骨尖窄、蹄底較凹，利於抓地蹬推加速。", clinical: "後蹄承重約 40%，蹄葉炎發生率遠低於前蹄。" },
+];
+
+function buildHorseScene(filterRegion = null) {
+  let root = null;
+  if (window.HORSE_OBJ_DATA) root = loadOBJString(window.HORSE_OBJ_DATA);
+  if (!root || root.children.length === 0) root = buildFallbackHorse();
+
+  if (window.HORSE_OBJ_DATA) root.rotation.y = Math.PI / 2;
+  const box = new THREE.Box3().setFromObject(root);
+  const center = new THREE.Vector3(); box.getCenter(center);
+  const size = new THREE.Vector3(); box.getSize(size);
+  const scale = 32 / (Math.max(size.x, size.y, size.z) || 1);
+  root.scale.set(scale, scale, scale);
+  root.position.sub(center.clone().multiplyScalar(scale));
+  root.position.y += 1.0;
+  CUR.root.add(root);
+
+  const boneMat = new THREE.MeshLambertMaterial({ color: 0xe2d9cc });
+  const byName = {};
+  HORSE_GROUP_DEF.forEach(g => g.names.forEach(n => byName[n] = g.id));
+  const buckets = {};
+  HORSE_GROUP_DEF.forEach(g => buckets[g.id] = []);
+
+  root.traverse(child => {
+    if (!child.isMesh) return;
+    child.material = boneMat.clone();
+    const id = byName[child.name];
+    if (id) buckets[id].push(child);
+    else console.warn('未分類馬骨 mesh:', child.name);
+  });
+
+  HORSE_GROUP_DEF.forEach(g => {
+    const meshes = buckets[g.id];
+    if (!meshes.length) return;
+    const anchorMeshes = g.anchor ? meshes.filter(m => g.anchor.includes(m.name)) : [];
+    const vis = !filterRegion || g.region === filterRegion;
+    regPart({
+      id: g.id, zh: g.zh, en: g.en, latin: g.latin, grp: g.grp,
+      desc: g.desc, clinical: g.clinical, meshes,
+      anchorMeshes: anchorMeshes.length ? anchorMeshes : null,
+      anchorAt: g.anchorAt, visible: vis,
+      isKey: filterRegion ? (g.region === filterRegion && (g.isKey || /carpus_|tarsal_|cervical_c[1234567]|pastern_|coronet_|coffin_/.test(g.id))) : g.isKey,
+      region: g.region
+    });
+  });
+}
+
+function toggleRegionVisibility(keepRegion) {
+  const anyOtherHidden = CUR.parts.some(p => p.region !== keepRegion && !p.visible);
+  CUR.parts.forEach(p => {
+    if (p.region !== keepRegion) p.visible = anyOtherHidden;
+  });
+  rebuildList();
+  refresh();
+  SOUND.playClick();
+}
+
+// SCENE 1: 馬全身骨骼（全部 102 項獨立骨骼標註）
 SCENES.push({
   name: "(1) 馬全身骨骼",
-  title: "馬全身骨骼系統 (Equine Skeleton)",
+  title: "馬全身骨骼系統（102 項獨立分件標註）",
   desc: `
-    馬（<em>Equus caballus</em>）專為長距離高速奔馳特化，體重由單趾（第三指/趾骨）承受。<br>
+    馬（<em>Equus caballus</em>）齒骨與全脊柱、18 對肋骨、腕骨與跗骨皆已逐一獨立標註（點選任一椎骨或肋骨即可查看編號與臨床重點）：<br>
     <table>
-      <tr><th>骨骼分區</th><th>主要骨骼組成</th><th>解剖與臨床特徵</th></tr>
-      <tr><td>頭頸部</td><td>頭顱骨、下頜骨、寰椎(C1)、樞椎(C2)、頸椎(C3-C7)</td><td>面脊發達、額上頜竇相通、門齒磨損辨年齡</td></tr>
-      <tr><td>軀幹胸廓</td><td>胸椎(T18)、腰椎(L6)、薦骨(S5癒合)、尾椎(Co15-21)、肋骨(18對)</td><td>背腰段剛性高；第1-8為真肋，9-18為假肋</td></tr>
-      <tr><td>前肢系統</td><td>肩胛骨、肱骨、橈尺骨、腕骨群、前砲骨(MC3)、副夾骨、指骨(繫/冠/蹄)</td><td>承擔60%體重；懸韌帶與種子骨吸收衝擊；蹄葉炎易致蹄骨旋轉</td></tr>
-      <tr><td>後肢系統</td><td>骨盆(髂/坐/恥)、股骨、髕骨、脛腓骨、跟骨(飛節)、後砲骨(MT3)、趾骨</td><td><strong>第三轉子</strong>為馬特徵；膝蓋與飛節形成<strong>站立靜止裝置</strong></td></tr>
+      <tr><th>分區</th><th>精細標註範圍</th><th>解剖與臨床特徵</th></tr>
+      <tr><td>頭頸部</td><td>頭顱骨、下頜骨、上下切齒/頰齒、<strong>C1 環椎～C7 頸椎</strong></td><td>面脊發達；C1 無椎體、C2 具齒突、C6 具三裂橫突</td></tr>
+      <tr><td>軀幹胸廓</td><td><strong>T1～T18 胸椎</strong>、<strong>L1～L6 腰椎</strong>、薦骨、<strong>Co1～Co18 尾椎</strong>、<strong>第 1～18 肋骨</strong></td><td>T3–T6 形成鬐甲；T16 為抗斜椎；第 1–8 真肋、9–18 假肋</td></tr>
+      <tr><td>前肢系統</td><td>肩胛骨、肱骨、橈尺骨、<strong>5 組腕骨（含副腕骨）</strong>、前砲骨、<strong>繫/冠/蹄骨</strong></td><td>承擔 60% 體重；橈腕骨與第 3 腕骨易碎片／板狀骨折</td></tr>
+      <tr><td>後肢系統</td><td>骨盆、股骨(第三轉子)、髕骨、<strong>脛骨/腓骨</strong>、<strong>跟骨/距骨/中央・第3・第4跗骨</strong>、後砲骨、<strong>繫/冠/蹄骨</strong></td><td>膝與飛節構成<strong>站立靜止裝置</strong></td></tr>
     </table>
   `,
-  camera: { pos: [0, 0, 70], target: [0, 0, 0] },
-  build: function() {
-    let root = null;
-    if (window.HORSE_OBJ_DATA) {
-      root = loadOBJString(window.HORSE_OBJ_DATA);
-    }
-    if (!root || root.children.length === 0) {
-      root = buildFallbackHorse();
-    }
-
-    // 原始 OBJ 座標：+Z 朝頭、-Z 朝尾、X 為左右（負值＝左側）
-    // 轉 90° 讓馬頭朝 +X，左側面朝向鏡頭（解剖學慣用左側觀）
-    if (window.HORSE_OBJ_DATA) root.rotation.y = Math.PI / 2;
-
-    // 正規化尺寸
-    const box = new THREE.Box3().setFromObject(root);
-    const center = new THREE.Vector3();
-    box.getCenter(center);
-    const size = new THREE.Vector3();
-    box.getSize(size);
-    const maxDim = Math.max(size.x, size.y, size.z);
-    const scale = 32 / (maxDim || 1);
-    root.scale.set(scale, scale, scale);
-    root.position.sub(center.clone().multiplyScalar(scale));
-    root.position.y += 1.0;
-    CUR.root.add(root);
-
-    const boneMat = new THREE.MeshLambertMaterial({ color: 0xe2d9cc });
-
-    // OBJ 內的物件名稱是早期自動分割依座標門檻猜的，許多名稱與實際骨骼不符
-    // （例如 pelvis_* 其實是股骨、sacrum_95 是整個骨盆、humerus_130~137 是肋軟骨），
-    // 因此這裡逐一依實際位置與形狀指定歸屬；左側（_l / x<0）面向鏡頭，作為標籤錨點
-    const groupDef = [
-      { id: "cranium", names: ["cranium_200"], match: /cranium/i, zh: "頭顱骨 (腦顱與面骨)", en: "Skull (Cranium & Facial Bones)", latin: "Ossa cranii et faciei", grp: "頭頸部骨骼", desc: "包含腦顱骨（額骨、頂骨、枕骨、顳骨）與面骨（鼻骨、上頜骨、切齒骨、顴骨）；具完整骨性眼眶、顯著面脊（Facial crest）及相通的額竇與上頜竇。", clinical: "面脊為頭部重要體表定位標記；上頜竇蓄膿（齒源性竇炎）常於面脊上方行環鑽引流。" },
-      { id: "mandible", names: ["mandible_82"], zh: "下頜骨", en: "Mandible", latin: "Mandibula", grp: "頭頸部骨骼", desc: "左右下頜骨於下頜聯合完全癒合，下頜體承載下切齒與下頰齒，後方寬大下頜支供咬肌與翼肌附著。", clinical: "下頜體腹緣的血管切跡（Incisura vasorum facialium）是臨床觸摸面動脈脈搏的標準部位。" },
-      { id: "incisors", names: ["mandible_76", "mandible_77", "mandible_78", "mandible_79", "mandible_80", "mandible_81", "mandible_194", "mandible_195", "mandible_196", "mandible_197", "mandible_198", "mandible_199"], zh: "切齒 (上下各 6 枚)", en: "Incisor Teeth", latin: "Dentes incisivi", grp: "頭頸部骨骼", desc: "上下頷各 6 枚（中央齒 I1、中間齒 I2、隅齒 I3），呈弧形排列以切斷牧草。", clinical: "依切齒萌發時間、齒坎（黑窩/Cup）磨平順序與齒星形態，可準確推估馬匹年齡。" },
-      { id: "cheek_teeth", names: ["mandible_83", "mandible_84", "mandible_85", "mandible_86", "mandible_87", "mandible_88", "mandible_89", "mandible_90", "mandible_91", "mandible_92", "mandible_93", "mandible_94", "mandible_182", "mandible_183", "mandible_184", "mandible_185", "mandible_186", "mandible_187", "mandible_188", "mandible_189", "mandible_190", "mandible_191", "mandible_192", "mandible_193"], zh: "頰齒 (前臼齒與臼齒 24 枚)", en: "Cheek Teeth (Premolars & Molars)", latin: "Dentes praemolares et molares", grp: "頭頸部骨骼", desc: "上下左右各 6 枚（P2–P4、M1–M3，不含偶發狼齒 P1），為高冠齒（Hypsodont），終生持續萌出補償研磨耗損。", clinical: "因上頜寬於下頜，上頰齒頰側與下頰齒舌側易磨出銳利齒尖刮傷黏膜，需定期銼牙（Floating）。" },
-      { id: "atlas", names: ["facial_bones_101"], match: /atlas/i, zh: "環椎／寰椎 (第一頸椎 C1)", en: "Atlas (C1)", latin: "Atlas (Vertebra cervicalis I)", grp: "頭頸部骨骼", desc: "呈環狀、無椎體與棘突，兩側具寬大彎曲的寰椎翼（Ala atlantis）；前方與枕骨髁構成「點頭關節」（寰枕關節）。", clinical: "寰椎翼在耳後頸前端皮下清晰可觸，是頸部定位與寰枕池腦脊髓液（CSF）穿刺的關鍵標記。" },
-      { id: "axis", names: ["cervical_vert_102"], match: /axis/i, zh: "樞椎 (第二頸椎 C2)", en: "Axis (C2)", latin: "Axis (Vertebra cervicalis II)", grp: "頭頸部骨骼", desc: "全身最長的頸椎，前端具匙狀齒突（Dens）伸入環椎腹弓，背側具高大縱長棘突，與環椎構成頭部左右轉動的寰樞關節。", clinical: "幼駒外傷或先天發育異常可引起寰樞關節半脫位，壓迫高段頸髓導致四肢共濟失調。" },
-      { id: "cervical_c3_c7", names: ["cervical_vert_96", "cervical_vert_97", "cervical_vert_98", "cervical_vert_99", "cervical_vert_100"], match: /cervical/i, zh: "頸椎 (C3–C7)", en: "Cervical Vertebrae (C3–C7)", latin: "Vertebrae cervicales III–VII", grp: "頭頸部骨骼", desc: "共 5 枚（C3–C7），椎體粗長呈後凹型，關節突發達；C6 具三裂狀橫突（含寬大腹側板），C7 較短、具後肋凹且無橫突孔。", clinical: "項韌帶（Nuchal ligament）協助懸吊沉重頭頸；C3–C6 椎管狹窄是頸椎脊髓壓迫（搖擺症 Wobbler syndrome）主因。" },
-      { id: "thoracic_withers", names: ["thoracic_vert_124", "thoracic_vert_126", "thoracic_vert_125", "thoracic_vert_123", "thoracic_vert_112", "thoracic_vert_111", "thoracic_vert_110", "thoracic_vert_109"], anchor: ["thoracic_vert_125", "thoracic_vert_123"], anchorAt: "top", match: /thoracic|withers/i, zh: "前段胸椎與鬐甲 (T1–T8)", en: "Cranial Thoracic Vertebrae & Withers (T1–T8)", latin: "Vertebrae thoracicae I–VIII", grp: "軀幹脊柱與胸廓", desc: "前段胸椎棘突極度高聳（以 T4–T6 最高），形成馬體表最高隆起「鬐甲（Withers）」，供項韌帶索狀部與背長肌附著。", clinical: "鬐甲上方有棘上囊，鞍具壓迫磨傷易引起鬐甲瘻管（Fistulous withers）；量馬體高即由地面量至鬐甲最高點。" },
-      { id: "thoracic_caudal", names: ["thoracic_vert_113", "thoracic_vert_114", "thoracic_vert_115", "lumbar_vert_116", "lumbar_vert_117", "lumbar_vert_118", "lumbar_vert_119", "lumbar_vert_120", "lumbar_vert_121", "lumbar_vert_122"], anchor: ["lumbar_vert_116", "lumbar_vert_117", "lumbar_vert_118"], anchorAt: "top", zh: "後段胸椎 (T9–T18)", en: "Caudal Thoracic Vertebrae (T9–T18)", latin: "Vertebrae thoracicae IX–XVIII", grp: "軀幹脊柱與胸廓", desc: "馬共 18 枚胸椎；後段棘突逐漸變短並由後傾轉為垂直（T16 為抗斜椎 Anticlinal vertebra），承載馬鞍與騎手重量。", clinical: "T13–T18 棘突間距過窄互相撞擊磨損稱為「棘突重疊症（Kissing spines）」，為運動馬背痛常見病因。" },
-      { id: "lumbar", names: ["lumbar_vert_103", "lumbar_vert_104", "lumbar_vert_105", "lumbar_vert_106", "lumbar_vert_107", "lumbar_vert_108"], anchor: ["lumbar_vert_107", "lumbar_vert_108"], anchorAt: "top", match: /lumbar/i, zh: "腰椎 (L1–L6)", en: "Lumbar Vertebrae (L1–L6)", latin: "Vertebrae lumbales I–VI", grp: "軀幹脊柱與胸廓", desc: "通常 6 枚（部分阿拉伯馬為 5 枚），橫突極寬扁水平伸出；L4–L6 橫突間及 L6–薦骨翼之間具有獨特的橫突間關節。", clinical: "腰椎橫突間關節限制側彎並強化背腰剛性，使後肢推力無損傳導至前軀。" },
-      { id: "sacrum", names: ["sacrum_181"], anchorAt: "top", zh: "薦骨 (S1–S5 癒合)", en: "Sacrum (S1–S5 Fused)", latin: "Os sacrum", grp: "軀幹脊柱與胸廓", desc: "5 枚薦椎癒合而成的三角形骨板，前緣兩側薦骨翼與髂骨翼形成堅固的薦髂關節（Sacroiliac joint）。", clinical: "薦髂關節勞損或脫位常導致賽馬與障礙馬後肢推進無力與腰薦部疼痛。" },
-      { id: "caudal", names: ["caudal_vert_56", "caudal_vert_57", "caudal_vert_69", "caudal_vert_70", "caudal_vert_71", "caudal_vert_72", "caudal_vert_73", "vertebra_64", "vertebra_65", "vertebra_66", "vertebra_67", "vertebra_68", "limb_bone_mid_58", "limb_bone_mid_59", "limb_bone_mid_60", "limb_bone_mid_61", "limb_bone_mid_62", "limb_bone_mid_63"], anchor: ["caudal_vert_56", "caudal_vert_57"], zh: "尾椎 (Co1–Co18)", en: "Caudal Vertebrae", latin: "Vertebrae caudales", grp: "軀幹脊柱與胸廓", desc: "馬尾椎通常 15–21 枚（本模型具 18 枚），由前向後逐漸簡化，後段僅保留圓柱狀椎體。", clinical: "第 1–2 尾椎間（Co1–Co2）為馬尾硬膜外麻醉（Caudal epidural anesthesia）的標準進針點。" },
-      { id: "true_ribs", names: ["scapula_l_145", "scapula_l_146", "scapula_l_147", "scapula_l_148", "scapula_l_149", "scapula_l_150", "ribs_l_151", "ribs_l_152", "scapula_r_163", "scapula_r_164", "scapula_r_165", "scapula_r_166", "scapula_r_167", "scapula_r_168", "ribs_r_169", "ribs_r_170"], anchor: ["scapula_l_145", "scapula_l_146", "scapula_l_147", "scapula_l_148", "scapula_l_149", "scapula_l_150", "ribs_l_151", "ribs_l_152"], match: /ribs/i, zh: "真肋 (第 1–8 對肋骨)", en: "True / Sternal Ribs (Pairs 1–8)", latin: "Costae verae (I–VIII)", grp: "軀幹脊柱與胸廓", desc: "前 8 對肋骨較寬扁垂直，經各自的肋軟骨直接與胸骨相連，保護心臟與前胸廓。", clinical: "第 6–7 肋間腹側為心肺聽診及胸腔穿刺（Thoracocentesis）的關鍵解剖位置。" },
-      { id: "false_ribs", names: ["ribs_l_153", "ribs_l_155", "ribs_l_156", "ribs_l_154", "ribs_l_157", "ribs_l_158", "ribs_l_161", "ribs_l_160", "coffin_hind_l_159", "coffin_hind_l_162", "ribs_r_171", "ribs_r_174", "ribs_r_172", "ribs_r_175", "ribs_r_173", "ribs_r_176", "ribs_r_178", "ribs_r_177", "coffin_hind_r_180", "coffin_hind_r_179"], anchor: ["ribs_l_153", "ribs_l_155", "ribs_l_156", "ribs_l_154", "ribs_l_157", "ribs_l_158", "ribs_l_161", "ribs_l_160", "coffin_hind_l_159", "coffin_hind_l_162"], zh: "假肋 (第 9–18 對肋骨)", en: "False / Asternal Ribs (Pairs 9–18)", latin: "Costae spuriae (IX–XVIII)", grp: "軀幹脊柱與胸廓", desc: "後 10 對肋骨弧度大而細長，不直接接胸骨，其遠端肋軟骨依序疊接形成肋弓。", clinical: "胸廓深長延伸至第 18 肋，使肝臟、胃與部分腸管受後段肋廓包覆保護。" },
-      { id: "costal_cartilage", names: ["limb_bone_r_128", "limb_bone_l_129", "humerus_l_130", "humerus_r_131", "humerus_l_132", "humerus_r_133", "humerus_l_134", "humerus_r_135", "humerus_l_136", "humerus_r_137", "sternum_138", "ribs_r_139", "ribs_l_140", "ribs_r_141", "ribs_l_142", "ribs_r_143", "ribs_l_144"], anchor: ["ribs_l_144"], anchorAt: "bottom", zh: "肋軟骨與肋弓", en: "Costal Cartilages & Costal Arch", latin: "Cartilagines costales et arcus costalis", grp: "軀幹脊柱與胸廓", desc: "透明軟骨構成，前 8 對接胸骨；後 10 對相互連結成彈性「肋弓（Costal arch）」，隨呼吸擴張胸廓。", clinical: "肋弓為腹部超音波檢查與腹腔器官定位的重要體表邊界。" },
-      { id: "sternum", names: ["limb_bone_mid_127"], anchorAt: "bottom", match: /sternum/i, zh: "胸骨", en: "Sternum", latin: "Sternum", grp: "軀幹脊柱與胸廓", desc: "呈獨木舟形，由胸骨柄（前端具胸骨柄軟骨）、7 節胸骨體及扁平劍突軟骨構成，腹側具顯著胸骨嵴。", clinical: "胸骨體骨髓腔豐富，是成馬骨髓穿刺（Bone marrow aspirate）的首選部位。" },
-      { id: "scapula", names: ["scapula_l_74", "scapula_r_75"], anchor: ["scapula_l_74"], match: /scapula/i, zh: "肩胛骨", en: "Scapula", latin: "Scapula", grp: "前肢承重系統", desc: "大型三角形扁平骨，外側肩胛岡中段具粗隆但「無肩峰」，背緣接寬大肩胛軟骨；馬無鎖骨。", clinical: "前肢僅靠肌肉懸吊於胸廓（Synsarcosis）；肩胛上神經繞行肩胛頸易因撞傷導致「肩萎縮（Sweeney）」。" },
-      { id: "humerus", names: ["humerus_l_0", "humerus_r_1"], anchor: ["humerus_l_0"], match: /humerus/i, zh: "肱骨", en: "Humerus", latin: "Humerus", grp: "前肢承重系統", desc: "粗壯略呈螺旋狀的長骨，近端具大、小結節及馬特有的「中間結節」，將結節間溝分為雙溝供肱二頭肌腱滑動。", clinical: "肱二頭肌腱發達且含纖維腱索，是前肢站立靜止裝置的關鍵；結節間溝處易發二頭肌腱滑液囊炎。" },
-      { id: "radius_ulna", names: ["radius_ulna_l_54", "radius_ulna_r_55"], anchor: ["radius_ulna_l_54"], match: /radius_ulna/i, zh: "橈骨與尺骨 (含鷹嘴)", en: "Radius & Ulna (with Olecranon)", latin: "Radius et ulna", grp: "前肢承重系統", desc: "橈骨粗大垂直承重；尺骨近端形成高大鷹嘴（肘頭），骨幹向下急劇變細並與橈骨中段癒合，前臂無法旋前／旋後。", clinical: "鷹嘴為肱三頭肌附著處，馬踢傷引起鷹嘴骨折會呈現典型「掉肘（Dropped elbow）」步態。" },
-      { id: "carpus_proximal", names: ["radius_ulna_l_36", "radius_ulna_l_37", "radius_ulna_l_40", "radius_ulna_l_41", "radius_ulna_r_45", "radius_ulna_r_46", "radius_ulna_r_49", "radius_ulna_r_50"], anchor: ["radius_ulna_l_36", "radius_ulna_l_37", "radius_ulna_l_40", "radius_ulna_l_41"], match: /carpal/i, zh: "近列腕骨 (橈・中間・尺腕骨)", en: "Proximal Row of Carpal Bones (Radial, Intermediate, Ulnar)", latin: "Ossa carpi (Ordo proximalis)", grp: "前肢承重系統", desc: "由內而外為橈腕骨、中間腕骨與尺腕骨，上接橈骨遠端形成橈腕關節（活動度最大），下接遠列腕骨形成中腕關節。", clinical: "高速奔跑過度伸展時，橈腕骨與中間腕骨背緣最容易發生骨軟骨碎片骨折（Carpal chip fracture）。" },
-      { id: "carpus_accessory", names: ["radius_ulna_l_44", "radius_ulna_r_53"], anchor: ["radius_ulna_l_44"], zh: "副腕骨 (腕後種子骨)", en: "Accessory Carpal Bone", latin: "Os carpi accessorium", grp: "前肢承重系統", desc: "位於近列腕骨掌側（後方）的圓盤狀短骨（相當於人類豌豆骨），不直接負重，與屈肌支持帶共同圍成腕管。", clinical: "提供腕屈肌肌腱槓桿支點，保護通過腕管的指淺／深屈肌腱；跌倒撞擊可能導致垂直面骨折。" },
-      { id: "carpus_distal", names: ["carpal_l_38", "carpal_l_39", "carpal_l_42", "radius_ulna_l_43", "carpal_r_47", "carpal_r_48", "radius_ulna_r_51", "radius_ulna_r_52"], anchor: ["carpal_l_38", "carpal_l_39", "carpal_l_42", "radius_ulna_l_43"], zh: "遠列腕骨 (第 2・3・4 腕骨)", en: "Distal Row of Carpal Bones (C2, C3, C4)", latin: "Ossa carpi (Ordo distalis)", grp: "前肢承重系統", desc: "由內而外為第 2、第 3（最大，占遠列 2/3）與第 4 腕骨（第 1 腕骨僅約 50% 馬匹存在且極小），下接掌骨形成腕掌關節。", clinical: "第 3 腕骨承受極大垂直壓應力，賽馬常見第 3 腕骨板狀骨折（Slab fracture）與軟骨下骨硬化。" },
-      { id: "cannon_fore", names: ["cannon_fore_l_16", "cannon_fore_r_17"], anchor: ["cannon_fore_l_16"], match: /cannon_fore|splint_fore/i, zh: "前大砲骨 (第三掌骨) 與夾骨", en: "Fore Cannon (MC III) & Splint Bones (MC II/IV)", latin: "Os metacarpale III et II/IV", grp: "前肢承重系統", desc: "第三掌骨為極為堅固的圓柱狀承重骨；第二、第四掌骨退化為附於掌側兩旁的細長「夾骨（Splint bones）」。", clinical: "幼馬運動震盪易使砲骨前皮質發炎稱「管骨膜炎（Bucked shins）」；夾骨間韌帶骨化稱「夾骨瘤（Splints）」。" },
-      { id: "pastern_fore", names: ["pastern_fore_l_23", "pastern_fore_r_25"], anchor: ["pastern_fore_l_23"], match: /pastern_fore/i, zh: "前肢第一指骨／繫骨 (P1)", en: "Fore Proximal Phalanx (Long Pastern Bone, P1)", latin: "Phalanx proximalis (manus)", grp: "前肢承重系統", desc: "斜向前下方延伸，近端與第三掌骨及近端種子骨構成球節（Fetlock joint），遠端與冠骨構成繫關節。", clinical: "奔馳急停扭轉時，第一指骨近端矢狀溝易發生縱向劈裂骨折（Sagittal fracture）。" },
-      { id: "coronet_fore", names: ["coronet_fore_l_22", "coronet_fore_r_24"], anchor: ["coronet_fore_l_22"], match: /coronet_fore/i, zh: "前肢第二指骨／冠骨 (P2)", en: "Fore Middle Phalanx (Short Pastern Bone, P2)", latin: "Phalanx media (manus)", grp: "前肢承重系統", desc: "短粗方形骨，近端與繫骨形成繫關節（近指間關節），遠端部分包埋於蹄冠內與蹄骨、舟骨形成蹄關節。", clinical: "繫關節退化性骨關節炎伴隨骨贅增生，臨床俗稱「高位環骨（High ringbone）」。" },
-      { id: "coffin_fore", names: ["coffin_fore_l_26", "coronet_fore_r_27"], anchor: ["coffin_fore_l_26"], match: /coffin_fore/i, zh: "前肢第三指骨／蹄骨 (P3)", en: "Fore Distal Phalanx (Coffin Bone, P3)", latin: "Phalanx distalis / Os ungulare (manus)", grp: "前肢承重系統", desc: "呈半月圓錐形，完全包覆於蹄匣內，靠真皮葉層與蹄壁角質葉層緊密互鎖懸吊全身重量；掌側緊鄰遠端種子骨（舟骨）。", clinical: "蹄葉炎（Laminitis）時葉層分離，指深屈肌腱拉扯蹄骨向下旋轉，嚴重時可穿破蹄底；舟骨症亦好發於前蹄。" },
-      { id: "pelvis", names: ["sacrum_95"], match: /pelvis/i, zh: "骨盆 (髂骨・坐骨・恥骨)", en: "Pelvis (Ilium, Ischium & Pubis)", latin: "Os coxae / Pelvis", grp: "後肢推進系統", desc: "由左右髖骨於骨盆聯合癒合而成：髂骨翼外側為髖結節（腰角）、內側為薦結節；坐骨結節成臀角；髖臼容納股骨頭。", clinical: "通過狹窄門框撞擊常致髖結節骨折，外觀單側腰角塌陷稱「掉胯（Knocked-down hip）」。" },
-      { id: "femur", names: ["pelvis_l_2", "pelvis_r_3"], anchor: ["pelvis_l_2"], match: /femur/i, zh: "股骨 (具第三轉子)", en: "Femur (with Third Trochanter)", latin: "Os femoris", grp: "後肢推進系統", desc: "全身最粗壯長骨，外側骨幹具馬科特徵性「第三轉子（Third trochanter）」供臀淺肌附著；遠端內側滑車嵴特別巨大。", clinical: "股骨內側滑車嵴與上方的滑車結節，是後肢站立鎖定（Stay apparatus）勾掛髕骨的核心結構。" },
-      { id: "patella", names: ["femur_l_4", "femur_r_5"], anchor: ["femur_l_4"], match: /patella/i, zh: "髕骨 (膝蓋骨)", en: "Patella", latin: "Patella", grp: "後肢推進系統", desc: "大型種子骨，內側附著髕骨副軟骨，下方以內、中、外三條髕直韌帶連接脛骨粗隆。", clinical: "馬站立休息時可將內側髕直韌帶與副軟骨勾鎖於股骨內側滑車嵴上；若無法自動解鎖則稱「髕骨上方固定」。" },
-      { id: "tibia", names: ["tibia_fibula_l_8", "tibia_fibula_r_9"], anchor: ["tibia_fibula_l_8"], match: /tibia_fibula/i, zh: "脛骨", en: "Tibia", latin: "Tibia", grp: "後肢推進系統", desc: "後肢小腿部主要承重長骨，近端前方具粗大脛骨粗隆，遠端滑車凹斜向排列與距骨形成強力絞鏈關節。", clinical: "脛骨內側面僅覆薄層皮膚、無肌肉保護，遭踢傷極易發生骨膜炎或粉碎性開放骨折。" },
-      { id: "fibula", names: ["tibia_fibula_l_12", "tibia_fibula_r_13"], anchor: ["tibia_fibula_l_12"], zh: "腓骨 (退化細骨)", en: "Fibula", latin: "Fibula", grp: "後肢推進系統", desc: "馬的腓骨高度退化，僅存近端腓骨頭（接脛骨外側髁）與向下漸尖的細長骨針，遠端則癒合於脛骨成為外踝。", clinical: "臨床 X 光判讀時須區分腓骨正常骨化中心分節與真正腓骨骨折。" },
-      { id: "calcaneus", names: ["tibia_fibula_l_6", "tibia_fibula_r_7"], anchor: ["tibia_fibula_l_6"], match: /calcaneus/i, zh: "跟骨 (飛節尖)", en: "Calcaneus (Point of Hock)", latin: "Calcaneus", grp: "後肢推進系統", desc: "跗骨中最大且最靠後上方的長形骨，其向後上方突出的跟骨結節（Tuber calcanei）形成飛節尖，為跟腱（腓腸肌腱與趾淺屈肌腱）附著點。", clinical: "飛節尖皮下囊摩擦腫大俗稱「飛節頂腫（Capped hock）」；跟骨結節為後肢強大伸展槓桿臂。" },
-      { id: "talus", names: ["tibia_fibula_l_10", "tibia_fibula_r_11"], anchor: ["tibia_fibula_l_10"], match: /talus/i, zh: "距骨 (跗滑車)", en: "Talus", latin: "Talus", grp: "後肢推進系統", desc: "位於飛節前內側，近端具兩條深而斜向的滑車嵴，與脛骨遠端緊密嵌合，承受飛節幾乎全部的屈伸活動。", clinical: "幼馬距骨外側滑車嵴遠端是分離性骨軟骨炎（OCD）最常見的好發部位，常導致飛節積液（Bog spavin）。" },
-      { id: "tarsus_distal", names: ["tarsus_calcaneus_l_30", "tarsus_calcaneus_l_31", "tarsus_calcaneus_l_32", "tarsus_calcaneus_r_33", "tarsus_calcaneus_r_34", "tarsus_calcaneus_r_35"], anchor: ["tarsus_calcaneus_l_30", "tarsus_calcaneus_l_31", "tarsus_calcaneus_l_32"], match: /tarsal/i, zh: "中央跗骨與遠列跗骨 (T1+2・T3・T4)", en: "Central & Distal Tarsal Bones", latin: "Os tarsi centrale et ossa tarsalia I–IV", grp: "後肢推進系統", desc: "扁平緊密排列的中央跗骨、第 3 跗骨、第 4 跗骨及癒合的第 1+2 跗骨，幾乎無活動度，專責吸收壓力並傳導至後砲骨。", clinical: "遠端跗間關節與跗蹠關節之慢性退化性骨關節炎，稱為「飛節內腫（Bone spavin）」，是後肢跛行最常見病因。" },
-      { id: "cannon_hind", names: ["cannon_hind_l_14", "cannon_hind_r_15"], anchor: ["cannon_hind_l_14"], match: /cannon_hind|splint_hind/i, zh: "後大砲骨 (第三蹠骨) 與副蹠骨", en: "Hind Cannon (MT III) & Splint Bones (MT II/IV)", latin: "Os metatarsale III et II/IV", grp: "後肢推進系統", desc: "較前大砲骨長約 1/6、斷面較圓以抵抗後肢推進彎矩，蹠側兩旁同樣附有退化的第二、第四蹠骨。", clinical: "外側第四蹠骨較粗大，外傷遭他馬踢擊容易發生開放性副蹠骨骨折。" },
-      { id: "pastern_hind", names: ["pastern_hind_l_18", "pastern_hind_r_19"], anchor: ["pastern_hind_l_18"], match: /pastern_hind/i, zh: "後肢第一趾骨／繫骨 (P1)", en: "Hind Proximal Phalanx (Long Pastern Bone, P1)", latin: "Phalanx proximalis (pedis)", grp: "後肢推進系統", desc: "後肢球節下方之第一趾骨，較前肢繫骨略窄長且角度稍直立，承受後肢蹬地推進力。", clinical: "球節背近端偶見骨軟骨碎片，亦可能於急轉加速時發生矢狀骨折。" },
-      { id: "coronet_hind", names: ["coronet_hind_l_20", "coronet_hind_r_21"], anchor: ["coronet_hind_l_20"], match: /coronet_hind/i, zh: "後肢第二趾骨／冠骨 (P2)", en: "Hind Middle Phalanx (Short Pastern Bone, P2)", latin: "Phalanx media (pedis)", grp: "後肢推進系統", desc: "介於後肢繫骨與後蹄骨之間的短柱狀骨，構成近趾間關節與遠趾間關節。", clinical: "急停轉向頻繁的西部競技馬較易在後肢繫關節出現骨關節炎。" },
-      { id: "coffin_hind", names: ["coronet_hind_l_28", "coronet_hind_r_29"], anchor: ["coronet_hind_l_28"], match: /coffin_hind/i, zh: "後肢第三趾骨／蹄骨 (P3)", en: "Hind Distal Phalanx (Coffin Bone, P3)", latin: "Phalanx distalis / Os ungulare (pedis)", grp: "後肢推進系統", desc: "包覆於後蹄匣內，外形較前蹄骨尖窄、蹄底凹度較深且背壁較陡峭，利於抓地蹬推加速。", clinical: "因後肢僅承重約 40%，後蹄發生蹄葉炎與舟骨症的機率明顯低於前蹄。" },
-    ];
-
-    // 將 3D 骨骼 mesh 分派至各 group：先依名稱清單，找不到再用 regex（供備用模型）
-    const byName = {};
-    groupDef.forEach(g => (g.names || []).forEach(n => byName[n] = g.id));
-    const buckets = {};
-    groupDef.forEach(g => buckets[g.id] = []);
-
-    root.traverse(child => {
-      if (!child.isMesh) return;
-      child.material = boneMat.clone();
-      let id = byName[child.name];
-      if (!id) {
-        const g = groupDef.find(g => g.match && g.match.test(child.name));
-        id = g ? g.id : null;
-      }
-      if (id) buckets[id].push(child);
-      else console.warn('未分類的馬骨骼 mesh:', child.name);
-    });
-
-    groupDef.forEach(g => {
-      const meshes = buckets[g.id];
-      if (meshes.length === 0) return;
-      const anchorMeshes = g.anchor ? meshes.filter(m => g.anchor.includes(m.name)) : [];
-      regPart({
-        id: g.id,
-        zh: g.zh,
-        en: g.en,
-        latin: g.latin,
-        grp: g.grp,
-        desc: g.desc,
-        clinical: g.clinical,
-        meshes: meshes,
-        anchorMeshes: anchorMeshes.length ? anchorMeshes : null,
-        anchorAt: g.anchorAt,
-        visible: true
-      });
-    });
-  },
+  camera: { pos: [0, 0, 68], target: [0, 0, 0] },
+  build: function() { buildHorseScene(null); },
   controls: [
-    { label: "🐾 頭頸與環/樞椎", fn: () => flyTo([10, 8, 24], [10, 8, 0]) },
-    { label: "🦴 腕骨／前膝特寫", fn: () => flyTo([4, -4, 18], [4, -4.5, 0]) },
-    { label: "🐎 後肢與飛節特寫", fn: () => flyTo([-11, -3, 28], [-11, -3, 0]) },
+    { label: "🐾 頭頸與環/樞椎", fn: () => flyTo([10, 8, 22], [10, 8, 0]) },
+    { label: "🦴 腕骨／前膝特寫", fn: () => flyTo([4, -4, 16], [4, -4.5, 0]) },
+    { label: "🐎 後肢與飛節特寫", fn: () => flyTo([-11, -3, 24], [-11, -3, 0]) },
     { label: "💥 爆炸分解 / 復原", fn: toggleExplode }
   ]
 });
 
-// SCENE 2: 馬頭頸與前肢
+// SCENE 2: 馬頭頸與前肢（實際隔離顯示頭顱、C1–C7、前胸廓與前肢）
 SCENES.push({
   name: "(2) 馬頭頸與前肢",
-  title: "馬頭部・頸椎與前肢單蹄機構",
+  title: "馬頭頸部（C1–C7）與前肢承重系統特寫",
   desc: `
-    馬前肢承擔全身 60-65% 體重，主要功能為吸收高速著地之強大垂直震盪。<br>
+    本場景<strong>專注隔離顯示頭顱、牙齒、C1–C7 頸椎、前胸廓（T1–T9、第 1–10 肋骨）與前肢全骨（含 5 組腕骨與三節指骨）</strong>：<br>
     <table>
-      <tr><th>構造</th><th>解剖結構</th><th>臨床重要性</th></tr>
-      <tr><td>頭顱副鼻竇</td><td>額竇與上頜竇直接相通</td><td>竇蓄膿穿孔引流術（Sinus Trephination）重要位置</td></tr>
-      <tr><td>球節懸吊系統</td><td>第三掌骨遠端、近端種子骨、懸韌帶</td><td>球節下沉過度引發種子骨炎（Sesamoiditis）</td></tr>
-      <tr><td>單蹄懸吊</td><td>蹄匣（Hoof capsule）內之角質與真皮葉層</td><td>蹄葉炎（Laminitis）時葉層缺血壞死，蹄骨旋轉穿底</td></tr>
+      <tr><th>構造</th><th>細部解剖重點</th><th>臨床重要性</th></tr>
+      <tr><td>頸椎 C1–C7</td><td>C1 環椎、C2 樞椎、C3–C7 逐節可點選</td><td>C1 寰枕池 CSF 穿刺；C3–C6 搖擺症好發</td></tr>
+      <tr><td>腕骨群 (前膝)</td><td>橈腕骨、中間/尺腕骨、副腕骨、第 2/3/4 腕骨</td><td>賽馬腕骨碎片骨折（C3 板狀骨折）高發處</td></tr>
+      <tr><td>前肢單蹄三指骨</td><td>第一指骨(繫骨 P1)、第二指骨(冠骨 P2)、第三指骨(蹄骨 P3)</td><td>承重 60%；蹄葉炎與舟骨症好發於前蹄</td></tr>
     </table>
   `,
-  camera: { pos: [9, 0, 46], target: [9, 0, 0] },
-  build: function() {
-    SCENES[0].build(); // 復用骨骼模型
-  },
+  camera: { pos: [7, 1, 38], target: [7, 1, 0] },
+  build: function() { buildHorseScene('head_fore'); },
   controls: [
-    { label: "🐴 側觀視角", fn: () => flyTo([9, 0, 46], [9, 0, 0]) },
-    { label: "🔍 正面檢視", fn: () => flyTo([48, 2, 0], [0, 0, 0]) },
-    { label: "💥 爆炸分解 / 復原", fn: toggleExplode }
+    { label: "🦒 環椎・樞椎特寫", fn: () => flyTo([9, 10, 16], [9, 9.5, 0]) },
+    { label: "🦴 腕骨群特寫", fn: () => flyTo([4, -4.5, 13], [4, -4.8, 0]) },
+    { label: "🐴 前蹄三指骨特寫", fn: () => flyTo([4, -10, 14], [4, -10, 0]) },
+    { label: "👁️ 顯示／隱藏後軀", fn: () => toggleRegionVisibility('head_fore') }
   ]
 });
 
-// SCENE 3: 馬脊椎與後肢
+// SCENE 3: 馬後肢與骨盆（實際隔離顯示腰薦尾椎、骨盆與後肢）
 SCENES.push({
   name: "(3) 馬後肢與骨盆",
-  title: "馬骨盆・後肢與站立靜止裝置 (Stay Apparatus)",
+  title: "馬腰薦尾椎・骨盆・後肢與飛節特寫",
   desc: `
-    後肢為馬奔馳前進之動力引擎，並具特化之關節聯鎖靜止裝置。<br>
+    本場景<strong>專注隔離顯示後胸椎（T10–T18）、L1–L6 腰椎、薦骨、Co1–Co18 尾椎、骨盆與後肢全骨（含脛/腓骨與 5 組跗骨）</strong>：<br>
     <table>
-      <tr><th>構造</th><th>解剖特徵</th><th>獸醫臨床重點</th></tr>
-      <tr><td>第三轉子</td><td>股骨外側之粗大骨突</td><td>臀淺肌附著處，馬特徵解剖標記</td></tr>
-      <tr><td>膝蓋鎖定機制</td><td>髕骨軟骨勾鎖於股骨內側滑車脊</td><td>鎖定時後肢不需肌肉出力即可支撐體重；偶發髕骨上方固定（習慣性鎖死）</td></tr>
-      <tr><td>相互聯動裝置</td><td>腓骨第三肌與趾淺屈肌肌腱索</td><td>膝關節屈曲時強制飛節同步屈曲，兩關節角度永保聯鎖</td></tr>
+      <tr><th>構造</th><th>細部解剖重點</th><th>獸醫臨床重點</th></tr>
+      <tr><td>腰薦與骨盆</td><td>L1–L6 逐節、S1–S5 薦骨、Co1–Co18 逐節、骨盆</td><td>Co1–Co2 尾硬膜外麻醉；髖結節骨折致「掉胯」</td></tr>
+      <tr><td>股骨與髕骨</td><td>股骨具<strong>第三轉子</strong>；髕骨鎖定股骨內側滑車嵴</td><td>站立靜止裝置核心；異常鎖死稱髕骨上方固定</td></tr>
+      <tr><td>飛節 (跗骨群)</td><td><strong>跟骨、距骨、中央跗骨、第三跗骨、第四跗骨</strong></td><td>距骨 OCD（飛節積液）；遠端跗骨關節炎（飛節內腫）</td></tr>
     </table>
   `,
-  camera: { pos: [-11, -2, 42], target: [-11, -2, 0] },
-  build: function() {
-    SCENES[0].build();
-  },
+  camera: { pos: [-11, -1, 36], target: [-11, -1, 0] },
+  build: function() { buildHorseScene('hind_pelvis'); },
   controls: [
-    { label: "🐎 骨盆與第三轉子特寫", fn: () => flyTo([-10, 4, 22], [-10, 4, 0]) },
-    { label: "🦵 膝關節與髕骨特寫", fn: () => flyTo([-10, -1, 16], [-10, -1, 0]) },
-    { label: "💥 爆炸分解 / 復原", fn: toggleExplode }
+    { label: "🐎 骨盆與第三轉子", fn: () => flyTo([-10, 3, 20], [-10, 3, 0]) },
+    { label: "🦵 膝關節與髕骨", fn: () => flyTo([-10, -1, 16], [-10, -1, 0]) },
+    { label: "🦶 飛節(跟/距/跗骨)", fn: () => flyTo([-12, -5.5, 14], [-12, -5.5, 0]) },
+    { label: "👁️ 顯示／隱藏前軀", fn: () => toggleRegionVisibility('hind_pelvis') }
   ]
 });
 
@@ -1203,55 +1256,155 @@ SCENES.push({
   ]
 });
 
-// SCENE 6: 狗與豬消化道形態對比
+// SCENE 6: 豬狗消化器官同畫面並排對比（上方＝犬、下方＝豬）
 SCENES.push({
   name: "(6) 豬狗消化器官對比",
-  title: "犬（食肉類）與豬（雜食類）消化道解剖對比",
+  title: "犬（上方）vs 豬（下方）消化道與特徵器官同畫面 3D 對比",
   desc: `
-    食肉目與偶蹄雜食類演化適應之巨觀解剖特徵對照表：<br>
+    本場景將<strong>犬（上方，食肉類）</strong>與<strong>豬（下方，雜食類）</strong>之核心消化與特徵器官同畫面並排，方便直接對照形態差異：<br>
     <table>
-      <tr><th>比較器官</th><th>犬 (Canine, 食肉類)</th><th>豬 (Porcine, 雜食類)</th></tr>
-      <tr><td>吻部骨骼</td><td>吻端由鼻骨與切齒骨構成，無額外骨</td><td>具獨立<strong>吻骨 (Os rostri)</strong> 支撐拱土</td></tr>
-      <tr><td>氣管構造</td><td>正常氣管分叉成左右主支氣管</td><td>隆突前右壁具<strong>氣管支氣管 (Tracheal bronchus)</strong></td></tr>
-      <tr><td>胃部形態</td><td>單室C形囊，胃底平滑</td><td>具<strong>胃憩室 (Diverticulum)</strong> 與<strong>幽門枕</strong></td></tr>
-      <tr><td>結腸形態</td><td>呈簡單<strong>問號形</strong>（升/橫/降結腸）</td><td>特化為巨大<strong>圓錐螺旋結腸盤 (Spiral colon)</strong></td></tr>
-      <tr><td>肝臟質地</td><td>深裂柔軟，小葉間結締組織薄</td><td>小葉結締組織厚，肉眼可見<strong>清晰小葉網紋</strong></td></tr>
-      <tr><td>脾臟形態</td><td>扁平<strong>舌狀 (Tongue-shaped)</strong></td><td>狹長<strong>帶狀 (Strap-like)</strong>，長達40-50cm</td></tr>
-      <tr><td>盲腸構造</td><td><strong>S形短小螺旋狀</strong>盲囊</td><td>粗大<strong>圓筒狀</strong>，具縱行肌帶與袋狀分節</td></tr>
+      <tr><th>比較器官</th><th>上方：犬 (Canine)</th><th>下方：豬 (Porcine)</th></tr>
+      <tr><td>胃部形態</td><td>單室 C 形囊，胃底平滑</td><td>具背側<strong>胃憩室 (Diverticulum)</strong> 與<strong>幽門枕</strong></td></tr>
+      <tr><td>脾臟形態</td><td>扁平寬闊<strong>舌狀 (Tongue-shaped)</strong></td><td>極狹長扁平<strong>帶狀 (Strap-like)</strong></td></tr>
+      <tr><td>盲腸構造</td><td>右側 <strong>S 形短小螺旋狀</strong>盲囊</td><td>左側粗大<strong>圓筒狀</strong>（具縱肌帶與分節）</td></tr>
+      <tr><td>結腸形態</td><td>簡單<strong>問號形</strong>（升/橫/降結腸）</td><td>左側巨大<strong>倒圓錐螺旋結腸盤</strong>（背底腹尖）</td></tr>
+      <tr><td>肝臟與膽囊</td><td>6 葉深裂柔軟，小葉間結締組織薄</td><td>深裂分葉，小葉間結締組織厚呈清晰網紋</td></tr>
     </table>
   `,
-  camera: { pos: [0, 0, 28], target: [-1, 0, 0] },
+  camera: { pos: [0, 0, 30], target: [-1.5, 0, 0] },
   build: function() {
-    SCENES[4].build(); // 同時展示特徵器官
+    function addDigestiveRow(objData, speciesTag, yOffset, specs) {
+      if (!objData) return;
+      const root = loadOBJString(objData);
+      const keepRegex = /liver|gallbladder|stomach|diverticulum|spleen|pancreas|small_intestine|cecum|colon/i;
+      const toRemove = [];
+      root.traverse(c => { if (c.isMesh && !keepRegex.test(c.name)) toRemove.push(c); });
+      toRemove.forEach(c => c.parent && c.parent.remove(c));
+
+      const box = new THREE.Box3().setFromObject(root);
+      const center = new THREE.Vector3(); box.getCenter(center);
+      const size = new THREE.Vector3(); box.getSize(size);
+      const scale = 18 / (Math.max(size.x, size.y, size.z) || 1);
+      root.scale.set(scale, scale, scale);
+      root.position.sub(center.clone().multiplyScalar(scale));
+      root.position.y += yOffset;
+      CUR.root.add(root);
+
+      root.traverse(child => {
+        if (!child.isMesh) return;
+        for (const o of specs) {
+          if (o.match.test(child.name)) {
+            child.material = new THREE.MeshLambertMaterial({ color: o.col });
+            const bb = new THREE.Box3().setFromObject(child);
+            const anchor = new THREE.Vector3(); bb.getCenter(anchor);
+            regPart({
+              id: o.id, zh: `【${speciesTag}】${o.zh}`, en: o.en, latin: o.latin,
+              grp: `${speciesTag}消化道（${yOffset > 0 ? '上方' : '下方'}）`,
+              desc: o.desc, clinical: o.clinical,
+              meshes: [child], anchor, visible: true, isKey: o.key !== false, region: o.pair
+            });
+            break;
+          }
+        }
+      });
+    }
+
+    addDigestiveRow(window.DOG_OBJ_DATA, '犬', 5.4, [
+      { id: 'cmp_dog_liver', pair: 'liver', match: /liver/i, zh: '肝臟 (6葉柔軟)', en: 'Canine Liver', latin: 'Hepar', col: 0x881337, desc: '犬肝深裂為 6 葉，小葉間結締組織薄、質地柔軟。', clinical: '幼犬常見門脈分流（PSS）。' },
+      { id: 'cmp_dog_gb', pair: 'liver', key: false, match: /gallbladder/i, zh: '膽囊', en: 'Canine Gallbladder', latin: 'Vesica fellea', col: 0x15803d, desc: '梨形膽囊位於方葉與右內葉間。', clinical: '膽囊黏液囊腫好發於喜樂蒂與雪納瑞。' },
+      { id: 'cmp_dog_stom', pair: 'stom', match: /stomach/i, zh: '單室 C 形胃', en: 'Canine Stomach', latin: 'Gaster', col: 0xf472b6, desc: '典型食肉動物 C 形單室胃，胃底圓滑無憩室。', clinical: '大型深胸犬易發胃擴張扭轉（GDV）。' },
+      { id: 'cmp_dog_spl', pair: 'stom', match: /spleen/i, zh: '舌狀脾臟', en: 'Tongue-shaped Spleen', latin: 'Lien', col: 0x581c87, desc: '寬扁舌狀脾臟，掛於胃大彎左側。', clinical: '富含平滑肌與儲血，鈍傷易致腹腔大出血。' },
+      { id: 'cmp_dog_panc', pair: 'liver', key: false, match: /pancreas/i, zh: 'V 形兩葉胰臟', en: 'V-shaped Pancreas', latin: 'Pancreas', col: 0xfde047, desc: '呈 V 形分右葉（沿十二指腸）與左葉（沿胃大彎）。', clinical: '高脂飲食易誘發急性胰臟炎。' },
+      { id: 'cmp_dog_si', pair: 'colon', key: false, match: /small_intestine/i, zh: '小腸', en: 'Canine Small Intestine', latin: 'Intestinum tenue', col: 0xfca5a5, desc: '食肉動物小腸相對較短，空腸盤繞於腹底。', clinical: '幼犬常見腸套疊與線狀異物。' },
+      { id: 'cmp_dog_cec', pair: 'colon', match: /cecum/i, zh: 'S 形短小盲腸', en: 'S-shaped Cecum', latin: 'Caecum', col: 0xd97706, desc: '右側迴結腸交界處之 S 形短盲囊，發酵功能極低。', clinical: '偶見犬鞭蟲寄生或盲腸內翻。' },
+      { id: 'cmp_dog_col', pair: 'colon', match: /colon/i, zh: '問號形結腸', en: 'Question-mark Colon', latin: 'Colon', col: 0xb45309, desc: '升結腸極短，接橫結腸與長降結腸呈簡單問號形。', clinical: '公犬攝護腺肥大易壓迫直腸導致排便困難。' }
+    ]);
+
+    addDigestiveRow(window.PIG_OBJ_DATA, '豬', -5.4, [
+      { id: 'cmp_pig_liver', pair: 'liver', match: /liver/i, zh: '分葉網紋肝臟', en: 'Porcine Liver', latin: 'Hepar', col: 0x9f1239, desc: '豬肝小葉間結締組織極厚，表面可見清晰多角形小葉網紋。', clinical: '豬蛔蟲移行易造成「乳斑肝（Milk spots）」。' },
+      { id: 'cmp_pig_gb', pair: 'liver', key: false, match: /gallbladder/i, zh: '膽囊', en: 'Porcine Gallbladder', latin: 'Vesica biliaris', col: 0x16a34a, desc: '位於肝臟臟面右內葉與方葉之間膽囊窩。', clinical: '富含豬去氧膽酸。' },
+      { id: 'cmp_pig_stom', pair: 'stom', match: /stomach|diverticulum/i, zh: '單室胃＋胃憩室＋幽門枕', en: 'Porcine Stomach & Diverticulum', latin: 'Diverticulum ventriculi', col: 0xfb7185, desc: '胃底背左側突出錐形盲囊「胃憩室」，幽門處具半球形「幽門枕」。', clinical: '食道部非腺黏膜極易發生致命性胃潰瘍。' },
+      { id: 'cmp_pig_spl', pair: 'stom', match: /spleen/i, zh: '狹長帶狀脾臟', en: 'Strap-like Spleen', latin: 'Lien', col: 0x701a75, desc: '細長扁平呈帶狀，沿胃大彎左側縱向延伸，完全不同於犬之舌狀脾。', clinical: '非洲豬瘟時脾臟極度黑紫腫大。' },
+      { id: 'cmp_pig_panc', pair: 'liver', key: false, match: /pancreas/i, zh: '三葉胰臟 (門靜脈環)', en: 'Porcine Pancreas', latin: 'Pancreas', col: 0xfacc15, desc: '由脾葉、十二指腸葉與連接葉環繞門靜脈形成門靜脈環。', clinical: '早期糖尿病胰島素主要萃取來源。' },
+      { id: 'cmp_pig_si', pair: 'colon', key: false, match: /small_intestine/i, zh: '小腸 (空腸/迴腸)', en: 'Porcine Small Intestine', latin: 'Intestinum tenue', col: 0xfda4af, desc: '右側空腸密集盤繞，末端迴腸向左經迴腸乳頭開口於盲結腸交界。', clinical: 'PED／TGE 病毒造成絨毛萎縮與水樣下痢。' },
+      { id: 'cmp_pig_cec', pair: 'colon', match: /cecum/i, zh: '左側圓筒盲腸 (具縱帶)', en: 'Cylindrical Cecum', latin: 'Caecum', col: 0xf59e0b, desc: '位於腹腔左側中後部，粗大圓筒狀具 3 條縱行肌帶與袋狀分節。', clinical: '豬鞭蟲好發寄生部位。' },
+      { id: 'cmp_pig_col', pair: 'colon', match: /spiral_colon/i, zh: '圓錐螺旋結腸盤 (背底腹尖)', en: 'Conical Spiral Colon', latin: 'Colon spirale', col: 0xd97706, desc: '升結腸盤成基底朝背、尖端朝腹的倒圓錐；外層向心有袋、內層離心平滑。', clinical: '豬赤痢與沙門氏菌腸炎典型病灶區。' }
+    ]);
   },
   controls: [
-    { label: "🐕 切換至狗內臟觀看", fn: () => loadScene(3) },
-    { label: "🐖 切換至豬特徵觀看", fn: () => loadScene(4) }
+    { label: "🔄 全消化道並排", fn: () => { CUR.parts.forEach(p => p.visible = true); rebuildList(); refresh(); resetCam(); } },
+    { label: "🥩 只比對：胃與脾臟", fn: () => { CUR.parts.forEach(p => p.visible = p.region === 'stom'); rebuildList(); refresh(); } },
+    { label: "🌀 只比對：盲腸與結腸", fn: () => { CUR.parts.forEach(p => p.visible = p.region === 'colon'); rebuildList(); refresh(); } },
+    { label: "🫀 只比對：肝膽與胰臟", fn: () => { CUR.parts.forEach(p => p.visible = p.region === 'liver'); rebuildList(); refresh(); } }
   ]
 });
 
-// SCENE 7: 解剖隨機抽考
-let QUIZ_STATE = { active: false, curPart: null, score: 0, total: 0, streak: 0 };
+// SCENE 7: 嚴謹解剖隨機抽考（作答前完全隱藏所有名稱、標籤、懸停提示與構造清單！）
+let QUIZ_STATE = { active: false, revealed: false, bank: 'horse', curPart: null, score: 0, total: 0, streak: 0 };
+
+function loadQuizBank(bank) {
+  QUIZ_STATE.bank = bank;
+  if (CUR.root) {
+    scene3.remove(CUR.root);
+    CUR.root.traverse(o => { if (o.geometry && !o.geometry.userData.shared) o.geometry.dispose(); });
+  }
+  CUR.root = new THREE.Group();
+  scene3.add(CUR.root);
+  CUR.parts = [];
+  selected = null;
+  isExploded = false;
+
+  if (bank === 'dog') SCENES[3].build();
+  else if (bank === 'pig') SCENES[4].build();
+  else SCENES[0].build();
+
+  CUR.parts.forEach(p => p.meshes.forEach(m => {
+    if (m.material) {
+      m.material.userData.baseO = m.material.opacity;
+      m.material.userData.baseC = m.material.emissive ? m.material.emissive.getHex() : 0;
+    }
+  }));
+
+  $('labels').innerHTML = '';
+  $('svg').innerHTML = '';
+  labelEls = [];
+  CUR.parts.forEach(p => {
+    const d = document.createElement('div');
+    d.className = 'lab';
+    d.innerHTML = p.zh + '<small>' + (p.latin || p.en) + '</small>';
+    d.onclick = () => { if (!QUIZ_STATE.active || QUIZ_STATE.revealed) { select(p); SOUND.playClick(); } };
+    $('labels').appendChild(d);
+    const ln = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    ln.setAttribute('stroke', '#7fb6e8');
+    ln.setAttribute('stroke-width', '1');
+    ln.setAttribute('stroke-opacity', '0.75');
+    $('svg').appendChild(ln);
+    labelEls.push({ p, d, ln });
+  });
+
+  startQuizQuestion();
+}
+
 SCENES.push({
   name: "(7) 隨機抽考測驗",
-  title: "獸醫解剖 3D 中文抽考測驗系統",
+  title: "獸醫解剖 3D 無提示抽考系統",
   desc: `
-    互動式 3D 解剖部位隨機抽考：<br>
-    系統將在當前 3D 模型中<strong>聚光鎖定</strong>某個骨骼或內臟部位。<br>
-    請在右下側輸入該構造的<strong>中文名稱</strong>（或通用俗稱/別名），並點擊送出！<br>
-    測驗支援即時音效反饋、答題統計與即時詳解。
+    互動式 3D 解剖抽考（已啟用防洩題模式）：<br>
+    作答期間將<strong>自動隱藏所有 3D 標籤、滑鼠懸停名稱與左側構造清單</strong>。<br>
+    請觀察畫面中亮橘色高亮的解剖構造，在右下方輸入其<strong>中文名稱</strong>（如：環椎、樞椎、副腕骨、第 4 胸椎、胃憩室、螺旋結腸）並提交！
   `,
-  camera: { pos: [0, 0, 26], target: [0, 0, 0] },
+  camera: { pos: [0, 0, 56], target: [0, 0, 0] },
   build: function() {
-    // 預設以馬全身骨骼為題庫
+    QUIZ_STATE.active = true;
+    QUIZ_STATE.revealed = false;
     SCENES[0].build();
-    setTimeout(() => startQuizQuestion(), 200);
+    setTimeout(() => startQuizQuestion(), 180);
   },
   controls: [
     { label: "🎯 換一題抽考", fn: () => startQuizQuestion() },
-    { label: "🐎 抽考馬骨骼", fn: () => { SCENES[0].build(); startQuizQuestion(); } },
-    { label: "🐕 抽考狗器官", fn: () => { SCENES[3].build(); startQuizQuestion(); } },
-    { label: "🐖 抽考豬器官", fn: () => { SCENES[4].build(); startQuizQuestion(); } }
+    { label: "🐎 抽考馬骨骼", fn: () => loadQuizBank('horse') },
+    { label: "🐕 抽考狗器官", fn: () => loadQuizBank('dog') },
+    { label: "🐖 抽考豬器官", fn: () => loadQuizBank('pig') }
   ]
 });
 
@@ -1349,6 +1502,7 @@ function flyMesh(mesh, targetPos, ms = 600) {
 function startQuizQuestion() {
   if (CUR.parts.length === 0) return;
   QUIZ_STATE.active = true;
+  QUIZ_STATE.revealed = false;
   const validParts = CUR.parts.filter(p => p.visible && p.zh);
   const picked = validParts[Math.floor(Math.random() * validParts.length)];
   QUIZ_STATE.curPart = picked;
@@ -1356,59 +1510,102 @@ function startQuizQuestion() {
   select(picked);
   resolveAnchor(picked);
   if (picked.anchor) {
+    const dist = QUIZ_STATE.bank === 'horse' ? 22 : 14;
     flyTo(
-      [picked.anchor.x + 4, picked.anchor.y + 2, picked.anchor.z + 12],
+      [picked.anchor.x + dist * 0.25, picked.anchor.y + dist * 0.12, picked.anchor.z + dist],
       [picked.anchor.x, picked.anchor.y, picked.anchor.z],
       600
     );
   }
 
-  // 渲染右側測驗 Widget
+  // 防洩題：作答中隱藏左側構造清單與所有 3D 標籤、滑鼠提示
+  $('tip').style.display = 'none';
+  $('plist').innerHTML = `
+    <div style="padding:14px 10px;text-align:center;color:#93c5fd;background:rgba(15,35,58,0.65);border:1px dashed #3b82f6;border-radius:8px;font-size:12.5px;line-height:1.6;">
+      🔒 <strong>防洩題模式已啟用</strong><br>
+      3D 標籤、懸停提示與構造清單皆已隱藏。<br>
+      提交答案或點擊「看答案」後將立即解鎖！
+    </div>
+  `;
+
+  const bankLabel = QUIZ_STATE.bank === 'dog' ? '🐕 狗器官' : (QUIZ_STATE.bank === 'pig' ? '🐖 豬器官' : '🐎 馬骨骼');
+
   $('info').innerHTML = `
     <div class="quiz-widget">
-      <span class="quiz-badge">🎯 解剖隨機抽考</span>
-      <div style="font-size:12px; color:#93c5fd;">已聚焦鎖定 3D 模型中高亮閃爍之部位：</div>
+      <div><span class="quiz-badge">🎯 解剖隨機抽考 · ${bankLabel}</span></div>
+      <div style="font-size:12px; color:#93c5fd;">已於 3D 畫面高亮鎖定題目部位（可自由拖曳旋轉觀察）：</div>
       <div class="quiz-prompt">請輸入此解剖構造的<strong>中文名稱</strong>：</div>
       <div class="quiz-row">
-        <input type="text" class="quiz-input" id="quiz-ans" placeholder="輸入名稱 (如: 股骨、盲腸...)" autofocus />
-        <button id="quiz-sub" style="background:#2563eb; color:#fff; padding:6px 14px; border:none; border-radius:4px; cursor:pointer; font-weight:700;">提交</button>
+        <input type="text" class="quiz-input" id="quiz-ans" placeholder="輸入名稱（如：環椎、副腕骨、胃憩室）" autofocus />
+        <button id="quiz-sub" style="background:#2563eb; color:#fff; padding:6px 12px; border:none; border-radius:4px; cursor:pointer; font-weight:700;">提交</button>
       </div>
+      <div class="quiz-row">
+        <button id="quiz-hint" type="button" style="flex:1;background:#1e3a5f;color:#fde68a;border:1px solid #475569;border-radius:4px;padding:5px;cursor:pointer;font-size:12px;">💡 顯示提示</button>
+        <button id="quiz-reveal" type="button" style="flex:1;background:#3b1d2a;color:#fca5a5;border:1px solid #7f1d1d;border-radius:4px;padding:5px;cursor:pointer;font-size:12px;">👁️ 直接看答案</button>
+      </div>
+      <div id="quiz-hint-box" style="display:none;font-size:12px;color:#fde68a;background:rgba(234,179,8,0.12);border-left:3px solid #eab308;padding:5px 8px;border-radius:4px;"></div>
       <div id="quiz-feedback"></div>
-      <div style="margin-top:10px; font-size:12px; color:#9ca3af;">
-        統計：答對 <strong>${QUIZ_STATE.score}</strong> / <strong>${QUIZ_STATE.total}</strong> 題 ｜ 🔥 連續答對：<strong>${QUIZ_STATE.streak}</strong>
+      <div style="margin-top:6px; font-size:12px; color:#9ca3af;">
+        統計：答對 <strong>${QUIZ_STATE.score}</strong> / <strong>${QUIZ_STATE.total}</strong> 題 ｜ 🔥 連勝：<strong>${QUIZ_STATE.streak}</strong>
       </div>
     </div>
   `;
 
   const inputEl = $('quiz-ans');
   const submitBtn = $('quiz-sub');
+  const hintBtn = $('quiz-hint');
+  const revealBtn = $('quiz-reveal');
 
-  const checkAns = () => {
-    const val = inputEl.value.trim().toLowerCase();
-    if (!val) return;
-    QUIZ_STATE.total++;
+  const finishQuestion = (isCorrect, skipped = false) => {
+    QUIZ_STATE.revealed = true;
+    rebuildList();
+    refresh();
     const fb = $('quiz-feedback');
-    const targetName = picked.zh.toLowerCase();
-    const isCorrect = val === targetName || targetName.includes(val) || val.includes(targetName.split(' ')[0]);
-
     if (isCorrect) {
-      QUIZ_STATE.score++;
-      QUIZ_STATE.streak++;
-      SOUND.playRight();
       fb.className = "quiz-res ok";
-      fb.innerHTML = `🎉 <strong>答對了！</strong><br>此構造為：<strong>${picked.zh}</strong><br><small>${picked.en} (${picked.latin})</small><br>${picked.desc}`;
+      fb.innerHTML = `🎉 <strong>答對了！</strong><br><strong>${picked.zh}</strong><br><small>${picked.en} (${picked.latin})</small><br>${picked.desc}${picked.clinical ? `<br><span style="color:#fde047;">💡 ${picked.clinical}</span>` : ''}`;
     } else {
-      QUIZ_STATE.streak = 0;
-      SOUND.playWrong();
       fb.className = "quiz-res err";
-      fb.innerHTML = `❌ <strong>再接再厲！</strong><br>正確答案為：<strong>${picked.zh}</strong><br><small>${picked.en} (${picked.latin})</small><br>${picked.desc}`;
+      fb.innerHTML = `${skipped ? '👁️ <strong>已揭曉答案</strong>' : '❌ <strong>答錯了，再接再厲！</strong>'}<br>正確答案：<strong>${picked.zh}</strong><br><small>${picked.en} (${picked.latin})</small><br>${picked.desc}${picked.clinical ? `<br><span style="color:#fde047;">💡 ${picked.clinical}</span>` : ''}`;
     }
     inputEl.disabled = true;
+    hintBtn.disabled = true;
+    revealBtn.disabled = true;
     submitBtn.textContent = "下一題 ▶";
     submitBtn.style.background = "#059669";
     submitBtn.onclick = () => startQuizQuestion();
   };
 
+  const checkAns = () => {
+    if (QUIZ_STATE.revealed) return;
+    const raw = inputEl.value.trim().toLowerCase().replace(/\s+/g, '');
+    if (!raw) return;
+    QUIZ_STATE.total++;
+    const zhNorm = picked.zh.toLowerCase().replace(/\s+/g, '');
+    const enNorm = (picked.en || '').toLowerCase();
+    const core = zhNorm.split('(')[0].split('（')[0];
+    const partsSplit = core.split(/[／/・]/).filter(s => s.length >= 2);
+    const isCorrect =
+      raw === zhNorm || raw === core ||
+      (raw.length >= 2 && (zhNorm.includes(raw) || enNorm.includes(raw))) ||
+      partsSplit.some(tok => raw.includes(tok));
+    if (isCorrect) { QUIZ_STATE.score++; QUIZ_STATE.streak++; SOUND.playRight(); }
+    else { QUIZ_STATE.streak = 0; SOUND.playWrong(); }
+    finishQuestion(isCorrect, false);
+  };
+
+  hintBtn.onclick = () => {
+    const hb = $('quiz-hint-box');
+    hb.style.display = 'block';
+    hb.innerHTML = `分區：<strong>${picked.grp}</strong>｜英文開頭：<strong>${(picked.en || '').slice(0, 3)}…</strong>`;
+  };
+  revealBtn.onclick = () => {
+    if (QUIZ_STATE.revealed) return;
+    QUIZ_STATE.total++;
+    QUIZ_STATE.streak = 0;
+    SOUND.playWrong();
+    finishQuestion(false, true);
+  };
   submitBtn.onclick = checkAns;
   inputEl.onkeydown = e => { if (e.key === 'Enter') checkAns(); };
   inputEl.focus();
@@ -1526,7 +1723,7 @@ function init() {
 
   let lastMove = 0;
   canvasEl.addEventListener('pointermove', e => {
-    if (e.buttons) { $('tip').style.display = 'none'; return; }
+    if (e.buttons || (QUIZ_STATE.active && !QUIZ_STATE.revealed)) { $('tip').style.display = 'none'; return; }
     const now = performance.now();
     if (now - lastMove < 50) return;
     lastMove = now;
@@ -1577,6 +1774,7 @@ function loadScene(idx) {
   fly = null;
   isExploded = false;
   QUIZ_STATE.active = false;
+  QUIZ_STATE.revealed = false;
 
   CUR.root = new THREE.Group();
   scene3.add(CUR.root);
@@ -1813,7 +2011,14 @@ function updateLabels() {
 
   labelEls.forEach(L => {
     const p = L.p;
-    let show = p.visible && (mode === 'all' || (mode === 'sel' && p === selected));
+    let show = false;
+    if (QUIZ_STATE.active && !QUIZ_STATE.revealed) {
+      show = false;
+    } else if (QUIZ_STATE.active && QUIZ_STATE.revealed) {
+      show = p.visible && (p === selected);
+    } else if (p.visible) {
+      show = (mode === 'all') || (mode === 'sel' && p === selected) || (mode === 'key' && (p.isKey || p === selected));
+    }
     if (show && p.anchor) {
       resolveAnchor(p);
       _v.copy(p.anchor).project(camera);
